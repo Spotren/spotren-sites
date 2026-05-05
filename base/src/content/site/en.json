@@ -33,6 +33,51 @@
       "title": "How showing up on Google can become the turning point for your local business",
       "body": "This is placeholder content for the explanatory section of the page."
     },
+    "diagnosis": {
+      "id": "diagnosis",
+      "title": "Diagnosis",
+      "body": "Placeholder content for the diagnosis section."
+    },
+    "howWorks": {
+      "id": "how-works",
+      "title": "How it works",
+      "body": "Placeholder content explaining how the offer works."
+    },
+    "deliverables": {
+      "id": "deliverables",
+      "title": "Deliverables",
+      "body": "Placeholder content listing the main deliverables."
+    },
+    "icp": {
+      "id": "icp",
+      "title": "Ideal customer profile",
+      "body": "Placeholder content describing who this page and offer are for."
+    },
+    "anchorVal": {
+      "id": "anchor-val",
+      "title": "Value anchoring",
+      "body": "Placeholder content supporting the perceived value."
+    },
+    "priceBuy": {
+      "id": "price-buy",
+      "title": "Pricing and purchase",
+      "body": "Placeholder content presenting price, purchase and next step."
+    },
+    "costInaction": {
+      "id": "cost-inaction",
+      "title": "Cost of inaction",
+      "body": "Placeholder content showing the risk of not acting."
+    },
+    "creator": {
+      "id": "creator",
+      "title": "Who created this",
+      "body": "Placeholder content about the creator or owner of the offer."
+    },
+    "faqCta": {
+      "id": "faq-cta",
+      "title": "FAQ and call to action",
+      "body": "Placeholder content for frequently asked questions and the final CTA."
+    },
     "contact": {
       "id": "contact",
       "title": "Contact",

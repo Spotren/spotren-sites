@@ -33,6 +33,51 @@
       "title": "Como aparecer en Google puede convertirse en el cambio clave para tu negocio local",
       "body": "Este es un contenido de prueba para la seccion explicativa de la pagina."
     },
+    "diagnosis": {
+      "id": "diagnosis",
+      "title": "Diagnostico",
+      "body": "Contenido de prueba para la seccion de diagnostico."
+    },
+    "howWorks": {
+      "id": "how-works",
+      "title": "Como funciona",
+      "body": "Contenido de prueba para explicar como funciona la oferta."
+    },
+    "deliverables": {
+      "id": "deliverables",
+      "title": "Entregables",
+      "body": "Contenido de prueba para listar los entregables principales."
+    },
+    "icp": {
+      "id": "icp",
+      "title": "Perfil ideal de cliente",
+      "body": "Contenido de prueba para describir para quien es esta pagina y oferta."
+    },
+    "anchorVal": {
+      "id": "anchor-val",
+      "title": "Anclaje de valor",
+      "body": "Contenido de prueba para sostener la percepcion de valor."
+    },
+    "priceBuy": {
+      "id": "price-buy",
+      "title": "Precio y compra",
+      "body": "Contenido de prueba para presentar precio, compra y siguiente paso."
+    },
+    "costInaction": {
+      "id": "cost-inaction",
+      "title": "Costo de la inaccion",
+      "body": "Contenido de prueba para mostrar el riesgo de no actuar."
+    },
+    "creator": {
+      "id": "creator",
+      "title": "Quien creo esto",
+      "body": "Contenido de prueba sobre el creador o responsable de la oferta."
+    },
+    "faqCta": {
+      "id": "faq-cta",
+      "title": "Preguntas frecuentes y llamada a la accion",
+      "body": "Contenido de prueba para preguntas frecuentes y CTA final."
+    },
     "contact": {
       "id": "contact",
       "title": "Contacto",

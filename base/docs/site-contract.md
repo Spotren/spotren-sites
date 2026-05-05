@@ -61,6 +61,51 @@ Cada locale precisa fornecer um payload compativel com o schema em `src/lib/site
       "title": "string",
       "body": "string"
     },
+    "diagnosis": {
+      "id": "string",
+      "title": "string",
+      "body": "string"
+    },
+    "howWorks": {
+      "id": "string",
+      "title": "string",
+      "body": "string"
+    },
+    "deliverables": {
+      "id": "string",
+      "title": "string",
+      "body": "string"
+    },
+    "icp": {
+      "id": "string",
+      "title": "string",
+      "body": "string"
+    },
+    "anchorVal": {
+      "id": "string",
+      "title": "string",
+      "body": "string"
+    },
+    "priceBuy": {
+      "id": "string",
+      "title": "string",
+      "body": "string"
+    },
+    "costInaction": {
+      "id": "string",
+      "title": "string",
+      "body": "string"
+    },
+    "creator": {
+      "id": "string",
+      "title": "string",
+      "body": "string"
+    },
+    "faqCta": {
+      "id": "string",
+      "title": "string",
+      "body": "string"
+    },
     "contact": {
       "id": "string",
       "title": "string",
@@ -97,6 +142,24 @@ Cada locale precisa fornecer um payload compativel com o schema em `src/lib/site
   - secao de depoimentos com lista de artigos
 - `sections.mirror`
   - bloco explicativo principal da pagina
+- `sections.diagnosis`
+  - secao de diagnostico
+- `sections.howWorks`
+  - secao explicando como a oferta funciona
+- `sections.deliverables`
+  - secao com os entregaveis principais
+- `sections.icp`
+  - secao descrevendo o perfil ideal de cliente
+- `sections.anchorVal`
+  - secao de ancoragem de valor
+- `sections.priceBuy`
+  - secao de preco e compra
+- `sections.costInaction`
+  - secao sobre o custo da inacao
+- `sections.creator`
+  - secao sobre o criador ou responsavel pela oferta
+- `sections.faqCta`
+  - secao final de FAQ e chamada para acao
 - `sections.contact`
   - secao de contato com linhas simples para renderizacao em `address`
 - `footer.text`

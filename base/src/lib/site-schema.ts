@@ -1,5 +1,11 @@
 import { z } from "zod";
 
+const textSectionSchema = z.object({
+  id: z.string().trim().min(1),
+  title: z.string().trim().min(1),
+  body: z.string().trim().min(1),
+});
+
 export const siteSchema = z.object({
   title: z.string().trim().min(1).max(255),
   seoTitle: z.string().trim().min(1).max(255),
@@ -27,11 +33,16 @@ export const siteSchema = z.object({
         }),
       ).min(1),
     }),
-    mirror: z.object({
-      id: z.string().trim().min(1),
-      title: z.string().trim().min(1),
-      body: z.string().trim().min(1),
-    }),
+    mirror: textSectionSchema,
+    diagnosis: textSectionSchema,
+    howWorks: textSectionSchema,
+    deliverables: textSectionSchema,
+    icp: textSectionSchema,
+    anchorVal: textSectionSchema,
+    priceBuy: textSectionSchema,
+    costInaction: textSectionSchema,
+    creator: textSectionSchema,
+    faqCta: textSectionSchema,
     contact: z.object({
       id: z.string().trim().min(1),
       title: z.string().trim().min(1),
