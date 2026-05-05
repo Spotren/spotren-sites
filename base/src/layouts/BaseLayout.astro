@@ -1,0 +1,29 @@
+---
+import SeoHead from "../components/SeoHead.astro";
+
+interface Props {
+  description: string;
+  faviconContentType?: string;
+  faviconHref?: string;
+  locale: string;
+  title: string;
+}
+
+const { description, faviconContentType, faviconHref, locale, title } = Astro.props;
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <SeoHead
+      description={description}
+      faviconContentType={faviconContentType}
+      faviconHref={faviconHref}
+      locale={locale}
+      title={title}
+    />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

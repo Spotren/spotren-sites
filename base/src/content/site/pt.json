@@ -1,5 +1,48 @@
 {
   "title": "Spotren Sites",
+  "description": "Descricao de teste em portugues para o template padrao de site estatico da Spotren.",
   "faviconHref": "/favicon.ico",
-  "faviconContentType": "image/x-icon"
+  "faviconContentType": "image/x-icon",
+  "header": {
+    "eyebrow": "Cabecalho de teste",
+    "navAriaLabel": "Primaria",
+    "navItems": [
+      { "href": "#intro", "label": "Introducao" },
+      { "href": "#highlights", "label": "Destaques" },
+      { "href": "#contact", "label": "Contato" }
+    ]
+  },
+  "sections": {
+    "intro": {
+      "id": "intro",
+      "title": "Secao de introducao",
+      "body": "Este e um conteudo de teste para a area introdutoria da pagina."
+    },
+    "highlights": {
+      "id": "highlights",
+      "title": "Secao de destaques",
+      "articles": [
+        {
+          "title": "Titulo do artigo um",
+          "body": "Texto de exemplo para validar a estrutura semantica da pagina antes de adicionar estilo."
+        },
+        {
+          "title": "Titulo do artigo dois",
+          "body": "Outro bloco de conteudo de teste para apoiar futuras iteracoes de componente e layout."
+        }
+      ]
+    },
+    "contact": {
+      "id": "contact",
+      "title": "Secao de contato",
+      "lines": [
+        "Rua Exemplo Spotren",
+        "Avenida de Teste 123",
+        "ola@example.com"
+      ]
+    }
+  },
+  "footer": {
+    "text": "Rodape de teste"
+  }
 }

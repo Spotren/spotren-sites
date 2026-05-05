@@ -1,5 +1,48 @@
 {
   "title": "Spotren Sites",
+  "description": "Descripcion de prueba en espanol para la plantilla base de sitio estatico de Spotren.",
   "faviconHref": "/favicon.ico",
-  "faviconContentType": "image/x-icon"
+  "faviconContentType": "image/x-icon",
+  "header": {
+    "eyebrow": "Encabezado de prueba",
+    "navAriaLabel": "Principal",
+    "navItems": [
+      { "href": "#intro", "label": "Introduccion" },
+      { "href": "#highlights", "label": "Destacados" },
+      { "href": "#contact", "label": "Contacto" }
+    ]
+  },
+  "sections": {
+    "intro": {
+      "id": "intro",
+      "title": "Seccion de introduccion",
+      "body": "Este es un contenido de prueba para el area introductoria de la pagina."
+    },
+    "highlights": {
+      "id": "highlights",
+      "title": "Seccion de destacados",
+      "articles": [
+        {
+          "title": "Titulo del articulo uno",
+          "body": "Texto de ejemplo para validar la estructura semantica de la pagina antes de agregar estilos."
+        },
+        {
+          "title": "Titulo del articulo dos",
+          "body": "Otro bloque de contenido de prueba para apoyar futuras iteraciones de componente y layout."
+        }
+      ]
+    },
+    "contact": {
+      "id": "contact",
+      "title": "Seccion de contacto",
+      "lines": [
+        "Calle Ejemplo Spotren",
+        "Avenida de Prueba 123",
+        "hola@example.com"
+      ]
+    }
+  },
+  "footer": {
+    "text": "Pie de pagina de prueba"
+  }
 }

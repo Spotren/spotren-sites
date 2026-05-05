@@ -1,5 +1,48 @@
 {
   "title": "Spotren Sites",
+  "description": "Test English description for the default Spotren static site template.",
   "faviconHref": "/favicon.ico",
-  "faviconContentType": "image/x-icon"
+  "faviconContentType": "image/x-icon",
+  "header": {
+    "eyebrow": "Test header",
+    "navAriaLabel": "Primary",
+    "navItems": [
+      { "href": "#intro", "label": "Introduction" },
+      { "href": "#highlights", "label": "Highlights" },
+      { "href": "#contact", "label": "Contact" }
+    ]
+  },
+  "sections": {
+    "intro": {
+      "id": "intro",
+      "title": "Introduction Section",
+      "body": "This is placeholder content for the introductory area of the page."
+    },
+    "highlights": {
+      "id": "highlights",
+      "title": "Highlights Section",
+      "articles": [
+        {
+          "title": "Article Title One",
+          "body": "Sample article text to validate semantic page structure before styling is added."
+        },
+        {
+          "title": "Article Title Two",
+          "body": "Another block of test content to support future component and layout work."
+        }
+      ]
+    },
+    "contact": {
+      "id": "contact",
+      "title": "Contact Section",
+      "lines": [
+        "Spotren Example Street",
+        "123 Test Avenue",
+        "hello@example.com"
+      ]
+    }
+  },
+  "footer": {
+    "text": "Test footer"
+  }
 }

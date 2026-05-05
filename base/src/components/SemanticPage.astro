@@ -1,0 +1,50 @@
+---
+import type { SiteData } from "../lib/site-schema";
+
+interface Props {
+  site: SiteData;
+}
+
+const { site } = Astro.props;
+---
+
+<header>
+  <p>{site.header.eyebrow}</p>
+  <h1>{site.title}</h1>
+  <nav aria-label={site.header.navAriaLabel}>
+    {site.header.navItems.map((item) => <a href={item.href}>{item.label}</a>)}
+  </nav>
+</header>
+
+<main>
+  <section id={site.sections.intro.id}>
+    <h2>{site.sections.intro.title}</h2>
+    <p>{site.sections.intro.body}</p>
+  </section>
+
+  <section id={site.sections.highlights.id}>
+    <h2>{site.sections.highlights.title}</h2>
+    {site.sections.highlights.articles.map((article) => (
+      <article>
+        <h3>{article.title}</h3>
+        <p>{article.body}</p>
+      </article>
+    ))}
+  </section>
+
+  <section id={site.sections.contact.id}>
+    <h2>{site.sections.contact.title}</h2>
+    <address>
+      {site.sections.contact.lines.map((line) => (
+        <>
+          {line}
+          <br />
+        </>
+      ))}
+    </address>
+  </section>
+</main>
+
+<footer>
+  <p>{site.footer.text}</p>
+</footer>

@@ -1,0 +1,31 @@
+---
+interface Props {
+  description: string;
+  faviconContentType?: string;
+  faviconHref?: string;
+  locale: string;
+  title: string;
+}
+
+const {
+  description,
+  faviconContentType = "image/x-icon",
+  faviconHref = "/favicon.ico",
+  locale,
+  title,
+} = Astro.props;
+---
+
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<title>{title}</title>
+<meta content={description} name="description" />
+<meta content="index, follow" name="robots" />
+<meta content={title} property="og:title" />
+<meta content={description} property="og:description" />
+<meta content="website" property="og:type" />
+<meta content={locale} property="og:locale" />
+<meta content="summary" name="twitter:card" />
+<meta content={title} name="twitter:title" />
+<meta content={description} name="twitter:description" />
+<link href={faviconHref} rel="icon" type={faviconContentType} />

@@ -1,5 +1,7 @@
 ---
+import SemanticPage from "../components/SemanticPage.astro";
 import { loadSiteData, siteLocales, type SiteLocale } from "../lib/load-site-data";
+import BaseLayout from "../layouts/BaseLayout.astro";
 
 export function getStaticPaths() {
   return siteLocales.map((locale) => ({
@@ -11,17 +13,12 @@ const locale = Astro.params.locale as SiteLocale;
 const site = loadSiteData(locale);
 ---
 
-<!doctype html>
-<html lang={locale}>
-  <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1" name="viewport" />
-    <title>{site.title}</title>
-    <link href={site.faviconHref ?? "/favicon.ico"} rel="icon" type={site.faviconContentType ?? "image/x-icon"} />
-  </head>
-  <body>
-    <main>
-      <h1>{site.title}</h1>
-    </main>
-  </body>
-</html>
+<BaseLayout
+  description={site.description}
+  faviconContentType={site.faviconContentType}
+  faviconHref={site.faviconHref}
+  locale={locale}
+  title={site.title}
+>
+  <SemanticPage site={site} />
+</BaseLayout>

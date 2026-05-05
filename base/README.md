@@ -60,6 +60,16 @@ Valor inicial:
 ```json
 {
   "title": "Spotren Sites",
+  "description": "Test English description for the default Spotren static site template.",
+  "header": {
+    "eyebrow": "Test header",
+    "navAriaLabel": "Primary",
+    "navItems": [
+      { "href": "#intro", "label": "Introduction" },
+      { "href": "#highlights", "label": "Highlights" },
+      { "href": "#contact", "label": "Contact" }
+    ]
+  },
   "faviconHref": "/favicon.ico",
   "faviconContentType": "image/x-icon"
 }
