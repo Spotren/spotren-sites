@@ -17,12 +17,7 @@ export const siteSchema = z.object({
     ).min(1),
   }),
   sections: z.object({
-    intro: z.object({
-      id: z.string().trim().min(1),
-      title: z.string().trim().min(1),
-      body: z.string().trim().min(1),
-    }),
-    highlights: z.object({
+    testimonials: z.object({
       id: z.string().trim().min(1),
       title: z.string().trim().min(1),
       articles: z.array(
@@ -31,6 +26,11 @@ export const siteSchema = z.object({
           body: z.string().trim().min(1),
         }),
       ).min(1),
+    }),
+    mirror: z.object({
+      id: z.string().trim().min(1),
+      title: z.string().trim().min(1),
+      body: z.string().trim().min(1),
     }),
     contact: z.object({
       id: z.string().trim().min(1),

@@ -46,12 +46,7 @@ Cada locale precisa fornecer um payload compativel com o schema em `src/lib/site
     ]
   },
   "sections": {
-    "intro": {
-      "id": "string",
-      "title": "string",
-      "body": "string"
-    },
-    "highlights": {
+    "testimonials": {
       "id": "string",
       "title": "string",
       "articles": [
@@ -60,6 +55,11 @@ Cada locale precisa fornecer um payload compativel com o schema em `src/lib/site
           "body": "string"
         }
       ]
+    },
+    "mirror": {
+      "id": "string",
+      "title": "string",
+      "body": "string"
     },
     "contact": {
       "id": "string",
@@ -93,10 +93,10 @@ Cada locale precisa fornecer um payload compativel com o schema em `src/lib/site
   - label acessivel da navegacao principal
 - `header.navItems`
   - links internos usados no `nav`
-- `sections.intro`
-  - bloco introdutorio principal
-- `sections.highlights`
-  - secao de destaques com lista de artigos
+- `sections.testimonials`
+  - secao de depoimentos com lista de artigos
+- `sections.mirror`
+  - bloco explicativo principal da pagina
 - `sections.contact`
   - secao de contato com linhas simples para renderizacao em `address`
 - `footer.text`

@@ -9,27 +9,27 @@ const { site } = Astro.props;
 ---
 
 <header>
+  <nav aria-label={site.header.navAriaLabel}>
+    {site.header.navItems.map((item) => <a href={item.href} target="_blank" rel="nofollow">{item.label}</a>)}
+  </nav>
   <p>{site.header.eyebrow}</p>
   <h1>{site.title}</h1>
-  <nav aria-label={site.header.navAriaLabel}>
-    {site.header.navItems.map((item) => <a href={item.href}>{item.label}</a>)}
-  </nav>
 </header>
 
 <main>
-  <section id={site.sections.intro.id}>
-    <h2>{site.sections.intro.title}</h2>
-    <p>{site.sections.intro.body}</p>
-  </section>
-
-  <section id={site.sections.highlights.id}>
-    <h2>{site.sections.highlights.title}</h2>
-    {site.sections.highlights.articles.map((article) => (
+  <section id={site.sections.testimonials.id}>
+    <h2>{site.sections.testimonials.title}</h2>
+    {site.sections.testimonials.articles.map((article) => (
       <article>
         <h3>{article.title}</h3>
         <p>{article.body}</p>
       </article>
     ))}
+  </section>
+
+  <section id={site.sections.mirror.id}>
+    <h2>{site.sections.mirror.title}</h2>
+    <p>{site.sections.mirror.body}</p>
   </section>
 
   <section id={site.sections.contact.id}>

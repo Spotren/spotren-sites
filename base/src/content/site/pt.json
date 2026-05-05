@@ -1,27 +1,22 @@
 {
-  "title": "Spotren Sites",
-  "seoTitle": "Spotren Sites | Template de Site Estatico",
-  "description": "Descricao de teste em portugues para o template padrao de site estatico da Spotren.",
+  "title": "Como aparecer no Google com apenas um Site Simples e bem Estruturado",
+  "seoTitle": "Como aparecer no Google ∙ SEO para Negócios Locais ∙ Spotren™",
+  "description": "Como aparecer no Google em pouco tempo com apenas um site bem estruturado. Conheça o método SEO para Negócios Locais da Spotren™ agora.",
   "faviconHref": "/favicon.ico",
   "faviconContentType": "image/x-icon",
   "header": {
-    "eyebrow": "Cabecalho de teste",
-    "navAriaLabel": "Primaria",
     "navItems": [
-      { "href": "#intro", "label": "Introducao" },
-      { "href": "#highlights", "label": "Destaques" },
-      { "href": "#contact", "label": "Contato" }
-    ]
+      { "href": "https://www.facebook.com/rafa.spotren/", "label": "Facebook" },
+      { "href": "https://www.instagram.com/rafa.spotren/", "label": "Instagram" },
+      { "href": "https://www.linkedin.com/in/rafa-spotren-founder/", "label": "LinkedIn" }
+    ],
+    "eyebrow": "SEO para Negócios Locais by Spotren™",
+    "navAriaLabel": "Primaria"
   },
   "sections": {
-    "intro": {
-      "id": "intro",
-      "title": "Secao de introducao",
-      "body": "Este e um conteudo de teste para a area introdutoria da pagina."
-    },
-    "highlights": {
-      "id": "highlights",
-      "title": "Secao de destaques",
+    "testimonials": {
+      "id": "testimonials",
+      "title": "Depoimentos",
       "articles": [
         {
           "title": "Titulo do artigo um",
@@ -32,6 +27,11 @@
           "body": "Outro bloco de conteudo de teste para apoiar futuras iteracoes de componente e layout."
         }
       ]
+    },
+    "mirror": {
+      "id": "mirror",
+      "title": "Como aparecer no Google pode ser a mudança de chave para o seu Negócio Local",
+      "body": "Este e um conteudo de teste para a area introdutoria da pagina."
     },
     "contact": {
       "id": "contact",

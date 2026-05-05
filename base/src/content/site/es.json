@@ -5,37 +5,37 @@
   "faviconHref": "/favicon.ico",
   "faviconContentType": "image/x-icon",
   "header": {
-    "eyebrow": "Encabezado de prueba",
+    "eyebrow": "SEO para Negocios Locales by Spotren™",
     "navAriaLabel": "Principal",
     "navItems": [
-      { "href": "#intro", "label": "Introduccion" },
-      { "href": "#highlights", "label": "Destacados" },
+      { "href": "#testimonials", "label": "Testimonios" },
+      { "href": "#mirror", "label": "Explicacion" },
       { "href": "#contact", "label": "Contacto" }
     ]
   },
   "sections": {
-    "intro": {
-      "id": "intro",
-      "title": "Seccion de introduccion",
-      "body": "Este es un contenido de prueba para el area introductoria de la pagina."
-    },
-    "highlights": {
-      "id": "highlights",
-      "title": "Seccion de destacados",
+    "testimonials": {
+      "id": "testimonials",
+      "title": "Testimonios",
       "articles": [
         {
-          "title": "Titulo del articulo uno",
+          "title": "Titulo del testimonio uno",
           "body": "Texto de ejemplo para validar la estructura semantica de la pagina antes de agregar estilos."
         },
         {
-          "title": "Titulo del articulo dos",
+          "title": "Titulo del testimonio dos",
           "body": "Otro bloque de contenido de prueba para apoyar futuras iteraciones de componente y layout."
         }
       ]
     },
+    "mirror": {
+      "id": "mirror",
+      "title": "Como aparecer en Google puede convertirse en el cambio clave para tu negocio local",
+      "body": "Este es un contenido de prueba para la seccion explicativa de la pagina."
+    },
     "contact": {
       "id": "contact",
-      "title": "Seccion de contacto",
+      "title": "Contacto",
       "lines": [
         "Calle Ejemplo Spotren",
         "Avenida de Prueba 123",

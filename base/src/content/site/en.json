@@ -5,37 +5,37 @@
   "faviconHref": "/favicon.ico",
   "faviconContentType": "image/x-icon",
   "header": {
-    "eyebrow": "Test header",
+    "eyebrow": "Local SEO by Spotren™",
     "navAriaLabel": "Primary",
     "navItems": [
-      { "href": "#intro", "label": "Introduction" },
-      { "href": "#highlights", "label": "Highlights" },
+      { "href": "#testimonials", "label": "Testimonials" },
+      { "href": "#mirror", "label": "Explanation" },
       { "href": "#contact", "label": "Contact" }
     ]
   },
   "sections": {
-    "intro": {
-      "id": "intro",
-      "title": "Introduction Section",
-      "body": "This is placeholder content for the introductory area of the page."
-    },
-    "highlights": {
-      "id": "highlights",
-      "title": "Highlights Section",
+    "testimonials": {
+      "id": "testimonials",
+      "title": "Testimonials",
       "articles": [
         {
-          "title": "Article Title One",
-          "body": "Sample article text to validate semantic page structure before styling is added."
+          "title": "First testimonial title",
+          "body": "Sample article text to validate the semantic structure of the page before styling is added."
         },
         {
-          "title": "Article Title Two",
-          "body": "Another block of test content to support future component and layout work."
+          "title": "Second testimonial title",
+          "body": "Another block of placeholder content to support future component and layout work."
         }
       ]
     },
+    "mirror": {
+      "id": "mirror",
+      "title": "How showing up on Google can become the turning point for your local business",
+      "body": "This is placeholder content for the explanatory section of the page."
+    },
     "contact": {
       "id": "contact",
-      "title": "Contact Section",
+      "title": "Contact",
       "lines": [
         "Spotren Example Street",
         "123 Test Avenue",

@@ -63,11 +63,11 @@ Valor inicial:
   "seoTitle": "Spotren Sites | Static Site Template",
   "description": "Test English description for the default Spotren static site template.",
   "header": {
-    "eyebrow": "Test header",
+    "eyebrow": "Local SEO by Spotren™",
     "navAriaLabel": "Primary",
     "navItems": [
-      { "href": "#intro", "label": "Introduction" },
-      { "href": "#highlights", "label": "Highlights" },
+      { "href": "#testimonials", "label": "Testimonials" },
+      { "href": "#mirror", "label": "Explanation" },
       { "href": "#contact", "label": "Contact" }
     ]
   },
