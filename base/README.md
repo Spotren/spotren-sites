@@ -60,6 +60,7 @@ Valor inicial:
 ```json
 {
   "title": "Spotren Sites",
+  "seoTitle": "Spotren Sites | Static Site Template",
   "description": "Test English description for the default Spotren static site template.",
   "header": {
     "eyebrow": "Test header",

@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const siteSchema = z.object({
   title: z.string().trim().min(1).max(255),
+  seoTitle: z.string().trim().min(1).max(255),
   description: z.string().trim().min(1).max(320),
   faviconHref: z.string().trim().min(1).optional(),
   faviconContentType: z.string().trim().min(1).optional(),

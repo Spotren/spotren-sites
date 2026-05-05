@@ -31,6 +31,7 @@ Cada locale precisa fornecer um payload compativel com o schema em `src/lib/site
 ```json
 {
   "title": "string",
+  "seoTitle": "string",
   "description": "string",
   "faviconHref": "string",
   "faviconContentType": "string",
@@ -77,7 +78,9 @@ Cada locale precisa fornecer um payload compativel com o schema em `src/lib/site
 ## Semantica De Campos
 
 - `title`
-  - titulo principal do site e titulo da pagina
+  - titulo principal visivel do site, usado no `h1`
+- `seoTitle`
+  - titulo dedicado aos metadados de SEO, usado no `<title>` e em metadados sociais
 - `description`
   - descricao usada nos metadados de SEO
 - `faviconHref`

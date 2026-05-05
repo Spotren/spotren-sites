@@ -38,6 +38,7 @@ Se houver divergencia entre exemplos e implementacao, o schema em `src/lib/site-
 - nao hardcode texto estrutural dentro de paginas ou componentes quando ele puder viver no conteudo versionado
 - use componentes e layouts Astro para encapsular head, estrutura semantica e composicao de pagina
 - mantenha SEO dirigido por dados do conteudo, nao por strings soltas nas paginas
+- separe `seoTitle` de `title`: `seoTitle` e para metadata; `title` e para conteudo visivel
 - preserve HTML semantico simples antes de introduzir CSS ou componentes visuais mais complexos
 
 ## Estrutura Esperada

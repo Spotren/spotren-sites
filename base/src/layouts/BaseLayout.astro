@@ -6,10 +6,10 @@ interface Props {
   faviconContentType?: string;
   faviconHref?: string;
   locale: string;
-  title: string;
+  seoTitle: string;
 }
 
-const { description, faviconContentType, faviconHref, locale, title } = Astro.props;
+const { description, faviconContentType, faviconHref, locale, seoTitle } = Astro.props;
 ---
 
 <!doctype html>
@@ -20,7 +20,7 @@ const { description, faviconContentType, faviconHref, locale, title } = Astro.pr
       faviconContentType={faviconContentType}
       faviconHref={faviconHref}
       locale={locale}
-      title={title}
+      title={seoTitle}
     />
   </head>
   <body>
