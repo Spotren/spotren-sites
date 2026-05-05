@@ -1,3 +1,5 @@
 {
-  "title": "Acme Inc. Los Angeles"
+  "title": "Spotren Sites",
+  "faviconHref": "/favicon.ico",
+  "faviconContentType": "image/x-icon"
 }
