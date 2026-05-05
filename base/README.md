@@ -8,14 +8,18 @@ Template mínimo para sites estáticos da Spotren usando:
 
 ## Estrutura
 
-- `src/content/site.json`
-  - dados versionados do site
+- `src/content/site/en.json`
+- `src/content/site/pt.json`
+- `src/content/site/es.json`
+  - dados versionados do site por idioma
 - `src/lib/site-schema.ts`
   - schema Zod do conteúdo
 - `src/lib/load-site-data.ts`
-  - leitura e validação do JSON
+  - leitura e validação do JSON por idioma
 - `src/pages/index.astro`
-  - página inicial estática
+  - página inicial estática com `en` como default
+- `src/pages/[locale].astro`
+  - páginas estáticas para os demais idiomas suportados
 
 ## Build
 
@@ -43,12 +47,20 @@ npm run dev
 
 ## Conteúdo atual
 
-O `title` da home é gerado a partir de `src/content/site.json`.
+O `title` da home é gerado a partir de `src/content/site/en.json`.
+
+Idiomas suportados:
+
+- `en`
+- `pt`
+- `es`
 
 Valor inicial:
 
 ```json
 {
-  "title": "Acme Inc. Los Angeles"
+  "title": "Spotren Sites",
+  "faviconHref": "/favicon.ico",
+  "faviconContentType": "image/x-icon"
 }
 ```

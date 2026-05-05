@@ -1,7 +1,13 @@
 ---
-import { loadSiteData } from "../lib/load-site-data";
+import { loadSiteData, siteLocales, type SiteLocale } from "../lib/load-site-data";
 
-const locale = "en";
+export function getStaticPaths() {
+  return siteLocales.map((locale) => ({
+    params: { locale },
+  }));
+}
+
+const locale = Astro.params.locale as SiteLocale;
 const site = loadSiteData(locale);
 ---
 
