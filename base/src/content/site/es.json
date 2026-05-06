@@ -17,21 +17,35 @@
     "testimonials": {
       "id": "testimonials",
       "title": "Testimonios",
-      "articles": [
+      "items": [
         {
-          "title": "Titulo del testimonio uno",
-          "body": "Texto de ejemplo para validar la estructura semantica de la pagina antes de agregar estilos."
+          "headline": "Posicionamiento mas claro",
+          "quote": "Por fin encontre una forma mas simple de explicar mi negocio local y conectar con quien nos descubre en Google.",
+          "avatar": "/avatars/avatar-32.jpg",
+          "name": "Mariana Alves",
+          "role": "Estudio de Estetica",
+          "rating": 5
         },
         {
-          "title": "Titulo del testimonio dos",
-          "body": "Otro bloque de contenido de prueba para apoyar futuras iteraciones de componente y layout."
+          "headline": "Mas confianza para vender",
+          "quote": "El sitio quedo mas claro y nos ayudo a convertir visitas en conversaciones mucho mas calificadas.",
+          "avatar": "/avatars/avatar-12.jpg",
+          "name": "Carlos Henrique",
+          "role": "Taller Especializado",
+          "rating": 5
         }
       ]
     },
     "mirror": {
       "id": "mirror",
       "title": "Como aparecer en Google puede convertirse en el cambio clave para tu negocio local",
-      "body": "Este es un contenido de prueba para la seccion explicativa de la pagina."
+      "body": "Este es un contenido de prueba para la seccion explicativa de la pagina.",
+      "listTitle": "Para aparecer en Google necesitas:",
+      "speaker": {
+        "name": "Rafa Santos",
+        "role": "Fundador de Spotren",
+        "avatar": "/avatars/avatar-founder.jpg"
+      }
     },
     "diagnosis": {
       "id": "diagnosis",
@@ -41,7 +55,21 @@
     "howWorks": {
       "id": "how-works",
       "title": "Como funciona",
-      "body": "Contenido de prueba para explicar como funciona la oferta."
+      "body": "Contenido de prueba para explicar como funciona la oferta.",
+      "items": [
+        {
+          "title": "Envias lo esencial",
+          "body": "Compartes la informacion principal de tu negocio, servicios y datos de contacto."
+        },
+        {
+          "title": "Estructuramos la pagina",
+          "body": "Convertimos ese material en una pagina clara, pensada para SEO y descubrimiento con IA."
+        },
+        {
+          "title": "Tu sitio sale al aire",
+          "body": "Publicamos la pagina y la mantenemos lista para fortalecer tu presencia digital."
+        }
+      ]
     },
     "deliverables": {
       "id": "deliverables",
@@ -61,17 +89,38 @@
     "priceBuy": {
       "id": "price-buy",
       "title": "Precio y compra",
-      "body": "Contenido de prueba para presentar precio, compra y siguiente paso."
+      "body": "Contenido de prueba para presentar precio, compra y siguiente paso.",
+      "listTitle": "Garantia de 7 dias",
+      "pricing": {
+        "currency": "R$",
+        "amount": "27",
+        "period": "/ mes"
+      },
+      "cta": {
+        "href": "#contact",
+        "label": "Suscribirse ahora"
+      }
     },
     "costInaction": {
       "id": "cost-inaction",
       "title": "Costo de la inaccion",
+      "bodyTitle": "Porque",
       "body": "Contenido de prueba para mostrar el riesgo de no actuar."
     },
     "creator": {
       "id": "creator",
       "title": "Quien creo esto",
-      "body": "Contenido de prueba sobre el creador o responsable de la oferta."
+      "body": "Contenido de prueba sobre el creador o responsable de la oferta.",
+      "figure": {
+        "src": "/images/creator-mark.svg",
+        "alt": "Marca circular de Spotren en degradado naranja",
+        "caption": "Marca visual de Spotren."
+      },
+      "entity": {
+        "name": "Spotren",
+        "description": "Servicio de creacion de sitios optimizados para SEO, AEO y GEO para negocios locales.",
+        "image": "/images/creator-mark.svg"
+      }
     },
     "faqCta": {
       "id": "faq-cta",

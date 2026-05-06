@@ -17,21 +17,35 @@
     "testimonials": {
       "id": "testimonials",
       "title": "Testimonials",
-      "articles": [
+      "items": [
         {
-          "title": "First testimonial title",
-          "body": "Sample article text to validate the semantic structure of the page before styling is added."
+          "headline": "Sharper positioning",
+          "quote": "I finally found a simpler way to explain my local business and connect with people who discover us on Google.",
+          "avatar": "/avatars/avatar-32.jpg",
+          "name": "Mariana Alves",
+          "role": "Beauty Studio",
+          "rating": 5
         },
         {
-          "title": "Second testimonial title",
-          "body": "Another block of placeholder content to support future component and layout work."
+          "headline": "More confidence to sell",
+          "quote": "The site became clearer and helped us turn visits into much more qualified conversations.",
+          "avatar": "/avatars/avatar-12.jpg",
+          "name": "Carlos Henrique",
+          "role": "Specialized Workshop",
+          "rating": 5
         }
       ]
     },
     "mirror": {
       "id": "mirror",
       "title": "How showing up on Google can become the turning point for your local business",
-      "body": "This is placeholder content for the explanatory section of the page."
+      "body": "This is placeholder content for the explanatory section of the page.",
+      "listTitle": "To show up on Google, you need:",
+      "speaker": {
+        "name": "Rafa Santos",
+        "role": "Founder of Spotren",
+        "avatar": "/avatars/avatar-founder.jpg"
+      }
     },
     "diagnosis": {
       "id": "diagnosis",
@@ -41,7 +55,21 @@
     "howWorks": {
       "id": "how-works",
       "title": "How it works",
-      "body": "Placeholder content explaining how the offer works."
+      "body": "Placeholder content explaining how the offer works.",
+      "items": [
+        {
+          "title": "You send the essentials",
+          "body": "Share the main information about your business, services and contact details."
+        },
+        {
+          "title": "We structure the page",
+          "body": "We turn that material into a clear page built for SEO and AI-driven discovery."
+        },
+        {
+          "title": "Your site goes live",
+          "body": "We publish the page and keep it maintained so your business can show up more clearly online."
+        }
+      ]
     },
     "deliverables": {
       "id": "deliverables",
@@ -61,17 +89,38 @@
     "priceBuy": {
       "id": "price-buy",
       "title": "Pricing and purchase",
-      "body": "Placeholder content presenting price, purchase and next step."
+      "body": "Placeholder content presenting price, purchase and next step.",
+      "listTitle": "7-day guarantee",
+      "pricing": {
+        "currency": "$",
+        "amount": "27",
+        "period": "/ mo"
+      },
+      "cta": {
+        "href": "#contact",
+        "label": "Subscribe now"
+      }
     },
     "costInaction": {
       "id": "cost-inaction",
       "title": "Cost of inaction",
+      "bodyTitle": "Why",
       "body": "Placeholder content showing the risk of not acting."
     },
     "creator": {
       "id": "creator",
       "title": "Who created this",
-      "body": "Placeholder content about the creator or owner of the offer."
+      "body": "Placeholder content about the creator or owner of the offer.",
+      "figure": {
+        "src": "/images/creator-mark.svg",
+        "alt": "Spotren circular mark in an orange gradient",
+        "caption": "Spotren visual mark."
+      },
+      "entity": {
+        "name": "Spotren",
+        "description": "Service for building websites optimized for SEO, AEO and GEO for local businesses.",
+        "image": "/images/creator-mark.svg"
+      }
     },
     "faqCta": {
       "id": "faq-cta",

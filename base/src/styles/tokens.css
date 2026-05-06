@@ -19,8 +19,8 @@
   --space-lg: 2rem;
   --space-xl: 3rem;
   --space-2xl: 4.5rem;
-  --content-width: 72rem;
+  --content-width: 64rem;
   --reading-width: 46rem;
   --font-body: "IBM Plex Sans", "Segoe UI", sans-serif;
-  --font-heading: "Fraunces", Georgia, serif;
+  --font-heading: "IBM Plex Serif", Georgia, serif;
 }
