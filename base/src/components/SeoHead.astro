@@ -14,6 +14,22 @@ const {
   locale,
   title,
 } = Astro.props;
+
+function toOgLocale(value: string): string {
+  if (value === "pt-BR") {
+    return "pt_BR";
+  }
+
+  if (value === "en") {
+    return "en_US";
+  }
+
+  if (value === "es") {
+    return "es_ES";
+  }
+
+  return value.replace("-", "_");
+}
 ---
 
 <meta charset="utf-8" />
@@ -24,7 +40,7 @@ const {
 <meta content={title} property="og:title" />
 <meta content={description} property="og:description" />
 <meta content="website" property="og:type" />
-<meta content={locale} property="og:locale" />
+<meta content={toOgLocale(locale)} property="og:locale" />
 <meta content="summary" name="twitter:card" />
 <meta content={title} name="twitter:title" />
 <meta content={description} name="twitter:description" />

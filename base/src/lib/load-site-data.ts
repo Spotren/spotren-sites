@@ -3,7 +3,7 @@ import path from "node:path";
 
 import { siteSchema, type SiteData } from "./site-schema";
 
-export const siteLocales = ["en", "pt", "es"] as const;
+export const siteLocales = ["en", "pt-BR", "es"] as const;
 
 export type SiteLocale = (typeof siteLocales)[number];
 

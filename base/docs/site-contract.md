@@ -16,14 +16,14 @@ Cada locale precisa fornecer um payload compativel com o schema em `src/lib/site
 ## Arquivos De Conteudo
 
 - `src/content/site/en.json`
-- `src/content/site/pt.json`
+- `src/content/site/pt-BR.json`
 - `src/content/site/es.json`
 
 ## Regras De Resolucao
 
 - `/` usa `en` como locale default
 - `/en` usa `src/content/site/en.json`
-- `/pt` usa `src/content/site/pt.json`
+- `/pt-BR` usa `src/content/site/pt-BR.json`
 - `/es` usa `src/content/site/es.json`
 
 ## Contrato Atual
@@ -49,62 +49,108 @@ Cada locale precisa fornecer um payload compativel com o schema em `src/lib/site
     "testimonials": {
       "id": "string",
       "title": "string",
-      "articles": [
+      "items": [
         {
-          "title": "string",
-          "body": "string"
+          "headline": "string",
+          "quote": "string",
+          "avatar": "string",
+          "name": "string",
+          "role": "string",
+          "rating": 5
         }
       ]
     },
     "mirror": {
       "id": "string",
       "title": "string",
-      "body": "string"
+      "body": "string",
+      "listTitle": "string",
+      "speaker": {
+        "name": "string",
+        "role": "string",
+        "avatar": "string"
+      },
+      "items": ["string"]
     },
     "diagnosis": {
       "id": "string",
       "title": "string",
-      "body": "string"
+      "body": "string",
+      "items": ["string"]
     },
     "howWorks": {
       "id": "string",
       "title": "string",
-      "body": "string"
+      "body": "string",
+      "items": [
+        {
+          "title": "string",
+          "body": "string"
+        }
+      ]
     },
     "deliverables": {
       "id": "string",
       "title": "string",
-      "body": "string"
+      "body": "string",
+      "items": ["string"]
     },
     "icp": {
       "id": "string",
       "title": "string",
-      "body": "string"
+      "body": "string",
+      "items": ["string"]
     },
     "anchorVal": {
       "id": "string",
       "title": "string",
-      "body": "string"
+      "body": "string",
+      "items": ["string"]
     },
     "priceBuy": {
       "id": "string",
       "title": "string",
-      "body": "string"
+      "body": "string",
+      "listTitle": "string",
+      "pricing": {
+        "currency": "string",
+        "amount": "string",
+        "period": "string"
+      },
+      "cta": {
+        "href": "string",
+        "label": "string"
+      },
+      "items": ["string"]
     },
     "costInaction": {
       "id": "string",
       "title": "string",
-      "body": "string"
+      "bodyTitle": "string",
+      "body": "string",
+      "items": ["string"]
     },
     "creator": {
       "id": "string",
       "title": "string",
-      "body": "string"
+      "body": "string",
+      "figure": {
+        "src": "string",
+        "alt": "string",
+        "caption": "string"
+      },
+      "entity": {
+        "name": "string",
+        "description": "string",
+        "image": "string"
+      },
+      "items": ["string"]
     },
     "faqCta": {
       "id": "string",
       "title": "string",
-      "body": "string"
+      "body": "string",
+      "items": ["string"]
     },
     "contact": {
       "id": "string",
@@ -139,9 +185,11 @@ Cada locale precisa fornecer um payload compativel com o schema em `src/lib/site
 - `header.navItems`
   - links internos usados no `nav`
 - `sections.testimonials`
-  - secao de depoimentos com lista de artigos
+  - secao de depoimentos com lista de cards contendo titulo, depoimento, avatar, nome e nota
 - `sections.mirror`
   - bloco explicativo principal da pagina
+- `sections.*.items`
+  - lista opcional de pontos de apoio para secoes textuais
 - `sections.diagnosis`
   - secao de diagnostico
 - `sections.howWorks`

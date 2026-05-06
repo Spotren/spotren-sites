@@ -9,7 +9,7 @@ Template mínimo para sites estáticos da Spotren usando:
 ## Estrutura
 
 - `src/content/site/en.json`
-- `src/content/site/pt.json`
+- `src/content/site/pt-BR.json`
 - `src/content/site/es.json`
   - dados versionados do site por idioma
 - `src/lib/site-schema.ts`
