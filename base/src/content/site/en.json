@@ -56,6 +56,10 @@
       "id": "how-works",
       "title": "How it works",
       "body": "Placeholder content explaining how the offer works.",
+      "callout": {
+        "href": "https://www.youtube.com/",
+        "title": "YouTube tutorials"
+      },
       "items": [
         {
           "title": "You send the essentials",
@@ -74,12 +78,20 @@
     "deliverables": {
       "id": "deliverables",
       "title": "Deliverables",
-      "body": "Placeholder content listing the main deliverables."
+      "body": "Placeholder content listing the main deliverables.",
+      "callout": {
+        "title": "Site published instantly",
+        "body": "+ Git repository"
+      }
     },
     "icp": {
       "id": "icp",
       "title": "Ideal customer profile",
-      "body": "Placeholder content describing who this page and offer are for."
+      "body": "Placeholder content describing who this page and offer are for.",
+      "figure": {
+        "src": "/images/icp-spotren-aparecer-google-optmz.png",
+        "alt": "Service interaction at a local business counter"
+      }
     },
     "anchorVal": {
       "id": "anchor-val",
@@ -96,6 +108,7 @@
         "amount": "27",
         "period": "/ mo"
       },
+      "markLabel": "PIX subscription",
       "cta": {
         "href": "#contact",
         "label": "Subscribe now"
@@ -126,18 +139,14 @@
       "id": "faq-cta",
       "title": "FAQ and call to action",
       "body": "Placeholder content for frequently asked questions and the final CTA."
-    },
-    "contact": {
-      "id": "contact",
-      "title": "Contact",
-      "lines": [
-        "Spotren Example Street",
-        "123 Test Avenue",
-        "hello@example.com"
-      ]
     }
   },
   "footer": {
-    "text": "Test footer"
+    "text": "Test footer",
+    "lines": [
+      "Spotren Example Street",
+      "123 Test Avenue",
+      "hello@example.com"
+    ]
   }
 }

@@ -56,6 +56,10 @@
       "id": "how-works",
       "title": "Como funciona",
       "body": "Contenido de prueba para explicar como funciona la oferta.",
+      "callout": {
+        "href": "https://www.youtube.com/",
+        "title": "Tutoriales en YouTube"
+      },
       "items": [
         {
           "title": "Envias lo esencial",
@@ -74,12 +78,20 @@
     "deliverables": {
       "id": "deliverables",
       "title": "Entregables",
-      "body": "Contenido de prueba para listar los entregables principales."
+      "body": "Contenido de prueba para listar los entregables principales.",
+      "callout": {
+        "title": "Sitio publicado al instante",
+        "body": "+ repositorio Git"
+      }
     },
     "icp": {
       "id": "icp",
       "title": "Perfil ideal de cliente",
-      "body": "Contenido de prueba para describir para quien es esta pagina y oferta."
+      "body": "Contenido de prueba para describir para quien es esta pagina y oferta.",
+      "figure": {
+        "src": "/images/icp-spotren-aparecer-google-optmz.png",
+        "alt": "Interaccion de servicio en el mostrador de un negocio local"
+      }
     },
     "anchorVal": {
       "id": "anchor-val",
@@ -96,6 +108,7 @@
         "amount": "27",
         "period": "/ mes"
       },
+      "markLabel": "Suscripcion pix",
       "cta": {
         "href": "#contact",
         "label": "Suscribirse ahora"
@@ -126,18 +139,14 @@
       "id": "faq-cta",
       "title": "Preguntas frecuentes y llamada a la accion",
       "body": "Contenido de prueba para preguntas frecuentes y CTA final."
-    },
-    "contact": {
-      "id": "contact",
-      "title": "Contacto",
-      "lines": [
-        "Calle Ejemplo Spotren",
-        "Avenida de Prueba 123",
-        "hola@example.com"
-      ]
     }
   },
   "footer": {
-    "text": "Pie de pagina de prueba"
+    "text": "Pie de pagina de prueba",
+    "lines": [
+      "Calle Ejemplo Spotren",
+      "Avenida de Prueba 123",
+      "hola@example.com"
+    ]
   }
 }

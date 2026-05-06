@@ -82,6 +82,10 @@ Cada locale precisa fornecer um payload compativel com o schema em `src/lib/site
       "id": "string",
       "title": "string",
       "body": "string",
+      "callout": {
+        "href": "string",
+        "title": "string"
+      },
       "items": [
         {
           "title": "string",
@@ -93,12 +97,20 @@ Cada locale precisa fornecer um payload compativel com o schema em `src/lib/site
       "id": "string",
       "title": "string",
       "body": "string",
+      "callout": {
+        "title": "string",
+        "body": "string"
+      },
       "items": ["string"]
     },
     "icp": {
       "id": "string",
       "title": "string",
       "body": "string",
+      "figure": {
+        "src": "string",
+        "alt": "string"
+      },
       "items": ["string"]
     },
     "anchorVal": {
@@ -117,6 +129,7 @@ Cada locale precisa fornecer um payload compativel com o schema em `src/lib/site
         "amount": "string",
         "period": "string"
       },
+      "markLabel": "string",
       "cta": {
         "href": "string",
         "label": "string"
@@ -151,17 +164,13 @@ Cada locale precisa fornecer um payload compativel com o schema em `src/lib/site
       "title": "string",
       "body": "string",
       "items": ["string"]
-    },
-    "contact": {
-      "id": "string",
-      "title": "string",
-      "lines": [
-        "string"
-      ]
     }
   },
   "footer": {
-    "text": "string"
+    "text": "string",
+    "lines": [
+      "string"
+    ]
   }
 }
 ```
@@ -208,10 +217,10 @@ Cada locale precisa fornecer um payload compativel com o schema em `src/lib/site
   - secao sobre o criador ou responsavel pela oferta
 - `sections.faqCta`
   - secao final de FAQ e chamada para acao
-- `sections.contact`
-  - secao de contato com linhas simples para renderizacao em `address`
 - `footer.text`
   - texto simples do rodape
+- `footer.lines`
+  - linhas simples para renderizacao em `address`
 
 ## Invariantes
 

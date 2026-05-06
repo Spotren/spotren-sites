@@ -19,14 +19,6 @@
       "title": "Confiam na Spotren",
       "items": [
         {
-          "headline": "Clareza",
-          "quote": "Eu precisava de um site simples, mas com cara profissional e preparado para Google e IA. Ficou claro, rápido e fácil de apresentar para clientes.",
-          "avatar": "/avatars/avatar-32.jpg",
-          "name": "Mariana Alves",
-          "role": "Studio de Estética",
-          "rating": 5
-        },
-        {
           "headline": "Autoridade",
           "quote": "O site deixou minha empresa com mais credibilidade logo no primeiro contato. Hoje eu consigo apresentar melhor meu serviço e passar mais confiança.",
           "avatar": "/avatars/avatar-21.jpg",
@@ -73,14 +65,6 @@
           "name": "Márcio Teixeira",
           "role": "Auto Center",
           "rating": 4
-        },
-        {
-          "headline": "Clareza",
-          "quote": "O texto do site conseguiu traduzir exatamente o que eu faço. Ficou simples para o cliente entender e agir.",
-          "avatar": "/avatars/avatar-36.jpg",
-          "name": "Bianca Ferreira",
-          "role": "Nutricionista",
-          "rating": 5
         },
         {
           "headline": "Visibilidade",
@@ -148,6 +132,10 @@
       "id": "how-works",
       "title": "Como funciona",
       "body": "A Spotren cria e publica para você um site simples e bem estruturado, com copy comercial, organização semântica e base técnica pensada para SEO e mecanismos de busca guiados por IA.",
+      "callout": {
+        "href": "https://www.youtube.com/",
+        "title": "Tutoriais no Youtube"
+      },
       "items": [
         {
           "title": "Você envia o essencial",
@@ -167,6 +155,10 @@
       "id": "deliverables",
       "title": "O que está incluído",
       "body": "Você recebe uma base pronta para vender melhor sua empresa online, sem precisar administrar um projeto técnico complexo.",
+      "callout": {
+        "title": "Site publicado na hora",
+        "body": "+ repositório Git"
+      },
       "items": [
         "Site estruturado com foco em conversão",
         "Copy de apresentação do negócio",
@@ -180,6 +172,10 @@
       "id": "icp",
       "title": "Para quem faz sentido",
       "body": "Essa oferta foi desenhada para negócios locais que precisam começar com simplicidade, sem abrir mão de posicionamento e presença profissional.",
+      "figure": {
+        "src": "/images/icp-spotren-aparecer-google-optmz.png",
+        "alt": "Atendimento em um pequeno negócio local com entrega de produto no balcão"
+      },
       "items": [
         "Clínicas de estética e harmonização facial",
         "Consultórios odontológicos e ortodônticos",
@@ -197,7 +193,7 @@
     },
     "anchorVal": {
       "id": "anchor-val",
-      "title": "O valor não está em ter mais páginas; está em ser encontrado e entendido",
+      "title": "O valor não está em ter sites complexos; está em ser encontrado e entendido por potenciais clientes quando eles precisam de você",
       "body": "Um site pequeno, quando bem montado, pode valer muito mais do que uma presença digital confusa. O objetivo aqui não é volume. É clareza, indexação e confiança comercial.",
       "items": [
         "Mais clareza para o visitante",
@@ -215,6 +211,7 @@
         "amount": "27",
         "period": "/ mês"
       },
+      "markLabel": "assinatura pix.",
       "cta": {
         "href": "#contact",
         "label": "Assinar agora"
@@ -258,7 +255,7 @@
     },
     "faqCta": {
       "id": "faq-cta",
-      "title": "Perguntas rápidas e próximo passo",
+      "title": "Perguntas rápidas",
       "body": "Se você quer parar de improvisar sua presença online e começar com um site simples, otimizado e acessível, esta é a hora de dar o próximo passo.",
       "items": [
         "Preciso já ter um site? Não.",
@@ -266,19 +263,15 @@
         "É só SEO tradicional? Não. A estrutura considera SEO, AEO e GEO.",
         "Quanto custa para manter? R$ 27 por mês."
       ]
-    },
-    "contact": {
-      "id": "contact",
-      "title": "Vamos colocar seu negócio no ar com mais clareza",
-      "lines": [
-        "Spotren",
-        "R. XV de Novembro, 3057 - Centro",
-        "São José do Rio Preto - SP, 15015-110",
-        "(17) 99650-2614"
-      ]
     }
   },
   "footer": {
-    "text": "Spotren™ • Sites otimizados para SEO, AEO e GEO"
+    "text": "dev. by Rafa Santos",
+    "lines": [
+      "Spotren™ SEO para Negócios Locais",
+      "Rua Quinze de Novembro, 3057 - Centro",
+      "São José do Rio Preto - SP, 15015-110",
+      "(17) 99650-2614"
+    ]
   }
 }

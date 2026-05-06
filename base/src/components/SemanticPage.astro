@@ -1,13 +1,46 @@
 ---
+import { siteLocales, type SiteLocale } from "../lib/load-site-data";
 import type { SiteData } from "../lib/site-schema";
 
 interface Props {
+  locale: SiteLocale;
   site: SiteData;
 }
 
-const { site } = Astro.props;
+const { locale, site } = Astro.props;
 
 const ratingStars = [1, 2, 3, 4, 5];
+const testimonialsAverage = (site.sections.testimonials.items.reduce((sum, item) => sum + item.rating, 0) / site.sections.testimonials.items.length).toFixed(1);
+const testimonialsCount = site.sections.testimonials.items.length;
+const localeLinks = siteLocales.map((entry) => ({
+  code: entry,
+  href: entry === "en" ? "/" : `/${entry}`,
+  label: entry,
+}));
+
+function getTestimonialsReviewLabel(currentLocale: SiteLocale, count: number): string {
+  if (currentLocale === "pt-BR") {
+    return `${count} avaliações`;
+  }
+
+  if (currentLocale === "es") {
+    return `${count} reseñas`;
+  }
+
+  return `${count} reviews`;
+}
+
+function getTestimonialsSourceLabel(currentLocale: SiteLocale): string {
+  if (currentLocale === "pt-BR") {
+    return "Powered by Google";
+  }
+
+  if (currentLocale === "es") {
+    return "Powered by Google";
+  }
+
+  return "Powered by Google";
+}
 
 function isExternalLink(href: string): boolean {
   return href.startsWith("http://") || href.startsWith("https://");
@@ -78,19 +111,40 @@ function getSocialIcon(label: string) {
   </nav>
   <p class="eyebrow">{site.header.eyebrow}</p>
   <h1>{site.title}</h1>
+  <div class="language-switcher" aria-label="Language selector">
+    {localeLinks.map((entry) => (
+      <a
+        class={entry.code === locale ? "is-active" : undefined}
+        href={entry.href}
+        hreflang={entry.code}
+      >
+        {entry.label}
+      </a>
+    ))}
+  </div>
 </header>
 
 <main>
   <section class="testimonials-section" id={site.sections.testimonials.id}>
     <div class="testimonials-heading">
-      <div class="testimonials-heading-stars" aria-hidden="true">
-        {ratingStars.map(() => (
-          <svg viewBox="0 -960 960 960">
-            <path d="m233-120 65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z" />
-          </svg>
-        ))}
+      <div class="testimonials-summary" aria-label={site.sections.testimonials.title}>
+        <svg class="testimonials-google-mark" aria-hidden="true" viewBox="0 0 48 48">
+          <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path>
+          <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path>
+          <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"></path>
+          <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path>
+        </svg>
+        <span class="testimonials-summary-score">{testimonialsAverage}</span>
+        <div class="testimonials-heading-stars" aria-hidden="true">
+          {ratingStars.map((star) => (
+            <svg class={star <= Math.round(Number(testimonialsAverage)) ? "is-active" : "is-inactive"} viewBox="0 -960 960 960">
+              <path d="m233-120 65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z" />
+            </svg>
+          ))}
+        </div>
+        <span class="testimonials-summary-count">{getTestimonialsReviewLabel(locale, testimonialsCount)}</span>
       </div>
-      <h2 class="section-kicker">{site.sections.testimonials.title}</h2>
+      <div class="testimonials-summary-source">{getTestimonialsSourceLabel(locale)}</div>
     </div>
     <div class="testimonials-grid">
       {site.sections.testimonials.items.map((item) => (
@@ -187,6 +241,17 @@ function getSocialIcon(label: string) {
       <div class="section-copy">
         <h2>{site.sections.howWorks.title}</h2>
         <p>{site.sections.howWorks.body}</p>
+        <a
+          class="how-works-callout"
+          href={site.sections.howWorks.callout.href}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <svg aria-hidden="true" viewBox="0 -960 960 960">
+            <path d="M200-40q-33 0-56.5-23.5T120-120v-40h720v40q0 33-23.5 56.5T760-40H200Zm-40-200q-33 0-56.5-23.5T80-320v-320q0-33 23.5-56.5T160-720h640q33 0 56.5 23.5T880-640v320q0 33-23.5 56.5T800-240H160Zm-40-560v-40q0-33 23.5-56.5T200-920h560q33 0 56.5 23.5T840-840v40H120Zm280 440 200-120-200-120v240Z" />
+          </svg>
+          <span>{site.sections.howWorks.callout.title}</span>
+        </a>
       </div>
       <div class="how-works-steps">
         {site.sections.howWorks.items.map((item, index) => (
@@ -194,12 +259,12 @@ function getSocialIcon(label: string) {
             <div class="how-works-step-icon" aria-hidden="true">
               {index === 0 && (
                 <svg viewBox="0 -960 960 960">
-                  <path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v165q-40-42-92-63.5T679-560q-116 0-197.5 81.5T400-281q0 32 7 62t21 59H160Zm378.5 21.5Q480-197 480-280t58.5-141.5Q597-480 680-480t141.5 58.5Q880-363 880-280t-58.5 141.5Q763-80 680-80t-141.5-58.5ZM660-160h40v-160h-40v160Zm34-206q6-6 6-14t-6-14q-6-6-14-6t-14 6q-6 6-6 14t6 14q6 6 14 6t14-6Z" />
+                  <path d="M40-120v-80h880v80H40Zm120-120q-33 0-56.5-23.5T80-320v-440q0-33 23.5-56.5T160-840h640q33 0 56.5 23.5T880-760v440q0 33-23.5 56.5T800-240H160Zm280-140h80v-167l64 63 56-56-160-160-160 160 56 57 64-64v167Z" />
                 </svg>
               )}
               {index === 1 && (
                 <svg viewBox="0 -960 960 960">
-                  <path d="m352-522 86-87-56-57-44 44-56-56 43-44-45-45-87 87 159 158Zm328 329 87-87-45-45-44 43-56-56 43-44-57-56-86 86 158 159Zm-31-510 56 56 56-56-57-57-55 57ZM290-120H120v-170l175-175L80-680l200-200 216 216 151-152q12-12 27-18t31-6q16 0 31 6t27 18l53 54q12 12 18 27t6 31q0 16-6 30.5T816-647L665-495l215 215L680-80 465-295 290-120Z" />
+                  <path d="M160-120v-170l527-526q12-12 27-18t30-6q16 0 30.5 6t25.5 18l56 56q12 11 18 25.5t6 30.5q0 15-6 30t-18 27L330-120H160Zm586-529 54-54-57-57-54 54 57 57ZM560-120q74 0 137-37t63-103q0-36-19-62t-51-45l-59 59q23 10 36 22t13 26q0 23-36.5 41.5T560-200q-17 0-28.5 11.5T520-160q0 17 11.5 28.5T560-120ZM183-426l60-60q-20-8-31.5-16.5T200-520q0-12 18-24t76-37q88-38 117-69t29-70q0-55-44-87.5T280-840q-45 0-80.5 16T145-785q-11 13-9 29t15 26q13 11 29 9t27-13q14-14 31-20t42-6q41 0 60.5 12t19.5 28q0 14-17.5 25.5T262-654q-80 35-111 63.5T120-520q0 32 17 54.5t46 39.5Z" />
                 </svg>
               )}
               {index === 2 && (
@@ -223,6 +288,15 @@ function getSocialIcon(label: string) {
       <div class="section-copy">
         <h2>{site.sections.deliverables.title}</h2>
         <p>{site.sections.deliverables.body}</p>
+        <article class="deliverables-callout">
+          <svg aria-hidden="true" viewBox="0 -960 960 960">
+            <path d="M360-520q-34 0-57-23t-23-57v-200q0-33 23-56.5t57-23.5h240v360H360Zm320 0v-360h120q33 0 56.5 23.5T880-800v200q0 34-23.5 57T800-520H680ZM320-120v-320h272q14 0 24 8t14 19q4 11 1.5 23T618-369l-59 49H400v60h180l162-134q22-16 46.5-20t48.5 2q24 6 45.5 20.5T919-354L684-157q-22 18-48 27.5t-54 9.5H320ZM120-80q-17 0-28.5-11.5T80-120v-280q0-17 11.5-28.5T120-440h120v320q0 17-11.5 28.5T200-80h-80Z" />
+          </svg>
+          <div class="deliverables-callout-copy">
+            <strong>{site.sections.deliverables.callout.title}</strong>
+            <span>{site.sections.deliverables.callout.body}</span>
+          </div>
+        </article>
       </div>
       {site.sections.deliverables.items && (
         <ul>
@@ -233,7 +307,16 @@ function getSocialIcon(label: string) {
   </section>
 
   <section id={site.sections.icp.id}>
-    <div class="section-split">
+    <div class="section-split diagnosis-split">
+      <figure class="icp-figure">
+        <img
+          alt={site.sections.icp.figure.alt}
+          height="536"
+          loading="lazy"
+          src={site.sections.icp.figure.src}
+          width="439"
+        />
+      </figure>
       <div class="section-copy">
         <h2>{site.sections.icp.title}</h2>
         <p>{site.sections.icp.body}</p>
@@ -243,7 +326,6 @@ function getSocialIcon(label: string) {
           </ul>
         )}
       </div>
-      <div aria-hidden="true"></div>
     </div>
   </section>
 
@@ -267,10 +349,18 @@ function getSocialIcon(label: string) {
     <div class="section-split">
       <div class="section-copy">
         <h2>{site.sections.priceBuy.title}</h2>
-        <div class="price-buy-value" aria-label={`${site.sections.priceBuy.pricing.currency} ${site.sections.priceBuy.pricing.amount} ${site.sections.priceBuy.pricing.period}`}>
-          <span class="price-buy-currency">{site.sections.priceBuy.pricing.currency}</span>
-          <span class="price-buy-amount">{site.sections.priceBuy.pricing.amount}</span>
-          <span class="price-buy-period">{site.sections.priceBuy.pricing.period}</span>
+        <div class="price-buy-row">
+          <div class="price-buy-value" aria-label={`${site.sections.priceBuy.pricing.currency} ${site.sections.priceBuy.pricing.amount} ${site.sections.priceBuy.pricing.period}`}>
+            <span class="price-buy-currency">{site.sections.priceBuy.pricing.currency}</span>
+            <span class="price-buy-amount">{site.sections.priceBuy.pricing.amount}</span>
+            <span class="price-buy-period">{site.sections.priceBuy.pricing.period}</span>
+          </div>
+          <div class="price-buy-mark-wrap">
+            <svg class="price-buy-mark" aria-hidden="true" viewBox="0 0 50 50">
+              <path d="M 25 0.0390625 C 22.84 0.0390625 20.799531 0.88015625 19.269531 2.4101562 L 9.6796875 12 L 12.929688 12 C 14.529687 12 16.039922 12.619766 17.169922 13.759766 L 23.939453 20.529297 C 24.519453 21.109297 25.480547 21.109531 26.060547 20.519531 L 32.830078 13.759766 C 33.960078 12.619766 35.470312 12 37.070312 12 L 40.320312 12 L 30.730469 2.4101562 C 29.200469 0.88015625 27.16 0.0390625 25 0.0390625 z M 7.6796875 14 L 2.4101562 19.269531 C -0.74984375 22.429531 -0.74984375 27.570469 2.4101562 30.730469 L 7.6796875 36 L 12.929688 36 C 13.999687 36 14.999766 35.580078 15.759766 34.830078 L 22.529297 28.060547 C 23.889297 26.700547 26.110703 26.700547 27.470703 28.060547 L 34.240234 34.830078 C 35.000234 35.580078 36.000312 36 37.070312 36 L 42.320312 36 L 47.589844 30.730469 C 50.749844 27.570469 50.749844 22.429531 47.589844 19.269531 L 42.320312 14 L 37.070312 14 C 36.000313 14 35.000234 14.419922 34.240234 15.169922 L 27.470703 21.939453 C 26.790703 22.619453 25.9 22.960938 25 22.960938 C 24.1 22.960937 23.209297 22.619453 22.529297 21.939453 L 15.759766 15.169922 C 14.999766 14.419922 13.999688 14 12.929688 14 L 7.6796875 14 z M 25 29.037109 C 24.615 29.038359 24.229453 29.185469 23.939453 29.480469 L 17.169922 36.240234 C 16.039922 37.380234 14.529687 38 12.929688 38 L 9.6796875 38 L 19.269531 47.589844 C 20.799531 49.119844 22.84 49.960938 25 49.960938 C 27.16 49.960938 29.200469 49.119844 30.730469 47.589844 L 40.320312 38 L 37.070312 38 C 35.470313 38 33.960078 37.380234 32.830078 36.240234 L 26.060547 29.470703 C 25.770547 29.180703 25.385 29.035859 25 29.037109 z"></path>
+            </svg>
+            <span>{site.sections.priceBuy.markLabel}</span>
+          </div>
         </div>
       </div>
       <div class="price-buy-actions">
@@ -350,26 +440,23 @@ function getSocialIcon(label: string) {
       </ul>
     )}
   </section>
-
-  <section id={site.sections.contact.id}>
-    <h2>{site.sections.contact.title}</h2>
-    <address>
-      {site.sections.contact.lines.map((line) => (
-        <>
-          {line}
-          <br />
-        </>
-      ))}
-    </address>
-  </section>
 </main>
 
 <footer>
+  <address>
+    {site.footer.lines.map((line) => (
+      <>
+        {line}
+        <br />
+      </>
+    ))}
+  </address>
   <p>{site.footer.text}</p>
 </footer>
 
 <style>
   header {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -404,6 +491,27 @@ function getSocialIcon(label: string) {
   nav a:focus-visible {
     color: var(--color-accent-strong);
     transform: translateY(-1px);
+  }
+
+  .language-switcher {
+    position: absolute;
+    top: 0.5rem;
+    right: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .language-switcher a {
+    color: var(--color-text-soft);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .language-switcher a.is-active {
+    color: var(--color-accent-strong);
   }
 
   .eyebrow {
@@ -457,24 +565,59 @@ function getSocialIcon(label: string) {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-sm);
+    gap: var(--space-2xs);
     margin-bottom: var(--space-lg);
+  }
+
+  .testimonials-summary {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+  }
+
+  .testimonials-google-mark {
+    width: 2.5rem;
+    height: 2.5rem;
+    flex: 0 0 auto;
+  }
+
+  .testimonials-summary-score {
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .testimonials-summary-count {
+    color: var(--color-text-soft);
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .testimonials-summary-source {
+    text-align: center;
+    color: var(--color-text-soft);
+    font-size: 0.98rem;
+    font-weight: 500;
   }
 
   .testimonials-heading-stars {
     display: inline-flex;
     gap: 0.15rem;
-    color: var(--color-accent);
   }
 
   .testimonials-heading-stars svg {
-    width: 1rem;
-    height: 1rem;
+    width: 1.28rem;
+    height: 1.28rem;
     fill: currentColor;
   }
 
-  .testimonials-heading > .section-kicker {
-    margin-bottom: 0;
+  .testimonials-heading-stars .is-active {
+    color: #f4c542;
+  }
+
+  .testimonials-heading-stars .is-inactive {
+    color: #d9d9de;
   }
 
   .testimonials-grid {
@@ -540,6 +683,41 @@ function getSocialIcon(label: string) {
     display: none;
   }
 
+  .how-works-callout {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-top: var(--space-md);
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: rgba(255, 253, 250, 0.72);
+    color: var(--color-text-soft);
+    text-decoration: none;
+    transition: transform 140ms ease, border-color 140ms ease, color 140ms ease;
+  }
+
+  .how-works-callout:hover,
+  .how-works-callout:focus-visible {
+    color: var(--color-accent-strong);
+    border-color: color-mix(in srgb, var(--color-accent) 45%, var(--color-border));
+    transform: translateY(-1px);
+  }
+
+  .how-works-callout svg {
+    width: 1.45rem;
+    height: 1.45rem;
+    fill: var(--color-accent);
+    flex: 0 0 auto;
+  }
+
+  .how-works-callout span {
+    display: inline-flex;
+    align-items: center;
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+
   .how-works-step-icon svg {
     width: 100%;
     height: 100%;
@@ -558,14 +736,80 @@ function getSocialIcon(label: string) {
     color: var(--color-text-soft);
   }
 
+  .deliverables-callout {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    margin-top: var(--space-md);
+  }
+
+  .deliverables-callout + article {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .deliverables-callout svg {
+    width: 2.25rem;
+    height: 2.25rem;
+    fill: color-mix(in srgb, var(--color-accent) 42%, white);
+    flex: 0 0 auto;
+  }
+
+  .deliverables-callout-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    line-height: 1.35;
+  }
+
+  .deliverables-callout-copy strong {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .deliverables-callout-copy span {
+    color: var(--color-text-soft);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .price-buy-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.9rem;
+    margin-top: var(--space-sm);
+  }
+
   .price-buy-value {
     display: grid;
     grid-template-columns: auto auto auto;
     align-items: start;
     justify-content: start;
     gap: 0.45rem;
-    margin-top: var(--space-sm);
     color: var(--color-accent-strong);
+  }
+
+  .price-buy-mark-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-top: 0.2rem;
+    color: var(--color-accent);
+  }
+
+  .price-buy-mark {
+    width: 2.1rem;
+    height: 2.1rem;
+    fill: var(--color-accent);
+    flex: 0 0 auto;
+  }
+
+  .price-buy-mark-wrap span {
+    font-size: 0.98rem;
+    font-weight: 600;
+    line-height: 1.2;
   }
 
   .price-buy-actions {
@@ -599,7 +843,10 @@ function getSocialIcon(label: string) {
   }
 
   #price-buy .section-copy > h2 {
-    max-width: 17ch;
+    color: var(--color-text-soft);
+    font-family: var(--font-body);
+    font-size: clamp(1.1rem, 2.1vw, 1.7rem);
+    max-width: 12ch;
   }
 
   .price-buy-currency {
@@ -630,7 +877,7 @@ function getSocialIcon(label: string) {
     display: inline-flex;
     align-items: center;
     gap: 0.8rem;
-    margin-top: var(--space-md);
+    margin-top: var(--space-sm);
     padding: 0.85rem 1.35rem;
     border-radius: var(--radius-md);
     background: var(--color-accent-strong);
@@ -760,29 +1007,18 @@ function getSocialIcon(label: string) {
   }
 
   .anchor-val-title-card {
-    position: relative;
-    padding: var(--space-md);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    background: rgba(255, 253, 250, 0.72);
+    height: 100%;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
   }
 
   .anchor-val-title-card h2 {
     margin-bottom: 0;
     font-size: clamp(1.55rem, 2.7vw, 2.25rem);
-  }
-
-  .anchor-val-title-card::after {
-    content: "";
-    position: absolute;
-    right: 3.25rem;
-    bottom: -0.55rem;
-    width: 1rem;
-    height: 1rem;
-    border-right: 1px solid var(--color-border);
-    border-bottom: 1px solid var(--color-border);
-    background: var(--color-surface);
-    transform: rotate(45deg);
+    color: var(--color-text-soft);
+    text-align: right;
   }
 
   #cost-inaction h2 {
@@ -826,6 +1062,19 @@ function getSocialIcon(label: string) {
     font-family: var(--font-body);
     font-size: 0.95rem;
     line-height: 1.5;
+  }
+
+  .icp-figure {
+    margin: 0;
+  }
+
+  .icp-figure img {
+    width: 100%;
+    max-width: 27rem;
+    height: auto;
+    display: block;
+    border-radius: var(--radius-md);
+    object-fit: cover;
   }
 
   .testimonial-header {

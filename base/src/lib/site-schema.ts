@@ -56,10 +56,24 @@ export const siteSchema = z.object({
       id: z.string().trim().min(1),
       title: z.string().trim().min(1),
       body: z.string().trim().min(1),
+      callout: z.object({
+        href: z.string().trim().min(1),
+        title: z.string().trim().min(1),
+      }),
       items: z.array(stepItemSchema).length(3),
     }),
-    deliverables: textSectionSchema,
-    icp: textSectionSchema,
+    deliverables: textSectionSchema.extend({
+      callout: z.object({
+        title: z.string().trim().min(1),
+        body: z.string().trim().min(1),
+      }),
+    }),
+    icp: textSectionSchema.extend({
+      figure: z.object({
+        src: z.string().trim().min(1),
+        alt: z.string().trim().min(1),
+      }),
+    }),
     anchorVal: textSectionSchema,
     priceBuy: textSectionSchema.extend({
       listTitle: z.string().trim().min(1),
@@ -68,6 +82,7 @@ export const siteSchema = z.object({
         amount: z.string().trim().min(1),
         period: z.string().trim().min(1),
       }),
+      markLabel: z.string().trim().min(1),
       cta: z.object({
         href: z.string().trim().min(1),
         label: z.string().trim().min(1),
@@ -89,14 +104,10 @@ export const siteSchema = z.object({
       }),
     }),
     faqCta: textSectionSchema,
-    contact: z.object({
-      id: z.string().trim().min(1),
-      title: z.string().trim().min(1),
-      lines: z.array(z.string().trim().min(1)).min(1),
-    }),
   }),
   footer: z.object({
     text: z.string().trim().min(1),
+    lines: z.array(z.string().trim().min(1)).min(1),
   }),
 });
 
