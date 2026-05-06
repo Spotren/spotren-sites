@@ -16,6 +16,10 @@ Template mínimo para sites estáticos da Spotren usando:
   - schema Zod do conteúdo
 - `src/lib/load-site-data.ts`
   - leitura e validação do JSON por idioma
+- `src/styles/tokens.css`
+  - tokens globais de tema
+- `src/styles/global.css`
+  - reset leve e base responsiva
 - `src/pages/index.astro`
   - página inicial estática com `en` como default
 - `src/pages/[locale].astro`

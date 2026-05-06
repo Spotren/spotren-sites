@@ -93,3 +93,109 @@ const { site } = Astro.props;
 <footer>
   <p>{site.footer.text}</p>
 </footer>
+
+<style>
+  header {
+    padding: var(--space-lg) 0 var(--space-xl);
+  }
+
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-lg);
+  }
+
+  nav a {
+    padding: 0.55rem 0.85rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: rgba(255, 253, 250, 0.84);
+    text-decoration: none;
+    color: var(--color-text-soft);
+    transition: border-color 140ms ease, color 140ms ease, transform 140ms ease;
+  }
+
+  nav a:hover,
+  nav a:focus-visible {
+    color: var(--color-accent-strong);
+    border-color: var(--color-accent);
+    transform: translateY(-1px);
+  }
+
+  header p {
+    margin-bottom: var(--space-xs);
+    color: var(--color-accent-strong);
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-heading);
+    line-height: 1.1;
+  }
+
+  h1 {
+    max-width: 12ch;
+    font-size: clamp(2.5rem, 7vw, 5.75rem);
+    text-wrap: balance;
+  }
+
+  main {
+    padding-bottom: var(--space-2xl);
+  }
+
+  section {
+    margin-bottom: var(--space-lg);
+    padding: var(--space-lg);
+    border: 1px solid rgba(217, 201, 178, 0.7);
+    border-radius: var(--radius-lg);
+    background: rgba(255, 253, 250, 0.88);
+    box-shadow: var(--shadow-soft);
+  }
+
+  section > p,
+  address {
+    max-width: var(--reading-width);
+    color: var(--color-text-soft);
+  }
+
+  h2 {
+    margin-bottom: var(--space-sm);
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+  }
+
+  article + article {
+    margin-top: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+  }
+
+  h3 {
+    margin-bottom: var(--space-2xs);
+    font-size: 1.15rem;
+  }
+
+  address {
+    font-style: normal;
+  }
+
+  footer {
+    padding: 0 0 var(--space-xl);
+    color: var(--color-text-soft);
+  }
+
+  @media (min-width: 48rem) {
+    header {
+      padding-top: var(--space-xl);
+    }
+
+    section {
+      padding: var(--space-xl);
+    }
+  }
+</style>

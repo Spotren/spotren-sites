@@ -1,0 +1,53 @@
+@import "./tokens.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background:
+    radial-gradient(circle at top, rgba(154, 52, 18, 0.12), transparent 30%),
+    linear-gradient(180deg, #fcf8f2 0%, var(--color-bg) 100%);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  line-height: 1.6;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+p,
+h1,
+h2,
+h3 {
+  margin: 0;
+}
+
+main,
+header,
+footer {
+  width: min(calc(100% - 2rem), var(--content-width));
+  margin-inline: auto;
+}
+
+@media (min-width: 48rem) {
+  main,
+  header,
+  footer {
+    width: min(calc(100% - 3rem), var(--content-width));
+  }
+}
