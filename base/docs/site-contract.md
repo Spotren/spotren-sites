@@ -16,14 +16,14 @@ Cada locale precisa fornecer um payload compativel com o schema em `src/lib/site
 ## Arquivos De Conteudo
 
 - `src/content/site/en.json`
-- `src/content/site/pt-BR.json`
+- `src/content/site/pt.json`
 - `src/content/site/es.json`
 
 ## Regras De Resolucao
 
 - `/` usa `en` como locale default
 - `/en` usa `src/content/site/en.json`
-- `/pt-BR` usa `src/content/site/pt-BR.json`
+- `/pt` usa `src/content/site/pt.json`
 - `/es` usa `src/content/site/es.json`
 
 ## Contrato Atual

@@ -19,7 +19,7 @@ const localeLinks = siteLocales.map((entry) => ({
 }));
 
 function getTestimonialsReviewLabel(currentLocale: SiteLocale, count: number): string {
-  if (currentLocale === "pt-BR") {
+  if (currentLocale === "pt") {
     return `${count} avaliações`;
   }
 
@@ -31,7 +31,7 @@ function getTestimonialsReviewLabel(currentLocale: SiteLocale, count: number): s
 }
 
 function getTestimonialsSourceLabel(currentLocale: SiteLocale): string {
-  if (currentLocale === "pt-BR") {
+  if (currentLocale === "pt") {
     return "Powered by Google";
   }
 
