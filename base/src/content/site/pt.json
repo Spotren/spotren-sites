@@ -133,7 +133,7 @@
       "title": "Como funciona",
       "body": "A Spotren cria e publica para você um site simples e bem estruturado, com copy comercial, organização semântica e base técnica pensada para SEO e mecanismos de busca guiados por IA.",
       "callout": {
-        "href": "https://www.youtube.com/",
+        "href": "https://www.youtube.com/@demand-intelligence-spotren",
         "title": "Tutoriais no Youtube"
       },
       "items": [
@@ -235,12 +235,12 @@
     },
     "creator": {
       "id": "creator",
-      "title": "Quem está por trás",
-      "body": "A Spotren foi criada para ajudar negócios locais a ganhar estrutura digital com mais inteligência e menos enrolação. A proposta aqui é prática: colocar sua empresa online de um jeito mais claro, moderno e preparado para a nova lógica de busca.",
+      "title": "Spotren™",
+      "body": "A Spotren™ foi criada para ajudar negócios locais a ganhar estrutura digital com mais inteligência e menos enrolação. A proposta aqui é prática: colocar sua empresa online de um jeito mais moderno e preparado para a nova lógica de busca.",
       "figure": {
         "src": "/images/creator-mark.svg",
-        "alt": "Símbolo circular da Spotren em degradê laranja",
-        "caption": "Spotren™"
+        "alt": "Símbolo circular da Spotren™ em degradê laranja",
+        "caption": "Logo da Spotren™"
       },
       "entity": {
         "name": "Spotren",

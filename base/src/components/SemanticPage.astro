@@ -405,22 +405,22 @@ function getSocialIcon(label: string) {
   </section>
 
   <section id={site.sections.creator.id} itemscope itemtype="https://schema.org/Organization">
-    <div class="section-split diagnosis-split">
-      <figure class="creator-figure">
-        <img
-          alt={site.sections.creator.figure.alt}
-          height="512"
-          itemprop="image"
-          loading="lazy"
-          src={site.sections.creator.figure.src}
-          width="512"
-        />
-        <figcaption>{site.sections.creator.figure.caption}</figcaption>
-      </figure>
+    <div class="creator-stack">
       <div class="section-copy">
         <meta content={site.sections.creator.entity.name} itemprop="name" />
         <meta content={site.sections.creator.entity.description} itemprop="description" />
-        <h2>{site.sections.creator.title}</h2>
+        <h2 class="eyebrow">{site.sections.creator.title}</h2>
+        <figure class="creator-figure">
+          <img
+            alt={site.sections.creator.figure.alt}
+            height="512"
+            itemprop="image"
+            loading="lazy"
+            src={site.sections.creator.figure.src}
+            width="512"
+          />
+          <figcaption>{site.sections.creator.figure.caption}</figcaption>
+        </figure>
         <p>{site.sections.creator.body}</p>
         {site.sections.creator.items && (
           <ul>
@@ -543,7 +543,7 @@ function getSocialIcon(label: string) {
   }
 
   main {
-    padding-bottom: var(--space-2xl);
+    padding-bottom: 0;
   }
 
   section {
@@ -1048,6 +1048,16 @@ function getSocialIcon(label: string) {
     align-items: center;
     justify-content: center;
     text-align: center;
+  }
+
+  .creator-stack {
+    width: min(100%, 42rem);
+    margin-inline: auto;
+  }
+
+  .creator-stack > .section-copy {
+    width: min(100%, 32rem);
+    margin-inline: auto;
   }
 
   .creator-figure img {
