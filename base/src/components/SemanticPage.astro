@@ -1529,7 +1529,7 @@ function getSocialIcon(label: string) {
   .mirror-result-mark {
     width: 1.8rem;
     height: 1.8rem;
-    fill: currentColor;
+    fill: color-mix(in srgb, var(--color-accent) 42%, white);
   }
 
   .mirror-result-value {
@@ -1544,11 +1544,11 @@ function getSocialIcon(label: string) {
   }
 
   .mirror-result-value.is-success {
-    color: #2f8f4e;
+    color: var(--color-accent);
   }
 
   .mirror-result-value.is-highlight {
-    color: #2f6fce;
+    color: #2f8f4e;
   }
 
   .mirror-result-card > p {
