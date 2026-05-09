@@ -23,6 +23,18 @@ export const siteSchema = z.object({
   description: z.string().trim().min(1).max(320),
   faviconHref: z.string().trim().min(1).optional(),
   faviconContentType: z.string().trim().min(1).optional(),
+  successPage: z.object({
+    image: z.object({
+      src: z.string().trim().min(1),
+      alt: z.string().trim().min(1),
+    }),
+    title: z.string().trim().min(1),
+    body: z.string().trim().min(1),
+    button: z.object({
+      label: z.string().trim().min(1),
+      href: z.string().trim().min(1),
+    }),
+  }).optional(),
   header: z.object({
     eyebrow: z.string().trim().min(1),
     navAriaLabel: z.string().trim().min(1),

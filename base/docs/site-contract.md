@@ -35,6 +35,18 @@ Cada locale precisa fornecer um payload compativel com o schema em `src/lib/site
   "description": "string",
   "faviconHref": "string",
   "faviconContentType": "string",
+  "successPage": {
+    "image": {
+      "src": "string",
+      "alt": "string"
+    },
+    "title": "string",
+    "body": "string",
+    "button": {
+      "label": "string",
+      "href": "string"
+    }
+  },
   "header": {
     "eyebrow": "string",
     "navAriaLabel": "string",
@@ -233,6 +245,8 @@ Cada locale precisa fornecer um payload compativel com o schema em `src/lib/site
   - caminho publico do favicon
 - `faviconContentType`
   - content type do favicon
+- `successPage`
+  - conteudo da rota estatica `/pt/sucesso`, incluindo imagem, titulo, paragrafo e CTA
 - `header.eyebrow`
   - texto auxiliar do topo da pagina
 - `header.navAriaLabel`

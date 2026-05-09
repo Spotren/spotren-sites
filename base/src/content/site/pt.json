@@ -4,6 +4,18 @@
   "description": "Como aparecer no Google com um Site Simples. Conheça a Inteligência de Demanda da Spotren™ agora.",
   "faviconHref": "/favicon.ico",
   "faviconContentType": "image/x-icon",
+  "successPage": {
+    "image": {
+      "src": "/spotren-optmz.png",
+      "alt": "Ilustração da Spotren™ representando otimização digital"
+    },
+    "title": "Sucesso!",
+    "body": "Entre em contato, clicando no botão abaixo, e informe o <strong>e-mail usado na compra</strong>.",
+    "button": {
+      "label": "Mensagem",
+      "href": "https://wa.me/5517996502614"
+    }
+  },
   "header": {
     "navItems": [
       {
@@ -266,7 +278,7 @@
             "Melhor controle"
           ],
           "ctaLabel": "Assinar por mês",
-          "ctaHref": "#price-buy"
+          "ctaHref": "https://invoice.infinitepay.io/plans/spotren/gnaZ6f5UAY"
         },
         {
           "id": "yearly",
@@ -281,7 +293,7 @@
             "Mais previsibilidade"
           ],
           "ctaLabel": "Assinar por ano",
-          "ctaHref": "#price-buy"
+          "ctaHref": "https://invoice.infinitepay.io/plans/spotren/dlJFzWLE3w"
         },
         {
           "id": "lifetime",
@@ -297,7 +309,7 @@
             "Domínio grátis por <strong>5 anos</strong>"
           ],
           "ctaLabel": "Pagar uma vez só",
-          "ctaHref": "#price-buy"
+          "ctaHref": "https://checkout.infinitepay.io/spotren/O0GL1OGYt7"
         }
       ],
       "items": [
