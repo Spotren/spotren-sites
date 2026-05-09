@@ -19,6 +19,7 @@ const faqItemSchema = z.object({
 
 export const siteSchema = z.object({
   title: z.string().trim().min(1).max(255),
+  h1: z.string().trim().min(1).optional(),
   seoTitle: z.string().trim().min(1).max(255),
   description: z.string().trim().min(1).max(320),
   faviconHref: z.string().trim().min(1).optional(),
