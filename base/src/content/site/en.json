@@ -4,6 +4,18 @@
   "description": "How to show up on Google with a Simple Website. Discover Spotren™ Demand Intelligence now.",
   "faviconHref": "/favicon.ico",
   "faviconContentType": "image/x-icon",
+  "successPage": {
+    "image": {
+      "src": "/spotren-optmz.png",
+      "alt": "Spotren™ illustration representing digital optimization"
+    },
+    "title": "Success!",
+    "body": "Get in touch by clicking the button below and share the <strong>email used in the purchase</strong>.",
+    "button": {
+      "label": "Message",
+      "href": "https://wa.me/5517996502614"
+    }
+  },
   "header": {
     "navItems": [
       {
@@ -130,7 +142,7 @@
     "howWorks": {
       "id": "how-works",
       "title": "How it works",
-      "body": "Spotren creates and publishes for you a simple and well-structured website, with commercial copy, semantic organization and a technical base built for SEO and AI-driven search engines.",
+      "body": "Spotren creates and publishes for you a <strong>simple, well-structured website</strong>, with commercial copy, <strong>semantic organization</strong> and a technical base built for <strong>SEO</strong> and <strong>search engines</strong> guided by Artificial Intelligence.",
       "callout": {
         "title": "We use public data",
         "body": "from your business"
@@ -138,11 +150,11 @@
       "items": [
         {
           "title": "To get started",
-          "body": "You update the main information about your business, such as services, city, differentiators and more."
+          "body": "We will message you on WhatsApp to update the main information about your business."
         },
         {
           "title": "We structure your page",
-          "body": "We turn that material into a commercial page prepared for SEO."
+          "body": "We turn that information into a commercial page prepared for SEO and AIs."
         },
         {
           "title": "Your website goes live",
@@ -159,12 +171,12 @@
         "body": "+ Git repository"
       },
       "items": [
-        "Website structured with a focus on conversion",
+        "<strong>Website structured</strong> with a focus on conversion",
         "Business presentation copy",
-        "SEO-friendly semantic architecture",
+        "<strong>Semantic architecture friendly to SEO</strong>",
         "Structure designed for readability by AI engines",
-        "Hosting included in the monthly plan",
-        "You can use your own domain"
+        "<strong>Hosting included</strong> in the monthly plan",
+        "You can use your own domain (you get a <strong>free domain for 5 years</strong> on the lifetime plan)"
       ]
     },
     "icp": {
@@ -266,7 +278,7 @@
             "Better control"
           ],
           "ctaLabel": "Subscribe monthly",
-          "ctaHref": "#price-buy"
+          "ctaHref": "https://invoice.infinitepay.io/plans/spotren/gnaZ6f5UAY"
         },
         {
           "id": "yearly",
@@ -281,7 +293,7 @@
             "More predictability"
           ],
           "ctaLabel": "Subscribe yearly",
-          "ctaHref": "#price-buy"
+          "ctaHref": "https://invoice.infinitepay.io/plans/spotren/dlJFzWLE3w"
         },
         {
           "id": "lifetime",
@@ -297,7 +309,7 @@
             "Free domain for <strong>5 years</strong>"
           ],
           "ctaLabel": "Pay once",
-          "ctaHref": "#price-buy"
+          "ctaHref": "https://checkout.infinitepay.io/spotren/O0GL1OGYt7"
         }
       ],
       "items": [

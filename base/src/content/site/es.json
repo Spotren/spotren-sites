@@ -4,6 +4,18 @@
   "description": "Cómo aparecer en Google con un Sitio Simple. Descubre ahora la Inteligencia de Demanda de Spotren™.",
   "faviconHref": "/favicon.ico",
   "faviconContentType": "image/x-icon",
+  "successPage": {
+    "image": {
+      "src": "/spotren-optmz.png",
+      "alt": "Ilustración de Spotren™ representando optimización digital"
+    },
+    "title": "¡Éxito!",
+    "body": "Ponte en contacto haciendo clic en el botón de abajo e informa el <strong>correo usado en la compra</strong>.",
+    "button": {
+      "label": "Mensaje",
+      "href": "https://wa.me/5517996502614"
+    }
+  },
   "header": {
     "navItems": [
       {
@@ -130,7 +142,7 @@
     "howWorks": {
       "id": "how-works",
       "title": "Cómo funciona",
-      "body": "Spotren crea y publica para ti un sitio simple y bien estructurado, con copy comercial, organización semántica y una base técnica pensada para SEO y motores de búsqueda guiados por IA.",
+      "body": "Spotren crea y publica para ti un <strong>sitio simple y bien estructurado</strong>, con copy comercial, <strong>organización semántica</strong> y una base técnica pensada para <strong>SEO</strong> y <strong>motores de búsqueda</strong> guiados por Inteligencia Artificial.",
       "callout": {
         "title": "Usamos los datos públicos",
         "body": "de tu negocio"
@@ -138,11 +150,11 @@
       "items": [
         {
           "title": "Para empezar",
-          "body": "Actualizas la información principal de tu negocio, como servicios, ciudad, diferenciales y más."
+          "body": "Te vamos a escribir por WhatsApp para actualizar la información principal de tu negocio."
         },
         {
           "title": "Estructuramos tu página",
-          "body": "Transformamos ese material en una página comercial preparada para SEO."
+          "body": "Transformamos esa información en una página comercial preparada para SEO e IAs."
         },
         {
           "title": "Tu sitio sale al aire",
@@ -159,12 +171,12 @@
         "body": "+ repositorio Git"
       },
       "items": [
-        "Sitio estructurado con foco en conversión",
+        "<strong>Sitio estructurado</strong> con foco en conversión",
         "Copy de presentación del negocio",
-        "Arquitectura semántica amigable para SEO",
+        "Arquitectura <strong>semántica amigable para SEO</strong>",
         "Estructura pensada para la lectura por motores de IA",
-        "Hospedaje incluido en la mensualidad",
-        "Puedes usar tu propio dominio"
+        "<strong>Hospedaje incluido</strong> en la mensualidad",
+        "Puedes usar tu propio dominio (obtienes un <strong>dominio gratis por 5 años</strong> en el plan vitalicio)"
       ]
     },
     "icp": {
@@ -266,7 +278,7 @@
             "Mejor control"
           ],
           "ctaLabel": "Suscribirse por mes",
-          "ctaHref": "#price-buy"
+          "ctaHref": "https://invoice.infinitepay.io/plans/spotren/gnaZ6f5UAY"
         },
         {
           "id": "yearly",
@@ -281,7 +293,7 @@
             "Más previsibilidad"
           ],
           "ctaLabel": "Suscribirse por año",
-          "ctaHref": "#price-buy"
+          "ctaHref": "https://invoice.infinitepay.io/plans/spotren/dlJFzWLE3w"
         },
         {
           "id": "lifetime",
@@ -297,7 +309,7 @@
             "Dominio gratis por <strong>5 años</strong>"
           ],
           "ctaLabel": "Pagar una sola vez",
-          "ctaHref": "#price-buy"
+          "ctaHref": "https://checkout.infinitepay.io/spotren/O0GL1OGYt7"
         }
       ],
       "items": [
