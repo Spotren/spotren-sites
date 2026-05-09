@@ -49,6 +49,7 @@ Cada locale precisa fornecer um payload compativel com o schema em `src/lib/site
     "testimonials": {
       "id": "string",
       "title": "string",
+      "reviewCount": 1,
       "items": [
         {
           "headline": "string",
@@ -65,6 +66,10 @@ Cada locale precisa fornecer um payload compativel com o schema em `src/lib/site
       "title": "string",
       "body": "string",
       "listTitle": "string",
+      "result": {
+        "value": "string",
+        "body": "string"
+      },
       "speaker": {
         "name": "string",
         "role": "string",
@@ -76,15 +81,20 @@ Cada locale precisa fornecer um payload compativel com o schema em `src/lib/site
       "id": "string",
       "title": "string",
       "body": "string",
-      "items": ["string"]
+      "afterList": "string",
+      "items": ["string"],
+      "opportunity": {
+        "title": "string",
+        "paragraphs": ["string", "string"]
+      }
     },
     "howWorks": {
       "id": "string",
       "title": "string",
       "body": "string",
       "callout": {
-        "href": "string",
-        "title": "string"
+        "title": "string",
+        "body": "string"
       },
       "items": [
         {
@@ -111,7 +121,12 @@ Cada locale precisa fornecer um payload compativel com o schema em `src/lib/site
         "src": "string",
         "alt": "string"
       },
-      "items": ["string"]
+      "items": [
+        {
+          "text": "string",
+          "className": "string"
+        }
+      ]
     },
     "anchorVal": {
       "id": "string",
@@ -124,16 +139,30 @@ Cada locale precisa fornecer um payload compativel com o schema em `src/lib/site
       "title": "string",
       "body": "string",
       "listTitle": "string",
-      "pricing": {
-        "currency": "string",
-        "amount": "string",
-        "period": "string"
+      "speaker": {
+        "name": "string",
+        "role": "string",
+        "avatar": "string"
       },
-      "markLabel": "string",
-      "cta": {
-        "href": "string",
-        "label": "string"
+      "paymentLabels": {
+        "pixLabel": "string",
+        "cardLabel": "string",
+        "secureLabel": "string"
       },
+      "economyLabel": "string",
+      "plans": [
+        {
+          "id": "string",
+          "cardClass": "string",
+          "label": "string",
+          "currency": "string",
+          "amount": "string",
+          "period": "string",
+          "items": ["string"],
+          "ctaLabel": "string",
+          "ctaHref": "string"
+        }
+      ],
       "items": ["string"]
     },
     "costInaction": {
@@ -152,6 +181,18 @@ Cada locale precisa fornecer um payload compativel com o schema em `src/lib/site
         "alt": "string",
         "caption": "string"
       },
+      "profile": {
+        "name": "string",
+        "figure": {
+          "src": "string",
+          "alt": "string",
+          "caption": "string"
+        },
+        "paragraphs": [
+          "string",
+          "string"
+        ]
+      },
       "entity": {
         "name": "string",
         "description": "string",
@@ -163,7 +204,12 @@ Cada locale precisa fornecer um payload compativel com o schema em `src/lib/site
       "id": "string",
       "title": "string",
       "body": "string",
-      "items": ["string"]
+      "items": [
+        {
+          "question": "string",
+          "answer": "string"
+        }
+      ]
     }
   },
   "footer": {
@@ -193,6 +239,10 @@ Cada locale precisa fornecer um payload compativel com o schema em `src/lib/site
   - label acessivel da navegacao principal
 - `header.navItems`
   - links internos usados no `nav`
+- `header.offer`
+  - card promocional abaixo do `h1`
+- `header.offer.price`
+  - valor principal do card promocional, incluindo `currency` e `period`
 - `sections.testimonials`
   - secao de depoimentos com lista de cards contendo titulo, depoimento, avatar, nome e nota
 - `sections.mirror`
@@ -217,6 +267,7 @@ Cada locale precisa fornecer um payload compativel com o schema em `src/lib/site
   - secao sobre o criador ou responsavel pela oferta
 - `sections.faqCta`
   - secao final de FAQ e chamada para acao
+  - `items` usa pares de `question` e `answer`
 - `footer.text`
   - texto simples do rodape
 - `footer.lines`

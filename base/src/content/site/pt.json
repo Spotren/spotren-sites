@@ -1,22 +1,41 @@
 {
-  "title": "Como aparecer no Google com apenas um Site Simples e bem Estruturado",
-  "seoTitle": "Como aparecer no Google ∙ SEO para Negócios Locais ∙ Spotren™",
-  "description": "Como aparecer no Google em pouco tempo com apenas um site bem estruturado. Conheça o método SEO para Negócios Locais da Spotren™ agora.",
+  "title": "Como aparecer no Google com um Site Simples e bem Estruturado",
+  "seoTitle": "Como aparecer no Google com um Site Simples de R$27 ∙ Spotren™",
+  "description": "Como aparecer no Google com um Site Simples. Conheça a Inteligência de Demanda da Spotren™ agora.",
   "faviconHref": "/favicon.ico",
   "faviconContentType": "image/x-icon",
   "header": {
     "navItems": [
-      { "href": "https://www.facebook.com/rafa.spotren/", "label": "Facebook" },
-      { "href": "https://www.instagram.com/rafa.spotren/", "label": "Instagram" },
-      { "href": "https://www.linkedin.com/in/rafa-spotren-founder/", "label": "LinkedIn" }
+      {
+        "href": "https://www.facebook.com/rafa.spotren/",
+        "label": "Facebook"
+      },
+      {
+        "href": "https://www.instagram.com/rafa.spotren/",
+        "label": "Instagram"
+      },
+      {
+        "href": "https://www.linkedin.com/in/rafa-spotren-founder/",
+        "label": "LinkedIn"
+      }
     ],
-    "eyebrow": "SEO para Negócios Locais",
-    "navAriaLabel": "Primaria"
+    "eyebrow": "Site Simples + SEO e IA",
+    "navAriaLabel": "Primaria",
+    "offer": {
+      "title": "Site publicado em minutos",
+      "body": "+ hospedagem inclusa",
+      "price": {
+        "currency": "R$",
+        "amount": "27",
+        "period": "mês"
+      }
+    }
   },
   "sections": {
     "testimonials": {
       "id": "testimonials",
       "title": "Confiam na Spotren",
+      "reviewCount": 9,
       "items": [
         {
           "headline": "Autoridade",
@@ -25,14 +44,6 @@
           "name": "Fernanda Lima",
           "role": "Clínica Odontológica",
           "rating": 5
-        },
-        {
-          "headline": "Organização",
-          "quote": "Eu tinha muita dificuldade para explicar tudo o que minha empresa fazia. Agora ficou claro, objetivo e muito mais fácil de entender.",
-          "avatar": "/avatars/avatar-45.jpg",
-          "name": "Rafaela Souza",
-          "role": "Assistência Técnica",
-          "rating": 4
         },
         {
           "headline": "Descoberta",
@@ -53,18 +64,10 @@
         {
           "headline": "Confiança",
           "quote": "Minha página ficou com cara de empresa séria. Isso mudou a forma como novos clientes chegam e conversam comigo.",
-          "avatar": "/avatars/avatar-18.jpg",
+          "avatar": "/avatars/avatar-32.jpg",
           "name": "Patrícia Gomes",
           "role": "Clínica de Estética",
           "rating": 5
-        },
-        {
-          "headline": "Direção",
-          "quote": "Eu não sabia por onde começar no digital. Ter uma estrutura pronta e pensada para busca me deu um caminho muito mais claro.",
-          "avatar": "/avatars/avatar-28.jpg",
-          "name": "Márcio Teixeira",
-          "role": "Auto Center",
-          "rating": 4
         },
         {
           "headline": "Visibilidade",
@@ -81,65 +84,61 @@
           "name": "Camila Rocha",
           "role": "Advogada",
           "rating": 5
-        },
-        {
-          "headline": "Agilidade",
-          "quote": "Eu precisava colocar algo no ar sem enrolação e sem gastar alto. A proposta fez sentido e entregou exatamente isso.",
-          "avatar": "/avatars/avatar-9.jpg",
-          "name": "Gustavo Almeida",
-          "role": "Serviços Residenciais",
-          "rating": 4
-        },
-        {
-          "headline": "Resultado",
-          "quote": "O site ficou mais alinhado com o que meu cliente procura. Percebi melhora na qualidade das mensagens que começaram a chegar.",
-          "avatar": "/avatars/avatar-57.jpg",
-          "name": "Aline Ribeiro",
-          "role": "Psicóloga",
-          "rating": 5
         }
       ]
     },
     "mirror": {
       "id": "mirror",
-      "title": "Se você é dono de negócio local, não precisa de um site gigante para começar a aparecer",
-      "body": "Uma página objetiva, rápida e bem estruturada para explicar quem você atende, o que você vende e por que o seu negócio merece ser escolhido, e é isso que a Spotren entrega.",
-      "listTitle": "Você precisa de:",
+      "title": "Dono de Comércio Local e Profissional PJ, nós podemos te ajudar a aparecer no Google",
+      "body": "Uma página objetiva, rápida e bem estruturada para explicar <em>quem</em> você atende, <em>o que</em> você vende e <em>por que</em> o seu negócio merece ser escolhido, e é isso que a <strong>Spotren™</strong> entrega.",
+      "listTitle": "Marque o que melhor descreve",
+      "result": {
+        "value": "100",
+        "body": "Podemos ajudar o seu Negócio Local a <strong>aparecer em destaque no Google</strong>."
+      },
       "speaker": {
         "name": "Rafa Santos",
-        "role": "Fundador da Spotren",
+        "role": "Fundador da Spotren™",
         "avatar": "/avatars/avatar-founder.jpg"
       },
       "items": [
-        "Um perfil no Google meu Negócio completo",
-        "Imagens de produtos, serviços e depoimentos",
-        "Site otimizado com Nota 100/100",
-        "Aparecer nas buscas da sua cidade",
-        "Ser citado em respostas diretas e assistentes"
+        "Não tenho perfil funcional no Google meu Negócio",
+        "Nem imagens de produtos e depoimentos respondidos",
+        "Não tenho um <strong>site otimizado com Nota 100/100</strong>",
+        "Não consigo <strong>aparecer nas buscas</strong> da minha cidade",
+        "Não sou citado em respostas de inteligências artificias"
       ]
     },
     "diagnosis": {
       "id": "diagnosis",
-      "title": "O problema ",
+      "title": "Explicação",
       "body": "Muitos negócios locais continuam invisíveis onde realmente importa: na hora em que o cliente pesquisa no Google ou faz uma pergunta.",
+      "afterList": "Sem uma base própria, sua presença digital fica incompleta e sua empresa perde espaço justamente quando o cliente está mais perto da decisão.",
       "items": [
         "Instagram sozinho não organiza sua proposta",
         "Um perfil solto não explica bem seus serviços",
         "Sem estrutura, sua empresa perde contexto"
-      ]
+      ],
+      "opportunity": {
+        "title": "Oportunidade",
+        "paragraphs": [
+          "Quando sua empresa passa a ter uma página clara, objetiva e tecnicamente bem organizada, ela deixa de depender só de indicação ou rede social para ser descoberta.",
+          "A oportunidade está em transformar buscas comuns em visitas qualificadas, fortalecer sua autoridade local e criar uma presença digital que trabalha a seu favor todos os dias."
+        ]
+      }
     },
     "howWorks": {
       "id": "how-works",
       "title": "Como funciona",
       "body": "A Spotren cria e publica para você um site simples e bem estruturado, com copy comercial, organização semântica e base técnica pensada para SEO e mecanismos de busca guiados por IA.",
       "callout": {
-        "href": "https://www.youtube.com/@demand-intelligence-spotren",
-        "title": "Tutoriais no Youtube"
+        "title": "Usamos os dados públicos",
+        "body": "do seu negócio"
       },
       "items": [
         {
-          "title": "Você envia o essencial",
-          "body": "Você compartilha as informações principais do seu negócio, como serviços, cidade, diferenciais etc."
+          "title": "Pra começar",
+          "body": "Você atualiza as informações principais do seu negócio, como serviços, cidade, diferenciais etc."
         },
         {
           "title": "Nós estruturamos sua página",
@@ -171,61 +170,147 @@
     "icp": {
       "id": "icp",
       "title": "Para quem faz sentido",
-      "body": "Essa oferta foi desenhada para negócios locais que precisam começar com simplicidade, sem abrir mão de posicionamento e presença profissional.",
+      "body": "Essa oferta foi desenhada para negócios locais e profissionais PJ que precisam começar com simplicidade, sem abrir mão de posicionamento.",
       "figure": {
         "src": "/images/icp-spotren-aparecer-google-optmz.png",
         "alt": "Atendimento em um pequeno negócio local com entrega de produto no balcão"
       },
       "items": [
-        "Clínicas de estética e harmonização facial",
-        "Consultórios odontológicos e ortodônticos",
-        "Escritórios de advocacia e assessoria jurídica",
-        "Contabilidades e escritórios fiscais",
-        "Oficinas mecânicas e auto centers",
-        "Pintores, eletricistas e encanadores",
-        "Imobiliárias e corretores de imóveis",
-        "Academias, studios de pilates e personal trainers",
-        "Psicólogos, nutricionistas e terapeutas",
-        "Marmorarias, marcenarias e móveis planejados",
-        "Restaurantes, pizzarias e cafeterias locais",
-        "Pet shops, clínicas veterinárias e banho e tosa"
+        {
+          "text": "Clínicas de estética e harmonização facial",
+          "className": "aesthetic-clinics"
+        },
+        {
+          "text": "Dentistas e consultórios odontológicos / ortodônticos",
+          "className": "dental-practices"
+        },
+        {
+          "text": "Escritórios de advocacia e assessoria jurídica",
+          "className": "law-firms"
+        },
+        {
+          "text": "Contabilidades, contadores e escritórios fiscais",
+          "className": "accounting-offices"
+        },
+        {
+          "text": "Mecânicos, oficinas mecânicas e auto / moto centers",
+          "className": "auto-shops"
+        },
+        {
+          "text": "Pintores, eletricistas e encanadores",
+          "className": "home-services"
+        },
+        {
+          "text": "Engenheiros, imobiliárias e corretores de imóveis",
+          "className": "real-estate"
+        },
+        {
+          "text": "Academias, studios de pilates e personal trainers",
+          "className": "fitness-studios"
+        },
+        {
+          "text": "Psicólogos, psiquiatras, nutricionistas e terapeutas",
+          "className": "health-practitioners"
+        },
+        {
+          "text": "Marmorarias, marcenarias e móveis planejados",
+          "className": "custom-craft"
+        },
+        {
+          "text": "Restaurantes, pizzarias e cafeterias locais",
+          "className": "food-businesses"
+        },
+        {
+          "text": "Pet shops / sitters, clínicas veterinárias e banho e tosa",
+          "className": "pet-care"
+        }
       ]
     },
     "anchorVal": {
       "id": "anchor-val",
       "title": "O valor não está em ter sites complexos; está em ser encontrado e entendido por potenciais clientes quando eles precisam de você",
-      "body": "Um site pequeno, quando bem montado, pode valer muito mais do que uma presença digital confusa. O objetivo aqui não é volume. É clareza, indexação e confiança comercial.",
+      "body": "Um site pequeno, quando bem montado, pode valer muito mais do que uma presença digital confusa.",
       "items": [
         "Mais clareza para o visitante",
-        "Mais contexto para o Google",
-        "Mais estrutura para experiências de busca com IA"
+        "Mais contexto para buscas Google",
+        "Mais estrutura para Inteligência Artificial"
       ]
     },
     "priceBuy": {
       "id": "price-buy",
       "title": "Preço simples para começar agora",
-      "body": "Por apenas R$ 27 por mês, você tem um site profissional, otimizado para SEO, AEO e GEO, com manutenção contínua e uma base muito mais preparada para gerar presença digital real.",
+      "body": "Nosso objetivo é aumentar o número de usuários falando bem da nossa marca nas redes, por isso a garantia é incondicional.",
       "listTitle": "7 dias de garantia",
-      "pricing": {
-        "currency": "R$",
-        "amount": "27",
-        "period": "/ mês"
+      "speaker": {
+        "name": "Rafa Santos",
+        "role": "Fundador da Spotren",
+        "avatar": "/avatars/avatar-founder.jpg"
       },
-      "markLabel": "assinatura pix.",
-      "cta": {
-        "href": "#contact",
-        "label": "Assinar agora"
+      "paymentLabels": {
+        "pixLabel": "pix",
+        "cardLabel": "cartão",
+        "secureLabel": "pgt. seguro"
       },
+      "economyLabel": "Econômicos",
+      "plans": [
+        {
+          "id": "monthly",
+          "cardClass": "is-monthly",
+          "label": "Mensal",
+          "currency": "R$",
+          "amount": "27",
+          "period": "mês",
+          "items": [
+            "Ideal para começar",
+            "Pagamento recorrente",
+            "Melhor controle"
+          ],
+          "ctaLabel": "Assinar por mês",
+          "ctaHref": "#price-buy"
+        },
+        {
+          "id": "yearly",
+          "cardClass": "is-yearly",
+          "label": "Anual",
+          "currency": "R$",
+          "amount": "247",
+          "period": "ano",
+          "items": [
+            "<strong>Economia de 24%</strong>",
+            "Compromisso de médio prazo",
+            "Mais previsibilidade"
+          ],
+          "ctaLabel": "Assinar por ano",
+          "ctaHref": "#price-buy"
+        },
+        {
+          "id": "lifetime",
+          "cardClass": "is-lifetime",
+          "label": "Vitalício",
+          "currency": "R$",
+          "amount": "2.497",
+          "period": "pgt. único",
+          "items": [
+            "Pagamento único",
+            "Sem mensalidade recorrente",
+            "Aquisição definitiva",
+            "Domínio grátis por <strong>5 anos</strong>"
+          ],
+          "ctaLabel": "Pagar uma vez só",
+          "ctaHref": "#price-buy"
+        }
+      ],
       "items": [
-        "Sem complexidade desnecessária",
-        "Sem precisar montar tudo sozinho",
-        "Com foco em visibilidade e vendas"
+        "Sem precisar ficar horas solicitando cancelamento",
+        "Sem protocolo de atendimento e dar nota no final",
+        "Sem ter que conversar com ninguém por telefone",
+        "Não gostou? O cancelamento é seu direito."
       ]
     },
     "costInaction": {
       "id": "cost-inaction",
       "title": "O custo de continuar sem isso tende a ser maior",
-      "bodyTitle": "Porque",
+      "bodyTitle": "Porque sai caro",
       "body": "Enquanto sua empresa não tem uma base clara e própria na web, você continua dependendo demais de indicações, perde contexto de busca e desperdiça oportunidades de descoberta.",
       "items": [
         "Menos chance de aparecer em pesquisas qualificadas",
@@ -235,12 +320,24 @@
     },
     "creator": {
       "id": "creator",
-      "title": "Spotren™",
+      "title": "A Marca",
       "body": "A Spotren™ foi criada para ajudar negócios locais a ganhar estrutura digital com mais inteligência e menos enrolação. A proposta aqui é prática: colocar sua empresa online de um jeito mais moderno e preparado para a nova lógica de busca.",
       "figure": {
         "src": "/images/creator-mark.svg",
         "alt": "Símbolo circular da Spotren™ em degradê laranja",
         "caption": "Logo da Spotren™"
+      },
+      "profile": {
+        "name": "Responsável Técnico",
+        "figure": {
+          "src": "/avatars/avatar-founder.jpg",
+          "alt": "Foto de Rafa Santos, Fundador da Spotren",
+          "caption": "Rafa Santos, Fundador da Spotren™"
+        },
+        "paragraphs": [
+          "Rafa Santos é o fundador da <strong>Spotren™</strong> e Eng. de Software Sênior com mais de 15 anos de experiência no desenvolvimento de aplicações web, atuando como Full-Stack Developer com forte foco em backend e arquitetura de software.",
+          "Seu foco está em unir posicionamento comercial, SEO local e organização técnica simples para transformar páginas enxutas em ativos úteis."
+        ]
       },
       "entity": {
         "name": "Spotren",
@@ -258,20 +355,32 @@
       "title": "Perguntas rápidas",
       "body": "Se você quer parar de improvisar sua presença online e começar com um site simples, otimizado e acessível, esta é a hora de dar o próximo passo.",
       "items": [
-        "Preciso já ter um site? Não.",
-        "Serve para negócio pequeno? Sim, especialmente para negócio local.",
-        "É só SEO tradicional? Não. A estrutura considera SEO, AEO e GEO.",
-        "Quanto custa para manter? R$ 27 por mês."
+        {
+          "question": "Preciso já ter um site?",
+          "answer": "Não."
+        },
+        {
+          "question": "Serve para negócio pequeno?",
+          "answer": "Sim, especialmente para negócio local."
+        },
+        {
+          "question": "É só SEO tradicional?",
+          "answer": "Não. A estrutura considera SEO, AEO e GEO."
+        },
+        {
+          "question": "Quanto custa para manter?",
+          "answer": "R$ 27 por mês."
+        }
       ]
     }
   },
   "footer": {
     "text": "dev. by Rafa Santos",
     "lines": [
-      "Spotren™ SEO para Negócios Locais",
+      "<strong>Spotren™</strong> Inteligência de Demanda",
       "Rua Quinze de Novembro, 3057 - Centro",
       "São José do Rio Preto - SP, 15015-110",
-      "(17) 99650-2614"
+      "WhatsApp: (17) 99650-2614"
     ]
   }
 }

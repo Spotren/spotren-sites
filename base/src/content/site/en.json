@@ -1,152 +1,386 @@
 {
-  "title": "Spotren Sites",
-  "seoTitle": "Spotren Sites | Static Site Template",
-  "description": "Test English description for the default Spotren static site template.",
+  "title": "How to Show Up on Google with a Simple and Well-Structured Website",
+  "seoTitle": "How to Show Up on Google with a Simple R$27 Website ∙ Spotren™",
+  "description": "How to show up on Google with a Simple Website. Discover Spotren™ Demand Intelligence now.",
   "faviconHref": "/favicon.ico",
   "faviconContentType": "image/x-icon",
   "header": {
-    "eyebrow": "Local SEO by Spotren™",
-    "navAriaLabel": "Primary",
     "navItems": [
-      { "href": "#testimonials", "label": "Testimonials" },
-      { "href": "#mirror", "label": "Explanation" },
-      { "href": "#contact", "label": "Contact" }
-    ]
+      {
+        "href": "https://www.facebook.com/rafa.spotren/",
+        "label": "Facebook"
+      },
+      {
+        "href": "https://www.instagram.com/rafa.spotren/",
+        "label": "Instagram"
+      },
+      {
+        "href": "https://www.linkedin.com/in/rafa-spotren-founder/",
+        "label": "LinkedIn"
+      }
+    ],
+    "eyebrow": "Simple Website + SEO and AI",
+    "navAriaLabel": "Primary",
+    "offer": {
+      "title": "Website published in minutes",
+      "body": "+ hosting included",
+      "price": {
+        "currency": "R$",
+        "amount": "27",
+        "period": "mo"
+      }
+    }
   },
   "sections": {
     "testimonials": {
       "id": "testimonials",
-      "title": "Testimonials",
+      "title": "Businesses Trust Spotren",
+      "reviewCount": 9,
       "items": [
         {
-          "headline": "Sharper positioning",
-          "quote": "I finally found a simpler way to explain my local business and connect with people who discover us on Google.",
-          "avatar": "/avatars/avatar-32.jpg",
-          "name": "Mariana Alves",
-          "role": "Beauty Studio",
+          "headline": "Authority",
+          "quote": "The website gave my company more credibility from the very first interaction. Now I can present my service better and inspire more confidence.",
+          "avatar": "/avatars/avatar-21.jpg",
+          "name": "Fernanda Lima",
+          "role": "Dental Clinic",
           "rating": 5
         },
         {
-          "headline": "More confidence to sell",
-          "quote": "The site became clearer and helped us turn visits into much more qualified conversations.",
-          "avatar": "/avatars/avatar-12.jpg",
-          "name": "Carlos Henrique",
-          "role": "Specialized Workshop",
+          "headline": "Discovery",
+          "quote": "I realized that relying only on social media was not enough. With a well-structured page, my business started making much more sense to people searching for us.",
+          "avatar": "/avatars/avatar-5.jpg",
+          "name": "Juliana Martins",
+          "role": "Pilates Studio",
+          "rating": 5
+        },
+        {
+          "headline": "Conversion",
+          "quote": "The best part was having a simple website, with no unnecessary complexity, but built to sell better. Today I feel my online presence is much more mature.",
+          "avatar": "/avatars/avatar-52.jpg",
+          "name": "Eduardo Nunes",
+          "role": "Accounting Office",
+          "rating": 5
+        },
+        {
+          "headline": "Trust",
+          "quote": "My page now looks like a serious business. That changed the way new customers arrive and start conversations with me.",
+          "avatar": "/avatars/avatar-32.jpg",
+          "name": "Patrícia Gomes",
+          "role": "Aesthetics Clinic",
+          "rating": 5
+        },
+        {
+          "headline": "Visibility",
+          "quote": "Now I have a foundation that speaks to Google and also to the new way people search using AI.",
+          "avatar": "/avatars/avatar-61.jpg",
+          "name": "Leandro Costa",
+          "role": "Custom Furniture Store",
+          "rating": 5
+        },
+        {
+          "headline": "Focus",
+          "quote": "Having a lean page, but one that is well thought out, helped me stop improvising and show only what truly matters to close business.",
+          "avatar": "/avatars/avatar-41.jpg",
+          "name": "Camila Rocha",
+          "role": "Lawyer",
           "rating": 5
         }
       ]
     },
     "mirror": {
       "id": "mirror",
-      "title": "How showing up on Google can become the turning point for your local business",
-      "body": "This is placeholder content for the explanatory section of the page.",
-      "listTitle": "To show up on Google, you need:",
+      "title": "If You Run a Local Business or Work as an Incorporated Professional, We Can Help You Show Up on Google",
+      "body": "An objective, fast and well-structured page to explain <em>who</em> you serve, <em>what</em> you sell and <em>why</em> your business deserves to be chosen, and that is exactly what <strong>Spotren™</strong> delivers.",
+      "listTitle": "Check what describes you best",
+      "result": {
+        "value": "100",
+        "body": "We can help your <strong>Local Business stand out on Google</strong>."
+      },
       "speaker": {
         "name": "Rafa Santos",
-        "role": "Founder of Spotren",
+        "role": "Founder of Spotren™",
         "avatar": "/avatars/avatar-founder.jpg"
-      }
+      },
+      "items": [
+        "I do not have a functional Google Business Profile",
+        "I do not even have product images and answered reviews",
+        "I do not have a <strong>website optimized with a 100/100 score</strong>",
+        "I cannot <strong>show up in searches</strong> in my city",
+        "I am not mentioned in AI-generated answers"
+      ]
     },
     "diagnosis": {
       "id": "diagnosis",
-      "title": "Diagnosis",
-      "body": "Placeholder content for the diagnosis section."
+      "title": "Explanation",
+      "body": "Many local businesses remain invisible where it matters most: when the customer searches on Google or asks a direct question.",
+      "afterList": "Without a home base of your own, your digital presence stays incomplete and your business loses ground right when the customer is closest to making a decision.",
+      "items": [
+        "Instagram alone does not organize your offer",
+        "A loose profile does not explain your services well",
+        "Without structure, your business loses context"
+      ],
+      "opportunity": {
+        "title": "Opportunity",
+        "paragraphs": [
+          "When your business gains a page that is clear, objective and technically well organized, it stops depending only on referrals or social media to be discovered.",
+          "The opportunity is to turn common searches into qualified visits, strengthen your local authority and create a digital presence that works in your favor every day."
+        ]
+      }
     },
     "howWorks": {
       "id": "how-works",
       "title": "How it works",
-      "body": "Placeholder content explaining how the offer works.",
+      "body": "Spotren creates and publishes for you a simple and well-structured website, with commercial copy, semantic organization and a technical base built for SEO and AI-driven search engines.",
       "callout": {
-        "href": "https://www.youtube.com/",
-        "title": "YouTube tutorials"
+        "title": "We use public data",
+        "body": "from your business"
       },
       "items": [
         {
-          "title": "You send the essentials",
-          "body": "Share the main information about your business, services and contact details."
+          "title": "To get started",
+          "body": "You update the main information about your business, such as services, city, differentiators and more."
         },
         {
-          "title": "We structure the page",
-          "body": "We turn that material into a clear page built for SEO and AI-driven discovery."
+          "title": "We structure your page",
+          "body": "We turn that material into a commercial page prepared for SEO."
         },
         {
-          "title": "Your site goes live",
-          "body": "We publish the page and keep it maintained so your business can show up more clearly online."
+          "title": "Your website goes live",
+          "body": "We publish the page so you can start strengthening your digital presence in minutes."
         }
       ]
     },
     "deliverables": {
       "id": "deliverables",
-      "title": "Deliverables",
-      "body": "Placeholder content listing the main deliverables.",
+      "title": "What is included",
+      "body": "You receive a ready-made foundation to sell your business online more effectively, without having to manage a complex technical project.",
       "callout": {
-        "title": "Site published instantly",
+        "title": "Website published right away",
         "body": "+ Git repository"
-      }
+      },
+      "items": [
+        "Website structured with a focus on conversion",
+        "Business presentation copy",
+        "SEO-friendly semantic architecture",
+        "Structure designed for readability by AI engines",
+        "Hosting included in the monthly plan",
+        "You can use your own domain"
+      ]
     },
     "icp": {
       "id": "icp",
-      "title": "Ideal customer profile",
-      "body": "Placeholder content describing who this page and offer are for.",
+      "title": "Who this makes sense for",
+      "body": "This offer was designed for local businesses and incorporated professionals who need to start simply without giving up positioning.",
       "figure": {
         "src": "/images/icp-spotren-aparecer-google-optmz.png",
-        "alt": "Service interaction at a local business counter"
-      }
+        "alt": "Service at a small local business with a product handoff at the counter"
+      },
+      "items": [
+        {
+          "text": "Aesthetics clinics and facial harmonization studios",
+          "className": "aesthetic-clinics"
+        },
+        {
+          "text": "Dentists and dental or orthodontic practices",
+          "className": "dental-practices"
+        },
+        {
+          "text": "Law firms and legal advisory offices",
+          "className": "law-firms"
+        },
+        {
+          "text": "Accounting firms, accountants and tax offices",
+          "className": "accounting-offices"
+        },
+        {
+          "text": "Mechanics, repair shops and auto or motorcycle centers",
+          "className": "auto-shops"
+        },
+        {
+          "text": "Painters, electricians and plumbers",
+          "className": "home-services"
+        },
+        {
+          "text": "Engineers, real estate agencies and brokers",
+          "className": "real-estate"
+        },
+        {
+          "text": "Gyms, Pilates studios and personal trainers",
+          "className": "fitness-studios"
+        },
+        {
+          "text": "Psychologists, psychiatrists, nutritionists and therapists",
+          "className": "health-practitioners"
+        },
+        {
+          "text": "Marble shops, woodworking shops and custom furniture businesses",
+          "className": "custom-craft"
+        },
+        {
+          "text": "Restaurants, pizza shops and local coffee shops",
+          "className": "food-businesses"
+        },
+        {
+          "text": "Pet shops, pet sitters, veterinary clinics and grooming services",
+          "className": "pet-care"
+        }
+      ]
     },
     "anchorVal": {
       "id": "anchor-val",
-      "title": "Value anchoring",
-      "body": "Placeholder content supporting the perceived value."
+      "title": "The value is not in having complex websites; it is in being found and understood by potential customers when they need you",
+      "body": "A small website, when built well, can be worth far more than a confusing digital presence.",
+      "items": [
+        "More clarity for the visitor",
+        "More context for Google searches",
+        "More structure for Artificial Intelligence"
+      ]
     },
     "priceBuy": {
       "id": "price-buy",
-      "title": "Pricing and purchase",
-      "body": "Placeholder content presenting price, purchase and next step.",
+      "title": "Simple pricing to get started now",
+      "body": "Our goal is to increase the number of users speaking well about our brand online, so the guarantee is unconditional.",
       "listTitle": "7-day guarantee",
-      "pricing": {
-        "currency": "$",
-        "amount": "27",
-        "period": "/ mo"
+      "speaker": {
+        "name": "Rafa Santos",
+        "role": "Founder of Spotren",
+        "avatar": "/avatars/avatar-founder.jpg"
       },
-      "markLabel": "PIX subscription",
-      "cta": {
-        "href": "#contact",
-        "label": "Subscribe now"
-      }
+      "paymentLabels": {
+        "pixLabel": "pix",
+        "cardLabel": "card",
+        "secureLabel": "secure payment"
+      },
+      "economyLabel": "Economic",
+      "plans": [
+        {
+          "id": "monthly",
+          "cardClass": "is-monthly",
+          "label": "Monthly",
+          "currency": "R$",
+          "amount": "27",
+          "period": "month",
+          "items": [
+            "Ideal to get started",
+            "Recurring payment",
+            "Better control"
+          ],
+          "ctaLabel": "Subscribe monthly",
+          "ctaHref": "#price-buy"
+        },
+        {
+          "id": "yearly",
+          "cardClass": "is-yearly",
+          "label": "Yearly",
+          "currency": "R$",
+          "amount": "247",
+          "period": "year",
+          "items": [
+            "<strong>24% savings</strong>",
+            "Mid-term commitment",
+            "More predictability"
+          ],
+          "ctaLabel": "Subscribe yearly",
+          "ctaHref": "#price-buy"
+        },
+        {
+          "id": "lifetime",
+          "cardClass": "is-lifetime",
+          "label": "Lifetime",
+          "currency": "R$",
+          "amount": "2.497",
+          "period": "one-time",
+          "items": [
+            "One-time payment",
+            "No recurring monthly fee",
+            "Permanent acquisition",
+            "Free domain for <strong>5 years</strong>"
+          ],
+          "ctaLabel": "Pay once",
+          "ctaHref": "#price-buy"
+        }
+      ],
+      "items": [
+        "No need to spend hours asking for cancellation",
+        "No support ticket protocol and no end-of-call survey",
+        "No need to talk to anyone by phone",
+        "Did not like it? Cancellation is your right."
+      ]
     },
     "costInaction": {
       "id": "cost-inaction",
-      "title": "Cost of inaction",
-      "bodyTitle": "Why",
-      "body": "Placeholder content showing the risk of not acting."
+      "title": "The cost of continuing without this tends to be higher",
+      "bodyTitle": "Why it gets expensive",
+      "body": "While your business does not have a clear and owned base on the web, you remain too dependent on referrals, lose search context and waste discovery opportunities.",
+      "items": [
+        "Less chance of appearing in qualified searches",
+        "More difficulty explaining your offer",
+        "Less trust when people compare you with competitors"
+      ]
     },
     "creator": {
       "id": "creator",
-      "title": "Who created this",
-      "body": "Placeholder content about the creator or owner of the offer.",
+      "title": "The Brand",
+      "body": "Spotren™ was created to help local businesses gain digital structure with more intelligence and less friction. The proposal here is practical: put your company online in a more modern way and prepare it for the new search logic.",
       "figure": {
         "src": "/images/creator-mark.svg",
-        "alt": "Spotren circular mark in an orange gradient",
-        "caption": "Spotren visual mark."
+        "alt": "Spotren™ circular symbol in an orange gradient",
+        "caption": "Spotren™ logo"
+      },
+      "profile": {
+        "name": "Technical Lead",
+        "figure": {
+          "src": "/avatars/avatar-founder.jpg",
+          "alt": "Photo of Rafa Santos, Founder of Spotren",
+          "caption": "Rafa Santos, Founder of Spotren™"
+        },
+        "paragraphs": [
+          "Rafa Santos is the founder of <strong>Spotren™</strong> and a Senior Software Engineer with more than 15 years of experience building web applications, working as a Full-Stack Developer with a strong focus on backend and software architecture.",
+          "His focus is to combine commercial positioning, local SEO and simple technical organization to turn lean pages into useful assets."
+        ]
       },
       "entity": {
         "name": "Spotren",
-        "description": "Service for building websites optimized for SEO, AEO and GEO for local businesses.",
+        "description": "Service for creating websites optimized for SEO, AEO and GEO for local businesses.",
         "image": "/images/creator-mark.svg"
-      }
+      },
+      "items": [
+        "Focus on commercial clarity",
+        "Lean and efficient technical structure",
+        "SEO and AI-oriented thinking from the foundation"
+      ]
     },
     "faqCta": {
       "id": "faq-cta",
-      "title": "FAQ and call to action",
-      "body": "Placeholder content for frequently asked questions and the final CTA."
+      "title": "Quick questions",
+      "body": "If you want to stop improvising your online presence and start with a simple, optimized and affordable website, this is the time to take the next step.",
+      "items": [
+        {
+          "question": "Do I need to already have a website?",
+          "answer": "No."
+        },
+        {
+          "question": "Does this work for a small business?",
+          "answer": "Yes, especially for a local business."
+        },
+        {
+          "question": "Is it only traditional SEO?",
+          "answer": "No. The structure considers SEO, AEO and GEO."
+        },
+        {
+          "question": "How much does it cost to maintain?",
+          "answer": "R$ 27 per month."
+        }
+      ]
     }
   },
   "footer": {
-    "text": "Test footer",
+    "text": "dev. by Rafa Santos",
     "lines": [
-      "Spotren Example Street",
-      "123 Test Avenue",
-      "hello@example.com"
+      "<strong>Spotren™</strong> Demand Intelligence",
+      "Rua Quinze de Novembro, 3057 - Centro",
+      "São José do Rio Preto - SP, 15015-110",
+      "WhatsApp: (17) 99650-2614"
     ]
   }
 }

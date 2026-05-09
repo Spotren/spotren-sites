@@ -1,26 +1,31 @@
 ---
 import SeoHead from "../components/SeoHead.astro";
+import type { SiteLocale } from "../lib/load-site-data";
+import type { SiteData } from "../lib/site-schema";
 import "../styles/global.css";
 
 interface Props {
   description: string;
   faviconContentType?: string;
   faviconHref?: string;
-  locale: string;
+  locale: SiteLocale;
   seoTitle: string;
+  site: SiteData;
 }
 
-const { description, faviconContentType, faviconHref, locale, seoTitle } = Astro.props;
+const { description, faviconContentType, faviconHref, locale, seoTitle, site } = Astro.props;
 ---
 
 <!doctype html>
 <html lang={locale}>
   <head>
     <SeoHead
+      baseUrl={Astro.site?.toString()}
       description={description}
       faviconContentType={faviconContentType}
       faviconHref={faviconHref}
       locale={locale}
+      site={site}
       title={seoTitle}
     />
   </head>

@@ -1,19 +1,33 @@
 ---
+import type { SiteLocale } from "../lib/load-site-data";
+import { buildStructuredData } from "../lib/structured-data";
+import type { SiteData } from "../lib/site-schema";
+
 interface Props {
+  baseUrl?: string;
   description: string;
   faviconContentType?: string;
   faviconHref?: string;
-  locale: string;
+  locale: SiteLocale;
+  site: SiteData;
   title: string;
 }
 
 const {
+  baseUrl,
   description,
   faviconContentType = "image/x-icon",
   faviconHref = "/favicon.ico",
   locale,
+  site,
   title,
 } = Astro.props;
+
+const structuredData = buildStructuredData({
+  baseUrl,
+  locale,
+  site,
+});
 
 function toOgLocale(value: string): string {
   if (value === "pt") {
@@ -45,3 +59,4 @@ function toOgLocale(value: string): string {
 <meta content={title} name="twitter:title" />
 <meta content={description} name="twitter:description" />
 <link href={faviconHref} rel="icon" type={faviconContentType} />
+<script is:inline set:html={JSON.stringify(structuredData)} type="application/ld+json"></script>
