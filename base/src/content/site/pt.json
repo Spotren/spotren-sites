@@ -142,7 +142,7 @@
     "howWorks": {
       "id": "how-works",
       "title": "Como funciona",
-      "body": "A Spotren cria e publica para você um site simples e bem estruturado, com copy comercial, organização semântica e base técnica pensada para SEO e mecanismos de busca guiados por IA.",
+      "body": "A Spotren cria e publica para você um <strong>site simples e bem estruturado</strong>, com copy comercial, <strong>organização semântica</strong> e base técnica pensada para <strong>SEO</strong> e <strong>mecanismos de busca</strong> guiados por Inteligência Artificial.",
       "callout": {
         "title": "Usamos os dados públicos",
         "body": "do seu negócio"
@@ -150,11 +150,11 @@
       "items": [
         {
           "title": "Pra começar",
-          "body": "Você atualiza as informações principais do seu negócio, como serviços, cidade, diferenciais etc."
+          "body": "Vamos te chamar no whatsapp para atualizar as informações principais do seu negócio."
         },
         {
           "title": "Nós estruturamos sua página",
-          "body": "Transformamos esse material em uma página comercial preparada para SEO."
+          "body": "Transformamos essas informações em uma página comercial preparada para SEO e IAs."
         },
         {
           "title": "Seu site entra no ar",
@@ -171,12 +171,12 @@
         "body": "+ repositório Git"
       },
       "items": [
-        "Site estruturado com foco em conversão",
+        "<strong>Site estruturado</strong> com foco em conversão",
         "Copy de apresentação do negócio",
-        "Arquitetura semântica amigável para SEO",
+        "Arquitetura <strong>semântica amigável para SEO</strong>",
         "Estrutura pensada para leitura por mecanismos de IA",
-        "Hospedagem inclusa na mensalidade",
-        "Você pode usar seu domínio próprio"
+        "<strong>Hospedagem inclusa</strong> na mensalidade",
+        "Você pode usar seu domínio próprio (você ganha um <strong>domínio grátis por 5 anos</strong> no plano vitalício)"
       ]
     },
     "icp": {
