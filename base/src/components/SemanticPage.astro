@@ -236,13 +236,13 @@ function getSocialIcon(label: string) {
         )}
         <div class="mirror-result-card">
           <div class="mirror-result-title">Match</div>
-          <div class="mirror-result-score">
+          <div class="mirror-result-score" id="mirror-result-score">
             <svg class="mirror-result-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" aria-hidden="true">
-              <path d="m389-400 91-55 91 55-24-104 80-69-105-9-42-98-42 98-105 9 80 69-24 104ZM200-120v-640q0-33 23.5-56.5T280-840h400q33 0 56.5 23.5T760-760v640L480-240 200-120Zm80-122 200-86 200 86v-518H280v518Zm0-518h400-400Z" />
+              <path d="m233-120 65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z" />
             </svg>
             <div class="mirror-result-value" id="mirror-result-value">{site.sections.mirror.result.value}</div>
             <svg class="mirror-result-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" aria-hidden="true">
-              <path d="m389-400 91-55 91 55-24-104 80-69-105-9-42-98-42 98-105 9 80 69-24 104ZM200-120v-640q0-33 23.5-56.5T280-840h400q33 0 56.5 23.5T760-760v640L480-240 200-120Zm80-122 200-86 200 86v-518H280v518Zm0-518h400-400Z" />
+              <path d="m233-120 65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z" />
             </svg>
           </div>
           <p set:html={rich(site.sections.mirror.result.body)} />
@@ -665,25 +665,30 @@ function getSocialIcon(label: string) {
 <script is:inline>
   const mirrorCheckboxes = Array.from(document.querySelectorAll('.mirror-checkbox'));
   const mirrorResultValue = document.getElementById('mirror-result-value');
+  const mirrorResultScore = document.getElementById('mirror-result-score');
 
-  if (mirrorCheckboxes.length > 0 && mirrorResultValue) {
+  if (mirrorCheckboxes.length > 0 && mirrorResultValue && mirrorResultScore) {
     const updateMirrorResult = () => {
       const checkedCount = mirrorCheckboxes.filter((input) => input.checked).length;
       const score = 70 + checkedCount * 10;
       mirrorResultValue.textContent = String(score);
       mirrorResultValue.classList.remove('is-warning', 'is-success', 'is-highlight');
+      mirrorResultScore.classList.remove('is-warning', 'is-success', 'is-highlight');
 
       if (score === 70) {
         mirrorResultValue.classList.add('is-warning');
+        mirrorResultScore.classList.add('is-warning');
         return;
       }
 
       if (score >= 110) {
         mirrorResultValue.classList.add('is-highlight');
+        mirrorResultScore.classList.add('is-highlight');
         return;
       }
 
       mirrorResultValue.classList.add('is-success');
+      mirrorResultScore.classList.add('is-success');
     };
 
     mirrorCheckboxes.forEach((input) => {
@@ -1529,7 +1534,7 @@ function getSocialIcon(label: string) {
   .mirror-result-mark {
     width: 1.8rem;
     height: 1.8rem;
-    fill: color-mix(in srgb, var(--color-accent) 42%, white);
+    fill: color-mix(in srgb, currentColor 42%, white);
   }
 
   .mirror-result-value {
@@ -1543,11 +1548,23 @@ function getSocialIcon(label: string) {
     color: #c49a1f;
   }
 
+  .mirror-result-score.is-warning {
+    color: #c49a1f;
+  }
+
   .mirror-result-value.is-success {
     color: var(--color-accent);
   }
 
+  .mirror-result-score.is-success {
+    color: var(--color-accent);
+  }
+
   .mirror-result-value.is-highlight {
+    color: #2f8f4e;
+  }
+
+  .mirror-result-score.is-highlight {
     color: #2f8f4e;
   }
 
