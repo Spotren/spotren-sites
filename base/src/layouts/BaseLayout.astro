@@ -2,7 +2,6 @@
 import SeoHead from "../components/SeoHead.astro";
 import type { SiteLocale } from "../lib/load-site-data";
 import type { SiteData } from "../lib/site-schema";
-import "../styles/global.css";
 
 interface Props {
   description: string;
@@ -28,6 +27,86 @@ const { description, faviconContentType, faviconHref, locale, seoTitle, site } =
       site={site}
       title={seoTitle}
     />
+    <style is:global>
+      :root {
+        color-scheme: light;
+        --color-bg: #f7f3eb;
+        --color-surface: #fffdfa;
+        --color-surface-strong: #f0e6d6;
+        --color-text: #1f1a17;
+        --color-text-soft: #65584e;
+        --color-border: #d9c9b2;
+        --color-accent: #9a3412;
+        --color-accent-strong: #7c2d12;
+        --shadow-soft: 0 18px 40px rgba(31, 26, 23, 0.08);
+        --radius-sm: 0.75rem;
+        --radius-md: 1.25rem;
+        --radius-lg: 1.75rem;
+        --space-2xs: 0.375rem;
+        --space-xs: 0.75rem;
+        --space-sm: 1rem;
+        --space-md: 1.5rem;
+        --space-lg: 2rem;
+        --space-xl: 3rem;
+        --space-2xl: 4.5rem;
+        --content-width: 64rem;
+        --reading-width: 46rem;
+        --font-body: "IBM Plex Sans", "Segoe UI", sans-serif;
+        --font-heading: "IBM Plex Serif", Georgia, serif;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        min-width: 320px;
+        background:
+          radial-gradient(circle at top, rgba(154, 52, 18, 0.12), transparent 30%),
+          linear-gradient(180deg, #fcf8f2 0%, var(--color-bg) 100%);
+        color: var(--color-text);
+        font-family: var(--font-body);
+        line-height: 1.6;
+      }
+
+      img {
+        display: block;
+        max-width: 100%;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      p,
+      h1,
+      h2,
+      h3 {
+        margin: 0;
+      }
+
+      main,
+      header,
+      footer {
+        width: min(calc(100% - 2rem), var(--content-width));
+        margin-inline: auto;
+      }
+
+      @media (min-width: 48rem) {
+        main,
+        header,
+        footer {
+          width: min(calc(100% - 3rem), var(--content-width));
+        }
+      }
+    </style>
   </head>
   <body>
     <slot />
