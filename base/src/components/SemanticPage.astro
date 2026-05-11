@@ -176,7 +176,8 @@ function getSocialIcon(label: string) {
         <article class="testimonial-card" data-testimonial-card>
           <div class="testimonial-header">
             <h3>{item.headline}</h3>
-            <div class="testimonial-rating" aria-label={`${item.rating} stars`}>
+            <div class="testimonial-rating">
+              <span class="visually-hidden">{item.rating} stars</span>
               <div class="testimonial-stars" aria-hidden="true">
                 {ratingStars.map((star) => (
                   <svg class={star <= item.rating ? "is-active" : "is-inactive"} fill="currentColor" viewBox="0 -960 960 960">
