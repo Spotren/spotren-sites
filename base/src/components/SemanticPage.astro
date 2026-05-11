@@ -76,6 +76,7 @@ function getSocialIcon(label: string) {
 
       return (
         <a
+          aria-label={socialIcon ? item.label : undefined}
           href={item.href}
           rel={external ? "noopener noreferrer nofollow" : undefined}
           target={external ? "_blank" : undefined}
@@ -149,6 +150,7 @@ function getSocialIcon(label: string) {
 
 <main>
   <section class="testimonials-section" id={site.sections.testimonials.id}>
+    <h2 class="visually-hidden">{site.sections.testimonials.title}</h2>
     <div class="testimonials-heading">
       <div class="testimonials-summary" aria-label={site.sections.testimonials.title}>
         <svg class="testimonials-google-mark" aria-hidden="true" viewBox="0 0 48 48">
@@ -747,6 +749,18 @@ function getSocialIcon(label: string) {
 
   .language-switcher a.is-active {
     color: var(--color-accent-strong);
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 
   h1 {
