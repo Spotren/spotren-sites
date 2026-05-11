@@ -739,12 +739,17 @@ function getSocialIcon(label: string) {
   }
 
   .language-switcher a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2rem;
+    min-height: 2rem;
     color: var(--color-text-soft);
     font-family: var(--font-body);
     font-size: 1rem;
     font-weight: 600;
     text-decoration: none;
-    padding: .25rem;
+    padding: 0.25rem 0.4rem;
   }
 
   .language-switcher a.is-active {
