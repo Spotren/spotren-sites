@@ -36,6 +36,11 @@
     "description": "Selecao de cases e registros visuais.",
     "introduce": "Uma colecao de destaques, exemplos e fragmentos visuais."
   },
+  "newSite": {
+    "title": "New Site",
+    "description": "Uma pagina dedicada para apresentar um novo site ndEX.",
+    "introduce": "Esta pagina vai reunir o titulo, a descricao e os proximos detalhes de um novo site."
+  },
   "home": {
     "title": "ndEX",
     "subtitle": "Site para indexação otimizada de PMEs",

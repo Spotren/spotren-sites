@@ -37,6 +37,20 @@ if (hasPinnedPosts) {
       <div class="pro text-muted-foreground text-pretty">
         <p>{HOME_CONFIG.intro}</p>
       </div>
+      <form action="/new-site" method="get" class="mt-6 flex flex-col gap-3 sm:max-w-xl sm:flex-row sm:items-center">
+        <input
+          type="text"
+          name="gmn"
+          class="h-11 min-w-0 flex-1 rounded-full border border-border/70 bg-background/80 px-4 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-primary/60"
+          placeholder="Nome no Google Maps"
+        />
+        <button
+          type="submit"
+          class="inline-flex h-11 shrink-0 items-center justify-center rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+        >
+          New Site
+        </button>
+      </form>
       <div class="mt-6 flex gap-6">
         {
           SOCIAL_LINKS.map((item) => {

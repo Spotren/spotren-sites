@@ -38,6 +38,11 @@ export const siteSchema = z.object({
     description: z.string().trim().min(1),
     introduce: z.string().trim().min(1),
   }),
+  newSite: z.object({
+    title: z.string().trim().min(1),
+    description: z.string().trim().min(1),
+    introduce: z.string().trim().min(1),
+  }),
   home: z.object({
     title: z.string().trim().min(1),
     subtitle: z.string().trim().min(1),

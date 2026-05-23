@@ -36,6 +36,11 @@
     "description": "Selected cases and visual notes.",
     "introduce": "A collection of case highlights, examples, and visual fragments."
   },
+  "newSite": {
+    "title": "New Site",
+    "description": "A dedicated page for presenting a new ndEX website.",
+    "introduce": "This page will gather the title, description, and future details for a new site."
+  },
   "home": {
     "title": "ndEX",
     "subtitle": "Site for optimized indexing for SMBs",

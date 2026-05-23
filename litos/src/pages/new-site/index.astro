@@ -1,0 +1,15 @@
+---
+import { getLocaleConfig } from '~/config'
+import Layout from '~/layouts/Layout.astro'
+import PageTitle from '~/components/base/PageTitle.astro'
+
+const locale = 'en'
+const { NEW_SITE_CONFIG } = getLocaleConfig(locale)
+const { title, description, introduce } = NEW_SITE_CONFIG
+---
+
+<Layout {title} {description} {locale}>
+  <div class="relative z-[1] py-8 pb-10 px-6 sm:px-8">
+    <PageTitle {title} introduce={introduce} />
+  </div>
+</Layout>

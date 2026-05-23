@@ -14,6 +14,12 @@ import type {
 import { loadSiteData } from './lib/load-site-data'
 import { defaultSiteLocale, type SiteLocale, withLocalePath } from './lib/i18n'
 
+type NewSiteConfig = {
+  title: string
+  description: string
+  introduce: string
+}
+
 type HomeConfig = {
   title: string
   subtitle: string
@@ -83,6 +89,7 @@ type LocaleConfig = {
   TAGS_CONFIG: TagsConfig
   PROJECTS_CONFIG: ProjectConfig
   CASES_CONFIG: CasesConfig
+  NEW_SITE_CONFIG: NewSiteConfig
   ANALYTICS_CONFIG: AnalyticsConfig
   HOME_CONFIG: HomeConfig
   UI: UiConfig
@@ -217,6 +224,12 @@ export function getLocaleConfig(locale: SiteLocale = defaultSiteLocale): LocaleC
     introduce: siteData.cases.introduce,
   }
 
+  const NEW_SITE_CONFIG: NewSiteConfig = {
+    title: siteData.newSite.title,
+    description: siteData.newSite.description,
+    introduce: siteData.newSite.introduce,
+  }
+
   const COMMENT_CONFIG: CommentConfig = {
     enabled: true,
     system: 'gitalk',
@@ -313,6 +326,7 @@ export function getLocaleConfig(locale: SiteLocale = defaultSiteLocale): LocaleC
     TAGS_CONFIG,
     PROJECTS_CONFIG,
     CASES_CONFIG,
+    NEW_SITE_CONFIG,
     ANALYTICS_CONFIG,
     HOME_CONFIG,
     UI,
@@ -329,3 +343,4 @@ export const COMMENT_CONFIG = getLocaleConfig(defaultSiteLocale).COMMENT_CONFIG
 export const TAGS_CONFIG = getLocaleConfig(defaultSiteLocale).TAGS_CONFIG
 export const PROJECTS_CONFIG = getLocaleConfig(defaultSiteLocale).PROJECTS_CONFIG
 export const CASES_CONFIG = getLocaleConfig(defaultSiteLocale).CASES_CONFIG
+export const NEW_SITE_CONFIG = getLocaleConfig(defaultSiteLocale).NEW_SITE_CONFIG
