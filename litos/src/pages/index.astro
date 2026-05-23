@@ -2,10 +2,11 @@
 import { getLocaleConfig } from '~/config.ts'
 import Layout from '~/layouts/Layout.astro'
 import SectionDivider from '~/components/base/SectionDivider.astro'
-import GithubContributions from '~/components/base/GithubContributions.tsx'
+import GithubSitesHeatmap from '~/components/base/GithubSitesHeatmap.tsx'
 import SocialLink from '~/components/base/SocialLink.astro'
 import List from '~/components/posts/card/List.astro'
 import SkillsShowcase from '~/components/base/SkillsShowcase.astro'
+import PageSpeedScores from '~/components/base/PageSpeedScores.astro'
 import { getNumPosts, getPinnedPosts } from '~/lib/data'
 
 const locale = 'en'
@@ -50,10 +51,20 @@ if (hasPinnedPosts) {
           <SectionDivider />
           <div class="py-8 pb-10 px-6 max-md:px-6">
             <div class="px-2 max-md:px-0">
-              <h2 class="text-2xl sm:text-3xl">{HOME_CONFIG.contributionsTitle}</h2>
-              <p class="text-muted-foreground mb-6 mt-1">{HOME_CONFIG.contributionsDescription}</p>
+              <h2 class="text-2xl sm:text-3xl">{HOME_CONFIG.sitesTitle}</h2>
+              <p class="text-muted-foreground mb-6 mt-1">{HOME_CONFIG.sitesDescription}</p>
             </div>
-            <GithubContributions username={GITHUB_USERNAME} tooltipEnabled={TOOLTIP_ENABLED} client:load transition:animate="none" />
+            <GithubSitesHeatmap
+              username={GITHUB_USERNAME}
+              tooltipEnabled={TOOLTIP_ENABLED}
+              dateLocale={UI.heatmapDateLocale}
+              dateFormat={UI.heatmapDateFormat}
+              restDayLabel={UI.heatmapRestDay}
+              siteSingularLabel={UI.heatmapSiteSingular}
+              sitePluralLabel={UI.heatmapSitePlural}
+              client:load
+              transition:animate="none"
+            />
           </div>
         </>
       )
@@ -66,6 +77,15 @@ if (hasPinnedPosts) {
             <div class="px-2 max-md:px-0">
               <h2 class="text-2xl sm:text-3xl tracking-tight">{HOME_CONFIG.skillsTitle}</h2>
               <p class="text-muted-foreground mb-6 mt-1">{HOME_CONFIG.skillsDescription}</p>
+              <PageSpeedScores
+                scores={[
+                  { label: HOME_CONFIG.pageSpeedScores.performance, value: 100 },
+                  { label: HOME_CONFIG.pageSpeedScores.accessibility, value: 100 },
+                  { label: HOME_CONFIG.pageSpeedScores.bestPractices, value: 100 },
+                  { label: HOME_CONFIG.pageSpeedScores.seo, value: 100 },
+                ]}
+              />
+              <h3 class="mt-6 mb-2 text-lg font-medium tracking-tight text-foreground">{HOME_CONFIG.skillsSubheading}</h3>
             </div>
             <SkillsShowcase skillsData={SKILLS_DATA} />
           </div>

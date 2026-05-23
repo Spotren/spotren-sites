@@ -1,9 +1,9 @@
 import type {
   AnalyticsConfig,
+  CasesConfig,
   CommentConfig,
   GithubConfig,
   Link,
-  CasesConfig,
   PostConfig,
   ProjectConfig,
   Site,
@@ -19,10 +19,17 @@ type HomeConfig = {
   subtitle: string
   intro: string
   socialLabel: string
-  contributionsTitle: string
-  contributionsDescription: string
+  sitesTitle: string
+  sitesDescription: string
   skillsTitle: string
   skillsDescription: string
+  skillsSubheading: string
+  pageSpeedScores: {
+    performance: string
+    accessibility: string
+    bestPractices: string
+    seo: string
+  }
   postsTitle: string
   pinnedLabel: string
   recentLabel: string
@@ -57,6 +64,11 @@ type UiConfig = {
   recommendedPostTitle: string
   viewPostsTaggedWith: (tag: string) => string
   socialAriaLabel: (name: string) => string
+  heatmapDateLocale: string
+  heatmapDateFormat: 'long' | 'numeric' | 'dot' | 'long-pt'
+  heatmapRestDay: string
+  heatmapSiteSingular: string
+  heatmapSitePlural: string
 }
 
 type LocaleConfig = {
@@ -109,8 +121,9 @@ const SKILLSSHOWCASE_CONFIG: SkillsShowcaseConfig = {
         { name: 'CSS', icon: 'icon-[skill-icons--css]', url: 'https://developer.mozilla.org/en-US/docs/Web/CSS' },
         { name: 'HTML', icon: 'icon-[skill-icons--html]', url: 'https://developer.mozilla.org/en-US/docs/Web/HTML' },
         { name: 'TypeScript', icon: 'icon-[skill-icons--typescript]', url: 'https://www.typescriptlang.org/' },
-        { name: 'Vue', icon: 'icon-[skill-icons--vuejs-dark]', url: 'https://vuejs.org/' },
         { name: 'Sass', icon: 'icon-[skill-icons--sass]', url: 'https://sass-lang.com/' },
+        { name: 'Ubuntu', icon: 'icon-[skill-icons--ubuntu-dark]', url: 'https://ubuntu.com/' },
+        { name: 'Git', icon: 'icon-[skill-icons--git]', url: 'https://git-scm.com/' },
       ],
     },
     {
@@ -119,20 +132,9 @@ const SKILLSSHOWCASE_CONFIG: SkillsShowcaseConfig = {
         { name: 'Astro', icon: 'icon-[skill-icons--astro]', url: 'https://astro.build/' },
         { name: 'Node.js', icon: 'icon-[skill-icons--nodejs-dark]', url: 'https://nodejs.org/' },
         { name: 'React', icon: 'icon-[skill-icons--react-dark]', url: 'https://react.dev/' },
-        { name: 'Next.js', icon: 'icon-[skill-icons--nextjs-dark]', url: 'https://nextjs.org/' },
         { name: 'Tailwind CSS', icon: 'icon-[skill-icons--tailwindcss-dark]', url: 'https://tailwindcss.com/' },
-        { name: 'Vite', icon: 'icon-[skill-icons--vite-dark]', url: 'https://vitejs.dev/' },
-      ],
-    },
-    {
-      direction: 'left',
-      skills: [
-        { name: 'Ubuntu', icon: 'icon-[skill-icons--ubuntu-dark]', url: 'https://ubuntu.com/' },
-        { name: 'Git', icon: 'icon-[skill-icons--git]', url: 'https://git-scm.com/' },
-        { name: 'MongoDB', icon: 'icon-[skill-icons--mongodb]', url: 'https://www.mongodb.com/' },
         { name: 'Vercel', icon: 'icon-[skill-icons--vercel-dark]', url: 'https://vercel.com/' },
         { name: 'VS Code', icon: 'icon-[skill-icons--vscode-dark]', url: 'https://code.visualstudio.com/' },
-        { name: 'Obsidian', icon: 'icon-[skill-icons--obsidian-dark]', url: 'https://obsidian.md/' },
       ],
     },
   ],
@@ -171,8 +173,8 @@ export function getLocaleConfig(locale: SiteLocale = defaultSiteLocale): LocaleC
     introduce: siteData.posts.introduce,
     author: siteData.posts.author,
     homePageConfig: {
-      size: 2,
-      type: 'compact',
+      size: 3,
+      type: 'minimal',
     },
     postPageConfig: {
       size: 10,
@@ -238,10 +240,12 @@ export function getLocaleConfig(locale: SiteLocale = defaultSiteLocale): LocaleC
     subtitle: siteData.home.subtitle,
     intro: siteData.home.intro,
     socialLabel: siteData.home.socialLabel,
-    contributionsTitle: siteData.home.contributionsTitle,
-    contributionsDescription: siteData.home.contributionsDescription,
+    sitesTitle: siteData.home.sitesTitle,
+    sitesDescription: siteData.home.sitesDescription,
     skillsTitle: siteData.home.skillsTitle,
     skillsDescription: siteData.home.skillsDescription,
+    skillsSubheading: siteData.home.skillsSubheading,
+    pageSpeedScores: siteData.home.pageSpeedScores,
     postsTitle: siteData.home.postsTitle,
     pinnedLabel: siteData.home.pinnedLabel,
     recentLabel: siteData.home.recentLabel,
@@ -282,6 +286,11 @@ export function getLocaleConfig(locale: SiteLocale = defaultSiteLocale): LocaleC
     recommendedPostTitle: siteData.ui.recommendedPostTitle,
     viewPostsTaggedWith: (tag) => `${siteData.ui.viewPostsTaggedWithPrefix} ${tag}`,
     socialAriaLabel: (name) => `${siteData.ui.socialAriaLabelPrefix} ${name}`,
+    heatmapDateLocale: siteData.ui.heatmapDateLocale,
+    heatmapDateFormat: siteData.ui.heatmapDateFormat,
+    heatmapRestDay: siteData.ui.heatmapRestDay,
+    heatmapSiteSingular: siteData.ui.heatmapSiteSingular,
+    heatmapSitePlural: siteData.ui.heatmapSitePlural,
   }
 
   return {

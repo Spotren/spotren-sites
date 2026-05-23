@@ -1,0 +1,35 @@
+---
+export type ScoreItem = {
+  label: string
+  value: number
+}
+
+type Props = {
+  scores: ScoreItem[]
+}
+
+const { scores } = Astro.props
+---
+
+<div class="grid grid-cols-2 gap-x-6 gap-y-8 py-2 sm:grid-cols-4">
+  {
+    scores.map((score) => {
+      return (
+      <div class="flex flex-col gap-3">
+        <p class="relative border-l border-border/60 pl-4 text-sm font-medium text-foreground/85 after:absolute after:left-0 after:top-5 after:h-6 after:w-6 after:bg-[linear-gradient(45deg,transparent_calc(50%-0.5px),hsl(var(--border)/0.6)_calc(50%-0.5px),hsl(var(--border)/0.6)_calc(50%+0.5px),transparent_calc(50%+0.5px))]">
+          {score.label}
+        </p>
+        <div class="relative flex h-16 w-16 items-center justify-center self-center">
+          <img
+            src="/ndex-spotren-psi-icon_optmz.png"
+            alt=""
+            class="absolute inset-0 h-full w-full object-contain"
+            loading="lazy"
+            decoding="async"
+          />
+          <span class="relative font-mono text-lg font-medium tracking-tight text-[#5af480]">{score.value}</span>
+        </div>
+      </div>
+    )})
+  }
+</div>
