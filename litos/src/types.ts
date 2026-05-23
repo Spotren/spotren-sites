@@ -133,7 +133,7 @@ export interface SkillsShowcaseConfig {
 /**
  * GitHub配置类型 / GitHub configuration type
  * @property {boolean} ENABLED - 是否启用GitHub功能 / Whether to enable GitHub features
- * @property {string} GITHUB_USERNAME - GITHUB用户名 / GitHub username
+ * @property {string} GITHUB_USERNAME - GITHUB用户名 / Public GitHub username used for links and stats
  * @property {boolean} TOOLTIP_ENABLED - 是否开启Tooltip功能 / Whether to enable Github Tooltip features
  */
 export type GithubConfig = {

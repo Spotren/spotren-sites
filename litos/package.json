@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro check && astro build",
+    "heatmap:refresh": "node scripts/refresh-github-org-repo-heatmap.mjs",
+    "build": "npm run heatmap:refresh && astro check && astro build",
     "preview": "astro preview",
     "check": "astro check",
     "astro": "astro",

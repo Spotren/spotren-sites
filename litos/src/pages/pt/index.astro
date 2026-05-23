@@ -8,12 +8,15 @@ import List from '~/components/posts/card/List.astro'
 import SkillsShowcase from '~/components/base/SkillsShowcase.astro'
 import PageSpeedScores from '~/components/base/PageSpeedScores.astro'
 import { getNumPosts, getPinnedPosts } from '~/lib/data'
+import rawGithubRepoHeatmap from '~/data/github-org-repo-heatmap.json'
+import { normalizeRepoHeatmapSnapshot } from '~/lib/github-org-repo-heatmap'
 
 const locale = 'pt'
 const { SITE, SKILLSSHOWCASE_CONFIG, SOCIAL_LINKS, GITHUB_CONFIG, POSTS_CONFIG, HOME_CONFIG, UI } = getLocaleConfig(locale)
-const { ENABLED, GITHUB_USERNAME, TOOLTIP_ENABLED } = GITHUB_CONFIG
+const { ENABLED, TOOLTIP_ENABLED } = GITHUB_CONFIG
 const { size, type } = POSTS_CONFIG.homePageConfig
 const { SKILLS_ENABLED, SKILLS_DATA } = SKILLSSHOWCASE_CONFIG
+const repoHeatmapData = normalizeRepoHeatmapSnapshot(rawGithubRepoHeatmap)
 
 let showPosts = []
 const pinnedPosts = await getPinnedPosts(locale)
@@ -69,7 +72,7 @@ if (hasPinnedPosts) {
               <p class="text-muted-foreground mb-6 mt-1">{HOME_CONFIG.sitesDescription}</p>
             </div>
             <GithubSitesHeatmap
-              username={GITHUB_USERNAME}
+              data={repoHeatmapData}
               tooltipEnabled={TOOLTIP_ENABLED}
               dateLocale={UI.heatmapDateLocale}
               dateFormat={UI.heatmapDateFormat}

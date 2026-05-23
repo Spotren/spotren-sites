@@ -1,30 +1,13 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
+import type { RepoHeatmapSnapshot } from '~/lib/github-org-repo-heatmap'
+import { buildRepoHeatmapGrid } from '~/lib/github-org-repo-heatmap'
 import { cn } from '~/lib/utils'
 import Tooltip, { TooltipProvider } from './Tooltip.tsx'
 
-// API from https://github.com/grubersjoe/github-contributions-api
-interface HeatmapDay {
-  date: string
-  count: number
-  level: 0 | 1 | 2 | 3 | 4
-}
-
-interface HeatmapResponse {
-  total: {
-    [year: number]: number
-    [year: string]: number // 'lastYear'
-  }
-  days: Array<HeatmapDay>
-}
-
-interface ErrorData {
-  error: string
-}
-
 interface Props {
-  username: string
+  data: RepoHeatmapSnapshot
   tooltipEnabled: boolean
   dateLocale: string
   dateFormat: 'long' | 'numeric' | 'dot' | 'long-pt'
@@ -33,7 +16,6 @@ interface Props {
   sitePluralLabel: string
 }
 
-// ERROR图案配置
 const ERROR_PATTERN = [
   [1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1],
   [1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
@@ -42,13 +24,10 @@ const ERROR_PATTERN = [
   [1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1],
 ] as const
 
-// Generate fallback heatmap data for the error state.
-function generateErrorHeatmap(): HeatmapResponse {
-  const days = Array.from({ length: 371 }, (_, index): HeatmapDay => {
+function generateErrorHeatmapGrid() {
+  return Array.from({ length: 371 }, (_, index) => {
     const weekIndex = Math.floor(index / 7)
     const dayIndex = index % 7
-
-    // 计算居中位置
     const patternStartWeek = Math.floor((53 - 19) / 2)
     const patternStartRow = Math.floor((7 - 5) / 2)
     const relativeWeek = weekIndex - patternStartWeek
@@ -56,79 +35,36 @@ function generateErrorHeatmap(): HeatmapResponse {
 
     let count = 0
     if (relativeWeek >= 0 && relativeWeek < 19 && relativeRow >= 0 && relativeRow < 5) {
-      count = ERROR_PATTERN[relativeRow]?.[relativeWeek] === 1 ? 10 : 0 // 10表示最深色
+      count = ERROR_PATTERN[relativeRow]?.[relativeWeek] === 1 ? 12 : 0
     }
 
     return {
-      date: '1',
+      date: '1970-01-01',
       count,
-      level: 0,
+      level: count > 0 ? 4 : 0,
     }
   })
-
-  return { days, total: { lastYear: 0 } }
 }
 
-function generatePlaceholderHeatmap(): HeatmapResponse {
-  const days = Array.from({ length: 371 }, (_, index): HeatmapDay => ({
-      date: new Date(Date.now() - (371 - index) * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      count: 0,
-      level: 0,
-    }))
-
-  return { days, total: { lastYear: 0 } }
-}
-
-async function fetchHeatmap(username: string): Promise<HeatmapResponse> {
-  const response = await fetch(`https://github-contributions-api.jogruber.de/v4/${username}?y=last`)
-  const data: { contributions: Array<HeatmapDay>; total: HeatmapResponse['total'] } | ErrorData = await response.json()
-
-  if (!response.ok) {
-    throw Error(`Fetching GitHub site heatmap data for "${username}" failed: ${(data as ErrorData).error}`)
-  }
-
-  const payload = data as { contributions: Array<HeatmapDay>; total: HeatmapResponse['total'] }
-
-  return {
-    days: payload.contributions,
-    total: payload.total,
-  }
-}
-
-export default function GithubSitesHeatmap({ username, tooltipEnabled, dateLocale, dateFormat, restDayLabel, siteSingularLabel, sitePluralLabel }: Props) {
+export default function GithubSitesHeatmap({ data, tooltipEnabled, dateLocale, dateFormat, restDayLabel, siteSingularLabel, sitePluralLabel }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const [data, setData] = useState<HeatmapResponse | null>(generatePlaceholderHeatmap())
-  const [errorVisible, setErrorVisible] = useState(true)
+  const hasValidData = Array.isArray(data?.repos)
+  const grid = hasValidData ? buildRepoHeatmapGrid(data) : generateErrorHeatmapGrid()
 
-  const scrollToRight = useCallback(() => {
+  useEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollLeft = containerRef.current.scrollWidth
     }
+  }, [grid.length])
+
+  const weeks = grid.reduce<typeof grid[]>((accumulator, day, index) => {
+    const weekIndex = Math.floor(index / 7)
+    if (!accumulator[weekIndex]) {
+      accumulator[weekIndex] = []
+    }
+    accumulator[weekIndex].push(day)
+    return accumulator
   }, [])
-
-  const fetchData = useCallback(() => {
-    fetchHeatmap(username)
-      .then(setData)
-      .then(scrollToRight)
-      .then(() => {
-        setErrorVisible(false)
-      })
-      .catch(() => {
-        setData(generateErrorHeatmap())
-      })
-  }, [username])
-
-  useEffect(fetchData, [fetchData])
-
-  const weeks =
-    data?.days.reduce<HeatmapDay[][]>((acc, day, index) => {
-      const weekIndex = Math.floor(index / 7)
-      if (!acc[weekIndex]) {
-        acc[weekIndex] = []
-      }
-      acc[weekIndex].push(day)
-      return acc
-    }, []) || []
 
   return (
     <TooltipProvider>
@@ -137,7 +73,7 @@ export default function GithubSitesHeatmap({ username, tooltipEnabled, dateLocal
           <div key={weekIndex} className="grid grid-rows-7 gap-1">
             {week.map((day, dayIndex) => {
               const { date, count } = day
-              const currentDate = new Date(date)
+              const currentDate = new Date(`${date}T00:00:00.000Z`)
               const formattedDate =
                 dateFormat === 'dot'
                   ? new Intl.DateTimeFormat(dateLocale, {
@@ -165,16 +101,14 @@ export default function GithubSitesHeatmap({ username, tooltipEnabled, dateLocal
                             year: 'numeric',
                             month: 'long',
                             day: 'numeric',
-                          }
+                          },
                     ).format(currentDate)
 
               const siteLabel = count === 1 ? siteSingularLabel : sitePluralLabel
-              const tooltipContent = `${formattedDate} — ${
-                count === 0 ? restDayLabel : `${count} ${siteLabel}`
-              }`
+              const tooltipContent = `${formattedDate} — ${count === 0 ? restDayLabel : `${count} ${siteLabel}`}`
 
               return (
-                <Tooltip key={dayIndex} content={tooltipContent} disabled={!tooltipEnabled || errorVisible}>
+                <Tooltip key={dayIndex} content={tooltipContent} disabled={!tooltipEnabled || !hasValidData}>
                   <div
                     className={cn(
                       'size-2 relative transition-colors duration-500 rounded-[1px]',
@@ -182,13 +116,11 @@ export default function GithubSitesHeatmap({ username, tooltipEnabled, dateLocal
                         ? 'bg-emerald-100/70 dark:bg-emerald-950/80'
                         : count < 3
                           ? 'bg-[#09cd3a]/20 dark:bg-[#09cd3a]/28'
-                          : count < 5
+                          : count < 6
                             ? 'bg-[#09cd3a]/38 dark:bg-[#09cd3a]/46'
-                            : count < 8
+                            : count < 11
                               ? 'bg-[#09cd3a]/62 dark:bg-[#09cd3a]/70'
-                              : count < 12
-                                ? 'bg-[#09cd3a]/82 dark:bg-[#09cd3a]/88'
-                                : 'bg-[#09cd3a]'
+                              : 'bg-[#09cd3a]'
                     )}
                   />
                 </Tooltip>
