@@ -32,9 +32,8 @@
         <title>Atom Feed | <xsl:value-of select="atom:title" /></title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" href="/favicon.ico" sizes="32x32" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="icon" href="/ndex-spotren-icon_optmz.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/ndex-spotren-icon_optmz.png" />
         <link rel="preload" href="/fonts/GeistVF.woff2" as="font" type="font/woff2" />
         <link rel="preload" href="/fonts/Lexend-VariableFont_wght.woff2" as="font" type="font/woff2" />
         <link rel="preload" href="/fonts/ZhudouSansVF-subset.woff2" as="font" type="font/woff2" />

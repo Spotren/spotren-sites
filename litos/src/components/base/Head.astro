@@ -1,17 +1,23 @@
 ---
 import { ClientRouter } from 'astro:transitions'
-import { ANALYTICS_CONFIG, SITE } from '~/config'
+import { ANALYTICS_CONFIG, getLocaleConfig } from '~/config'
+import { defaultSiteLocale, getLocaleFromPathname, siteLocales, stripLocalePrefix, type SiteLocale, withLocalePath } from '~/lib/i18n'
 
 type Props = {
   title: string
   description: string
   image?: string
+  locale?: SiteLocale
 }
 
+const locale = Astro.props.locale ?? getLocaleFromPathname(Astro.url.pathname)
 const { title, description, image }: Props = Astro.props
+const { SITE } = getLocaleConfig(locale)
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site)
 const ogImage = new URL(image || SITE.ogImage, Astro.url)
+const alternateBasePath = stripLocalePrefix(Astro.url.pathname)
+const rssHref = new URL(withLocalePath(locale, '/rss.xml'), Astro.site).href
 ---
 
 <!-- 传递主题动画配置到全局 -->
@@ -36,12 +42,17 @@ const ogImage = new URL(image || SITE.ogImage, Astro.url)
 <meta name="color-scheme" content="light dark" />
 
 <!-- icon -->
-<link rel="icon" href="/favicon.ico" sizes="32x32" />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="icon" href="/ndex-spotren-icon_optmz.png" type="image/png" />
+<link rel="apple-touch-icon" href="/ndex-spotren-icon_optmz.png" />
 
 {/* RSS Feed Link */}
-<link rel="alternate" type="application/rss+xml" title={SITE.title} href={new URL('/rss.xml', Astro.site).href} />
+<link rel="alternate" type="application/rss+xml" title={SITE.title} href={rssHref} />
+{
+  siteLocales.map((value) => (
+    <link rel="alternate" hreflang={value} href={new URL(withLocalePath(value, alternateBasePath), Astro.site).href} />
+  ))
+}
+<link rel="alternate" hreflang="x-default" href={new URL(withLocalePath(defaultSiteLocale, alternateBasePath), Astro.site).href} />
 
 <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
 
@@ -65,6 +76,7 @@ const ogImage = new URL(image || SITE.ogImage, Astro.url)
 <meta property="og:site_name" content={SITE.title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={ogImage} />
+<meta property="og:locale" content={locale === 'pt' ? 'pt_BR' : 'en_US'} />
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />

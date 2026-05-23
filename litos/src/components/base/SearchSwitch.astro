@@ -1,12 +1,16 @@
 ---
+import { getLocaleConfig } from '~/config'
+import { getLocaleFromPathname } from '~/lib/i18n'
 
+const locale = getLocaleFromPathname(Astro.url.pathname)
+const { UI } = getLocaleConfig(locale)
 ---
 
 <button
   class="inline-flex items-center text-foreground cursor-pointer hover:scale-105 size-6 origin-center"
   id="search-switch"
-  aria-label="Search"
-  title="Search (Ctrl+K)"
+  aria-label={UI.searchLabel}
+  title={UI.searchTitle}
 >
     <span class="icon-[material-symbols--manage-search] size-6"></span>
 </button>
@@ -16,30 +20,52 @@
       <div id="search-panel" class="grid grid-rows-[auto_1fr] max-h-[80vh] w-[22rem] sm:w-[40rem] bg-background/95 dark:bg-background/95 border border-border shadow-lg dark:shadow-accent/20 overflow-hidden">
       <div id="search-bar" class="grid grid-cols-[auto_1fr_auto_auto] items-center gap-2 px-4 h-12 border-b border-border">
         <span class="icon-[material-symbols--manage-search] size-6 text-muted-foreground"></span>
-        <label class="sr-only" for="search-input">Search</label>
+        <label class="sr-only" for="search-input">{UI.searchLabel}</label>
         <input
           type="search"
           id="search-input"
           class="w-full h-8 bg-transparent outline-none text-foreground placeholder:text-muted-foreground font-normal leading-8 text-base"
-          placeholder="Search"
+          placeholder={UI.searchPlaceholder}
           autocomplete="off"
         />
-        <button id="search-exact" class="inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded border border-border text-muted-foreground hover:bg-accent select-none" aria-pressed="false" title="Exact Match">
-          Exact
+        <button id="search-exact" class="inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded border border-border text-muted-foreground hover:bg-accent select-none" aria-pressed="false" title={UI.searchExact}>
+          {UI.searchExact}
         </button>
         <kbd class="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 text-xs text-muted-foreground bg-muted rounded">ESC</kbd>
       </div>
-      <div id="search-results" class="overflow-y-auto no-scrollbar p-1 sm:p-2 overscroll-contain" data-base="/"></div>
+      <div
+        id="search-results"
+        class="overflow-y-auto no-scrollbar p-1 sm:p-2 overscroll-contain"
+        data-base="/"
+        data-type-prompt={UI.searchTypePrompt}
+        data-no-results={UI.searchNoResults}
+        data-no-results-dev={UI.searchNoResultsDev}
+      ></div>
     </div>
   </div>
 </div>
 
 <script>
+  declare global {
+    interface Window {
+      pagefind?: {
+        init: () => void
+        options: (options: Record<string, unknown>) => Promise<void> | void
+        search: (query: string) => Promise<unknown>
+        debouncedSearch: (query: string) => Promise<{ results?: Array<{ data: () => Promise<any> }> }>
+      }
+      __pagefindLoading?: Promise<void>
+    }
+  }
+
   const searchInput = document.getElementById('search-input') as HTMLInputElement
   const searchMask = document.getElementById('search-mask')
   const searchSwitch = document.getElementById('search-switch')
   const searchResults = document.getElementById('search-results')
   const exactToggle = document.getElementById('search-exact') as HTMLButtonElement | null
+  const searchTypePrompt = searchResults?.getAttribute('data-type-prompt') || 'Type to search'
+  const searchNoResults = searchResults?.getAttribute('data-no-results') || 'No results found'
+  const searchNoResultsDev = searchResults?.getAttribute('data-no-results-dev') || 'No results in development mode'
 
   // 并发控制：用于丢弃过期的搜索结果
   let searchReqId = 0
@@ -67,8 +93,22 @@
     searchInput?.dispatchEvent(new Event('input'))
   })
 
-  // 声明 pagefind 类型
-  declare const pagefind: any
+  const ensurePagefind = async () => {
+    if (!import.meta.env.PROD) {
+      return null
+    }
+
+    if (window.pagefind) {
+      return window.pagefind
+    }
+
+    if (window.__pagefindLoading) {
+      await window.__pagefindLoading
+      return window.pagefind ?? null
+    }
+
+    return null
+  }
 
   // 打开搜索面板
   const openSearch = () => {
@@ -133,13 +173,27 @@
       tip.innerHTML = `
         <div class="flex items-center justify-center gap-2 select-none">
           <span class="icon-[material-symbols--keyboard] size-5 text-muted-foreground"></span>
-          <span class="text-muted-foreground">Type to search</span>
+            <span class="text-muted-foreground">${searchTypePrompt}</span>
         </div>
       `
       searchResults?.appendChild(tip)
       return
     }
     if (import.meta.env.PROD) {
+      const pagefind = await ensurePagefind()
+      if (!pagefind) {
+        const noResults = document.createElement('div')
+        noResults.className = 'search-results-item py-8'
+        noResults.innerHTML = `
+          <div class="flex items-center justify-center gap-2 select-none">
+            <span class="icon-[material-symbols--help-outline] size-5 text-muted-foreground"></span>
+            <span class="text-muted-foreground">${searchNoResults}</span>
+          </div>
+        `
+        searchResults?.appendChild(noResults)
+        return
+      }
+
       const pagefindQuery = exactMode ? `"${q}"` : q
       const search = await pagefind.debouncedSearch(pagefindQuery)
 
@@ -153,7 +207,7 @@
         noResults.innerHTML = `
           <div class="flex items-center justify-center gap-2 select-none">
             <span class="icon-[material-symbols--help-outline] size-5 text-muted-foreground"></span>
-            <span class="text-muted-foreground">No results found</span>
+            <span class="text-muted-foreground">${searchNoResults}</span>
           </div>
         `
         searchResults?.appendChild(noResults)
@@ -202,7 +256,7 @@
       noResults.innerHTML = `
         <div class="flex items-center justify-center gap-2 select-none">
           <span class="icon-[material-symbols--help-outline] size-5 text-muted-foreground"></span>
-          <span class="text-muted-foreground">No results in development mode</span>
+          <span class="text-muted-foreground">${searchNoResultsDev}</span>
         </div>
       `
       searchResults?.appendChild(noResults)
@@ -227,5 +281,9 @@
       pagefind.search('')
     }
 
-    if (!window.pagefind) loadPagefind()
+    if (!window.pagefind && !window.__pagefindLoading) {
+      window.__pagefindLoading = loadPagefind().finally(() => {
+        window.__pagefindLoading = undefined
+      })
+    }
   </script>}

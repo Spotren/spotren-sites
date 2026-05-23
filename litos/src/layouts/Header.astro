@@ -1,20 +1,25 @@
 ---
-import { HEADER_LINKS } from '~/config'
-import ThemeToggle from '~/components/theme/ThemeToggle'
+import { getLocaleConfig } from '~/config'
 import HeaderGradient from '~/components/theme/HeaderGradient.astro'
 import SectionDivider from '~/components/base/SectionDivider.astro'
 import HeaderLink from '~/components/base/HeaderLink.astro'
 import SearchSwitch from '~/components/base/SearchSwitch.astro'
+import LanguageSelect from '~/components/base/LanguageSelect'
 import { Image } from 'astro:assets'
-import favicon from '../../public/favicon.svg'
+import siteIcon from '../../public/ndex-spotren-icon_optmz.png'
+import { getLocaleFromPathname, siteLocaleOptions, stripLocalePrefix, withLocalePath } from '~/lib/i18n'
+
+const locale = getLocaleFromPathname(Astro.url.pathname)
+const { HEADER_LINKS, UI } = getLocaleConfig(locale)
+const alternateBasePath = stripLocalePrefix(Astro.url.pathname)
 ---
 
 <HeaderGradient />
 <header>
   <div class="mx-auto global-layout-width flex justify-between px-6 sm:px-8 py-4 lg:px-8">
     <div class="flex gap-3 sm:gap-6 items-center flex-shrink-0">
-      <a href="/" class="pointer-events-auto select-none" transition:persist>
-        <Image src={favicon} width={1000} height={1000} alt="Logo" class="w-8 h-8" densities={[1, 2]} loading="eager" />
+      <a href={withLocalePath(locale, '/')} class="pointer-events-auto select-none" transition:persist>
+        <Image src={siteIcon} width={1000} height={1000} alt="ndEX logo" class="w-8 h-8" densities={[1, 2]} loading="eager" />
       </a>
       <div class="flex gap-1">
         {
@@ -26,18 +31,24 @@ import favicon from '../../public/favicon.svg'
         }
       </div>
     </div>
-    <div class="flex gap-2 items-center" transition:persist="header-theme-toggle">
+    <div class="flex gap-2 items-center">
       <SearchSwitch />
+      <LanguageSelect
+        label={UI.languageSwitcherLabel}
+        locale={locale}
+        basePath={alternateBasePath}
+        options={siteLocaleOptions}
+        client:load
+      />
       <a
-        href="/atom.xml"
+        href={withLocalePath(locale, '/atom.xml')}
         target="_blank"
         class="inline-flex items-center hover:scale-105 size-5 origin-center"
-        aria-label="RSS Feed"
-        title="RSS Feed"
+        aria-label={UI.rssFeedLabel}
+        title={UI.rssFeedLabel}
       >
         <span class="icon-[material-symbols--rss-feed] size-5"></span>
       </a>
-      <ThemeToggle client:load />
     </div>
   </div>
   <div class="relative global-layout-width mx-auto pointer-events-none">
