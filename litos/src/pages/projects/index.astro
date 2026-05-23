@@ -1,6 +1,6 @@
 ---
 import { cn } from '~/lib/utils'
-import { PROJECTS_CONFIG } from '~/config'
+import { getLocaleConfig } from '~/config'
 import Layout from '~/layouts/Layout.astro'
 import SectionDivider from '~/components/base/SectionDivider.astro'
 import NumberTicker from '~/components/base/NumberTicker'
@@ -8,11 +8,13 @@ import { Image } from 'astro:assets'
 import { getAllProjects } from '~/lib/data'
 import PageTitle from '~/components/base/PageTitle.astro'
 
+const locale = 'en'
+const { PROJECTS_CONFIG, UI } = getLocaleConfig(locale)
 const { title, description, introduce } = PROJECTS_CONFIG
 const projects = await getAllProjects()
 ---
 
-<Layout {title} {description}>
+<Layout {title} {description} {locale}>
   <div class="relative z-[1] py-8 pb-10">
     <div class="px-6 sm:px-8">
       <PageTitle {title} {introduce} />
@@ -60,7 +62,7 @@ const projects = await getAllProjects()
                     <div class="flex items-center py-1.5 gap-3">
                       {project.data.star != null && (
                         <>
-                          <span class="text-xs uppercase tracking-wide font-medium text-muted-foreground">Stars</span>
+                          <span class="text-xs uppercase tracking-wide font-medium text-muted-foreground">{UI.projectsStars}</span>
                           <span class="font-semibold text-lg tracking-wider">
                             <NumberTicker play value={project.data.star} client:load githubRepo={githubRepo} githubType="stars" />
                           </span>
@@ -70,7 +72,7 @@ const projects = await getAllProjects()
                     <div class="flex items-center py-1.5 gap-3">
                       {project.data.fork != null && (
                         <>
-                          <span class="text-xs uppercase tracking-wide font-medium text-muted-foreground">Forks</span>
+                          <span class="text-xs uppercase tracking-wide font-medium text-muted-foreground">{UI.projectsForks}</span>
                           <span class="font-semibold text-lg tracking-wider">
                             <NumberTicker play value={project.data.fork} client:load githubRepo={githubRepo} githubType="forks" />
                           </span>
@@ -86,7 +88,7 @@ const projects = await getAllProjects()
                         class="hover:text-zinc-600 dark:hover:text-zinc-100 flex items-center gap-1"
                       >
                         <span class="icon-[mdi--web] size-4" />
-                        <span>Website</span>
+                        <span>{UI.projectsWebsite}</span>
                       </a>
                     )}
                     {project.data.githubUrl && (
@@ -96,7 +98,7 @@ const projects = await getAllProjects()
                         class="hover:text-zinc-600 dark:hover:text-zinc-100 flex items-center gap-1"
                       >
                         <span class="icon-[mdi--github] size-4" />
-                        <span>GitHub</span>
+                        <span>{UI.projectsGithub}</span>
                       </a>
                     )}
                   </div>

@@ -1,0 +1,87 @@
+{
+  "site": {
+    "title": "Spotren",
+    "description": "Litos is a modern blogging theme built on Astro.js, designed for developers. It supports multiple post layouts, case displays, project displays, and more, providing an elegant user experience and powerful customization capabilities.",
+    "lang": "en"
+  },
+  "header": {
+    "casesLabel": "Cases"
+  },
+  "posts": {
+    "title": "Posts",
+    "description": "Posts by Spotren",
+    "introduce": "Here I share how we build practical, well-structured websites and digital assets.",
+    "author": "Spotren",
+    "readMoreText": "Read more",
+    "prevPageText": "Previous",
+    "nextPageText": "Next",
+    "tocText": "On this page",
+    "backToPostsText": "Back to Posts",
+    "nextPostText": "Next Post",
+    "prevPostText": "Previous Post",
+    "recommendText": "REC"
+  },
+  "tags": {
+    "title": "Tags",
+    "description": "All tags of posts",
+    "introduce": "Browse every post tag and jump into a focused slice of the archive."
+  },
+  "projects": {
+    "title": "Projects",
+    "description": "Examples of projects and templates.",
+    "introduce": "Selected website, template, and product examples."
+  },
+  "cases": {
+    "title": "Cases",
+    "description": "Selected cases and visual notes.",
+    "introduce": "A collection of case highlights, examples, and visual fragments."
+  },
+  "home": {
+    "title": "ndEX",
+    "subtitle": "Site for optimized indexing for SMBs",
+    "intro": "An SEO method for local businesses that creates fast, intelligent websites with structured information that improves indexing and semantic understanding in LLMs.",
+    "socialLabel": "followers",
+    "contributionsTitle": "Sites",
+    "contributionsDescription": "Sites created in the last year:",
+    "skillsTitle": "Skills",
+    "skillsDescription": "Not just skills, but also tools.",
+    "postsTitle": "Posts",
+    "pinnedLabel": "Pinned",
+    "recentLabel": "Recent",
+    "postsSummarySuffix": "worth a look."
+  },
+  "comments": {
+    "language": "en"
+  },
+  "ui": {
+    "rssFeedLabel": "RSS Feed",
+    "languageSwitcherLabel": "Language switcher",
+    "languageOptionEnglish": "English",
+    "languageOptionPortuguese": "Portuguese",
+    "githubSourceLabel": "GitHub Source",
+    "searchLabel": "Search",
+    "searchTitle": "Search (Ctrl+K)",
+    "searchPlaceholder": "Search",
+    "searchExact": "Exact",
+    "searchTypePrompt": "Type to search",
+    "searchNoResults": "No results found",
+    "searchNoResultsDev": "No results in development mode",
+    "commentsTitle": "Comments",
+    "tagSingular": "tag",
+    "tagPlural": "tags",
+    "postSingular": "post",
+    "postPlural": "posts",
+    "totalSuffix": "total",
+    "tagsEmpty": "No tags available",
+    "tagBackLabel": "Tags",
+    "projectsStars": "Stars",
+    "projectsForks": "Forks",
+    "projectsWebsite": "Website",
+    "projectsGithub": "GitHub",
+    "casesEmpty": "No cases yet. Come back soon.",
+    "backToTop": "Back to top",
+    "recommendedPostTitle": "Recommended post",
+    "viewPostsTaggedWithPrefix": "View posts tagged with",
+    "socialAriaLabelPrefix": "Link to"
+  }
+}

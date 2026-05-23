@@ -1,6 +1,6 @@
 ---
-title: 'Photos Page Config'
-description: 'Current implementation notes for the Photos page, including PHOTOS_CONFIG, PhotosList, and getPhotos().'
+title: 'Cases Page Config'
+description: 'Current implementation notes for the Cases page, including CASES_CONFIG, CasesList, and getCases().'
 pubDate: 2025-08-10
 author: 'Dnzzk2'
 cover: assets/cover.png
@@ -8,22 +8,22 @@ recommend: true
 tags: ['Litos', 'Documentation']
 ---
 
-This document describes the current implementation of the Photos page.
+This document describes the current implementation of the Cases page.
 
 ## Current file structure
 
-- `src/pages/photos/index.astro`
-  - Reads page text from `PHOTOS_CONFIG`
-  - Reads timeline data from `PhotosList`
+- `src/pages/cases/index.astro`
+  - Reads page text from `CASES_CONFIG`
+  - Reads timeline data from `CasesList`
 - `src/config.ts`
-  - Stores `PHOTOS_CONFIG`
-- `src/lib/photos.ts`
-  - Stores `PhotosList`
-  - Auto-imports photo files
-  - Converts one folder of images into `Photo[]` with `getPhotos()`
+  - Stores `CASES_CONFIG`
+- `src/lib/cases.ts`
+  - Stores `CasesList`
+  - Auto-imports case files
+  - Converts one folder of images into `Case[]` with `getCases()`
 - `src/types.ts`
-  - Defines `PhotoData`, `Photo`, and `PolaroidVariant`
-- `src/components/photos/PolaroidCard.tsx`
+  - Defines `CaseData`, `Case`, and `PolaroidVariant`
+- `src/components/cases/PolaroidCard.tsx`
   - Maps each `variant` to the actual card size
 
 ## Page text
@@ -31,42 +31,42 @@ This document describes the current implementation of the Photos page.
 The page title and intro text come from `src/config.ts`.
 
 ```ts title="src/config.ts"
-export const PHOTOS_CONFIG: PhotosConfig = {
-  title: 'Photos',
-  description: 'Here I will record some photos taken in daily life.',
-  introduce: 'Here I will record some photos taken in daily life.',
+export const CASES_CONFIG: CasesConfig = {
+  title: 'Cases',
+  description: 'Here I will record some cases taken in daily life.',
+  introduce: 'Here I will record some cases taken in daily life.',
 }
 ```
 
-`src/pages/photos/index.astro` renders the page like this:
+`src/pages/cases/index.astro` renders the page like this:
 
-```astro title="src/pages/photos/index.astro"
+```astro title="src/pages/cases/index.astro"
 ---
-import { PHOTOS_CONFIG } from '~/config'
-import { PhotosList } from '~/lib/photos'
+import { CASES_CONFIG } from '~/config'
+import { CasesList } from '~/lib/cases'
 
-const { title, description, introduce } = PHOTOS_CONFIG
+const { title, description, introduce } = CASES_CONFIG
 ---
 
 <Layout {title} {description}>
   <PageTitle {title} {introduce} />
-  <PhotoTimeline photoData={PhotosList} />
+  <CaseTimeline caseData={CasesList} />
 </Layout>
 ```
 
-## PhotosList
+## CasesList
 
-`PhotosList` is defined in `src/lib/photos.ts`. Each item is one timeline entry.
+`CasesList` is defined in `src/lib/cases.ts`. Each item is one timeline entry.
 
-```ts title="src/lib/photos.ts"
-export const PhotosList: PhotoData[] = [
+```ts title="src/lib/cases.ts"
+export const CasesList: CaseData[] = [
   {
     title: 'Ningbo - Botanical Garden',
     icon: { type: 'emoji', value: '🌼' },
     description: 'It was early spring, so I went to see the cherry blossoms.',
     date: '2026-03-07',
     travel: '',
-    photos: getPhotos(
+    cases: getCases(
       '2026-03-07-botanicalGarden',
       'Early spring cherry blossoms at the botanical garden',
       ['3x4', '3x4', '3x4', '3x4', '3x4', '3x4']
@@ -75,7 +75,7 @@ export const PhotosList: PhotoData[] = [
 ]
 ```
 
-### PhotoData fields
+### CaseData fields
 
 | Field | Meaning |
 | --- | --- |
@@ -84,15 +84,15 @@ export const PhotosList: PhotoData[] = [
 | `description` | Optional timeline description |
 | `date` | Timeline date |
 | `travel` | Optional extra label |
-| `photos` | Array of `Photo` objects |
+| `cases` | Array of `Case` objects |
 
-## How `getPhotos()` works
+## How `getCases()` works
 
 Current implementation:
 
-```ts title="src/lib/photos.ts"
-function getPhotos(dir: string, alt: string, variants: PolaroidVariant[]): Photo[] {
-  return Object.entries(photoModules)
+```ts title="src/lib/cases.ts"
+function getCases(dir: string, alt: string, variants: PolaroidVariant[]): Case[] {
+  return Object.entries(caseModules)
     .filter(([path]) => path.includes(`/${dir}/`))
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([, mod], index) => {
@@ -112,17 +112,17 @@ function getPhotos(dir: string, alt: string, variants: PolaroidVariant[]): Photo
 
 | Parameter | Meaning |
 | --- | --- |
-| `dir` | Folder name under `src/assets/photos` |
+| `dir` | Folder name under `src/assets/cases` |
 | `alt` | Shared `alt` text for every image returned from that folder |
 | `variants` | Ratio list matched to the sorted images by index |
 
 ### Important behavior
 
-1. `getPhotos()` first filters all imported images by folder name.
+1. `getCases()` first filters all imported images by folder name.
 2. It then sorts the matched file paths with `localeCompare`.
-3. It creates the final `Photo[]` in that sorted order.
-4. `variants[index]` is applied to the photo at the same index.
-5. If one index is missing in `variants`, that photo falls back to `'4x3'`.
+3. It creates the final `Case[]` in that sorted order.
+4. `variants[index]` is applied to the case at the same index.
+5. If one index is missing in `variants`, that case falls back to `'4x3'`.
 
 ### How the third parameter is matched
 
@@ -130,15 +130,15 @@ The third parameter is not random metadata. It is position-based.
 
 For this code:
 
-```ts title="src/lib/photos.ts"
-photos: getPhotos(
+```ts title="src/lib/cases.ts"
+cases: getCases(
   '2026-03-07-botanicalGarden',
   'Early spring cherry blossoms at the botanical garden',
   ['3x4', '3x4', '3x4', '3x4', '3x4', '3x4']
 )
 ```
 
-Assume the folder `src/assets/photos/2026-03-07-botanicalGarden/` contains these files after sorting:
+Assume the folder `src/assets/cases/2026-03-07-botanicalGarden/` contains these files after sorting:
 
 ```text
 01.webp
@@ -160,12 +160,12 @@ Then the mapping is:
 | `05.webp` | fifth item in the array -> `3x4` |
 | `06.webp` | sixth item in the array -> `3x4` |
 
-So if you want the first photo in the folder to use `3x4`, the first item in the third array must be `3x4`.
+So if you want the first case in the folder to use `3x4`, the first item in the third array must be `3x4`.
 
 If you want mixed ratios, write them in the same order as the sorted files:
 
 ```ts
-photos: getPhotos('2025-03-01-dongqianhu', 'Ningbo - Dongqian Lake', ['4x5', '1x1', '4x3'])
+cases: getCases('2025-03-01-dongqianhu', 'Ningbo - Dongqian Lake', ['4x5', '1x1', '4x3'])
 ```
 
 That means:
@@ -174,10 +174,10 @@ That means:
 - second sorted image -> `1x1`
 - third sorted image -> `4x3`
 
-If the folder contains more photos than the array length:
+If the folder contains more cases than the array length:
 
 ```ts
-photos: getPhotos('example-folder', 'Example alt', ['3x4', '4x5'])
+cases: getCases('example-folder', 'Example alt', ['3x4', '4x5'])
 ```
 
 Then:
@@ -194,9 +194,9 @@ Then:
 export type PolaroidVariant = '1x1' | '4x5' | '4x3' | '3x4' | '9x16'
 ```
 
-Current size mapping in `src/components/photos/PolaroidCard.tsx`:
+Current size mapping in `src/components/cases/PolaroidCard.tsx`:
 
-```ts title="src/components/photos/PolaroidCard.tsx"
+```ts title="src/components/cases/PolaroidCard.tsx"
 const polaroidVariants: Record<PolaroidVariant, string> = {
   '1x1': 'w-20 h-20',
   '4x5': 'w-20 h-24',
@@ -208,24 +208,24 @@ const polaroidVariants: Record<PolaroidVariant, string> = {
 
 ## How to add a new timeline entry
 
-1. Create a folder under `src/assets/photos/`, for example `2026-04-01-spring-walk`.
+1. Create a folder under `src/assets/cases/`, for example `2026-04-01-spring-walk`.
 2. Put image files into that folder.
 3. Make sure the file names are in the order you want after sorting.
-4. Add one item to `PhotosList` in `src/lib/photos.ts`.
-5. Pass the third argument to `getPhotos()` in the same order as the sorted files.
+4. Add one item to `CasesList` in `src/lib/cases.ts`.
+5. Pass the third argument to `getCases()` in the same order as the sorted files.
 
 Example:
 
-```ts title="src/lib/photos.ts"
+```ts title="src/lib/cases.ts"
 {
   title: 'Spring Walk',
   icon: { type: 'emoji', value: '🌿' },
   description: 'A short walk with a camera.',
   date: '2026-04-01',
   travel: '',
-  photos: getPhotos(
+  cases: getCases(
     '2026-04-01-spring-walk',
-    'Photos from a spring walk',
+    'Cases from a spring walk',
     ['3x4', '4x3', '4x5', '4x3']
   ),
 }
@@ -233,6 +233,6 @@ Example:
 
 ## Notes
 
-- `alt` is applied to every photo returned from the same folder.
+- `alt` is applied to every case returned from the same folder.
 - The order is determined by sorted file path, not by import order in the editor.
-- If you rename files, the sort order may change, and the `variants` array will then map to different photos.
+- If you rename files, the sort order may change, and the `variants` array will then map to different cases.

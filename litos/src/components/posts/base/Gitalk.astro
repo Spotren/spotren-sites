@@ -10,7 +10,10 @@ const { id, title } = Astro.props
 <div id="gitalk-container" data-id={id} data-title={title}></div>
 
 <script>
-  import { COMMENT_CONFIG } from '~/config'
+  import { getLocaleConfig } from '~/config'
+  import { getLocaleFromPathname } from '~/lib/i18n'
+  const locale = getLocaleFromPathname(window.location.pathname)
+  const { COMMENT_CONFIG } = getLocaleConfig(locale)
   const { gitalk } = COMMENT_CONFIG
 
   let observer: IntersectionObserver | null = null

@@ -3,25 +3,29 @@ import '~/styles/global.css'
 import '~/styles/markdown.css'
 import '~/styles/lqip.css'
 import '~/styles/github-card.css'
-import { SITE } from '~/config'
+import { getLocaleConfig } from '~/config'
 import Head from '~/components/base/Head.astro'
 import Header from './Header.astro'
 import Footer from './Footer.astro'
+import { getLocaleFromPathname, type SiteLocale } from '~/lib/i18n'
 
 type Props = {
   title: string
   description: string
   image?: string
   disableViewTransition?: boolean
+  locale?: SiteLocale
 }
 
 const { title, description, image, disableViewTransition }: Props = Astro.props
+const locale = Astro.props.locale ?? getLocaleFromPathname(Astro.url.pathname)
+const { SITE } = getLocaleConfig(locale)
 ---
 
 <!doctype html>
 <html lang={SITE.lang} transition:name="root" transition:animate={SITE.transition && !disableViewTransition ? 'fade' : 'none'}>
   <head>
-    <Head title={`${title} | ${SITE.title}`} {description} {image} />
+    <Head title={`${title} | ${SITE.title}`} {description} {image} {locale} />
   </head>
   <body class="flex flex-col">
     <Header />

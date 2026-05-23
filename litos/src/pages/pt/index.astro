@@ -1,0 +1,82 @@
+---
+import { getLocaleConfig } from '~/config.ts'
+import Layout from '~/layouts/Layout.astro'
+import SectionDivider from '~/components/base/SectionDivider.astro'
+import GithubContributions from '~/components/base/GithubContributions.tsx'
+import SocialLink from '~/components/base/SocialLink.astro'
+import List from '~/components/posts/card/List.astro'
+import SkillsShowcase from '~/components/base/SkillsShowcase.astro'
+import { getNumPosts, getPinnedPosts } from '~/lib/data'
+
+const locale = 'pt'
+const { SITE, SKILLSSHOWCASE_CONFIG, SOCIAL_LINKS, GITHUB_CONFIG, POSTS_CONFIG, HOME_CONFIG, UI } = getLocaleConfig(locale)
+const { ENABLED, GITHUB_USERNAME, TOOLTIP_ENABLED } = GITHUB_CONFIG
+const { size, type } = POSTS_CONFIG.homePageConfig
+const { SKILLS_ENABLED, SKILLS_DATA } = SKILLSSHOWCASE_CONFIG
+
+let showPosts = []
+const pinnedPosts = await getPinnedPosts(locale)
+const hasPinnedPosts = pinnedPosts.length > 0
+if (hasPinnedPosts) {
+  showPosts = pinnedPosts
+} else {
+  showPosts = await getNumPosts(size, locale)
+}
+---
+
+<Layout title={`${HOME_CONFIG.title}: ${HOME_CONFIG.subtitle}`} description={SITE.description} {locale}>
+  <div class="relative z-[1]">
+    <div class="py-8 pb-10 px-6 sm:px-8">
+      <h1 class="flex flex-col gap-2">
+        <span class="text-4xl sm:text-5xl tracking-tight"> {HOME_CONFIG.title} </span>
+        <span class="text-muted-foreground font-light text-xl sm:text-2xl block tracking-wide text-balance">
+          {HOME_CONFIG.subtitle}
+        </span>
+      </h1>
+      <div class="pro text-muted-foreground text-pretty">
+        <p>{HOME_CONFIG.intro}</p>
+      </div>
+      <div class="mt-6 flex gap-6">
+        {
+          SOCIAL_LINKS.map((item) => {
+            return <SocialLink href={item.url} icon={item.icon} aria-label={UI.socialAriaLabel(item.name)} count={item.count} label={HOME_CONFIG.socialLabel} />
+          })
+        }
+      </div>
+    </div>
+    {
+      ENABLED && (
+        <>
+          <SectionDivider />
+          <div class="py-8 pb-10 px-6 max-md:px-6">
+            <div class="px-2 max-md:px-0">
+              <h2 class="text-2xl sm:text-3xl">{HOME_CONFIG.contributionsTitle}</h2>
+              <p class="text-muted-foreground mb-6 mt-1">{HOME_CONFIG.contributionsDescription}</p>
+            </div>
+            <GithubContributions username={GITHUB_USERNAME} tooltipEnabled={TOOLTIP_ENABLED} client:load transition:animate="none" />
+          </div>
+        </>
+      )
+    }
+    {
+      SKILLS_ENABLED && SKILLS_DATA.length > 0 && (
+        <>
+          <SectionDivider />
+          <div class="py-8 pb-10 px-6 max-md:px-6">
+            <div class="px-2 max-md:px-0">
+              <h2 class="text-2xl sm:text-3xl tracking-tight">{HOME_CONFIG.skillsTitle}</h2>
+              <p class="text-muted-foreground mb-6 mt-1">{HOME_CONFIG.skillsDescription}</p>
+            </div>
+            <SkillsShowcase skillsData={SKILLS_DATA} />
+          </div>
+        </>
+      )
+    }
+    <SectionDivider />
+    <div class="py-8 pb-10 px-6 sm:px-8">
+      <h2 class="text-2xl sm:text-3xl tracking-tight">{HOME_CONFIG.postsTitle}</h2>
+      <p class="text-muted-foreground mb-6 mt-1">{HOME_CONFIG.postsSummary(showPosts.length, hasPinnedPosts)}</p>
+      <List posts={showPosts} {type} coverLayout={POSTS_CONFIG.homePageConfig?.coverLayout} />
+    </div>
+  </div>
+</Layout>

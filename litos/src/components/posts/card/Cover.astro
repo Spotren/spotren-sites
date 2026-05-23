@@ -1,12 +1,16 @@
 ---
 import { formatDate } from '~/lib/utils'
-import { POSTS_CONFIG } from '~/config'
+import { getLocaleConfig } from '~/config'
 import Badge from '~/components/posts/base/Badge.astro'
 import type { CardProps } from './List.astro'
+import { getLocaleFromPathname, withLocalePath } from '~/lib/i18n'
+import { getPostSlug } from '~/lib/data'
 
 interface Props extends CardProps {}
 
 const { post, class: className, style }: Props = Astro.props
+const locale = getLocaleFromPathname(Astro.url.pathname)
+const { POSTS_CONFIG } = getLocaleConfig(locale)
 const recommendText = POSTS_CONFIG.recommendText
 ---
 
@@ -15,7 +19,7 @@ const recommendText = POSTS_CONFIG.recommendText
     <div class="flex flex-wrap items-center gap-3 text-sm text-muted-foreground/80">
       <time class="flex items-center gap-1.5">
         <span class="icon-[ph--calendar-blank] size-4"></span>
-        {formatDate(post.data.pubDate, 'chinese')}
+        {formatDate(post.data.pubDate, 'chinese', locale)}
       </time>
       {
         post.data.updatedDate && (
@@ -23,14 +27,14 @@ const recommendText = POSTS_CONFIG.recommendText
             <span class="text-border">|</span>
             <time class="flex items-center gap-1.5">
               <span class="icon-[ph--clock-clockwise] size-4" />
-              {formatDate(post.data.updatedDate, 'chinese')}
+              {formatDate(post.data.updatedDate, 'chinese', locale)}
             </time>
           </>
         )
       }
     </div>
 
-    <a href={`/posts/${post.id}`} class="group/title">
+    <a href={withLocalePath(locale, `/posts/${getPostSlug(post)}`)} class="group/title">
       <div class="text-base font-semibold transition-colors group-hover/title:text-primary line-clamp-2 leading-5 mb-1">
         {post.data.title}
       </div>
@@ -42,7 +46,7 @@ const recommendText = POSTS_CONFIG.recommendText
       {post.data.tags?.map((tag) => <Badge type="tag" content={tag} />)}
 
       <a
-        href={`/posts/${post.id}`}
+        href={withLocalePath(locale, `/posts/${getPostSlug(post)}`)}
         class="ml-auto hidden items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-primary sm:inline-flex"
       >
         {POSTS_CONFIG.readMoreText}

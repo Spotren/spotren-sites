@@ -2,10 +2,13 @@
 import { formatDate } from '~/lib/utils'
 import Badge from '~/components/posts/base/Badge.astro'
 import type { CardProps } from './List.astro'
+import { getLocaleFromPathname, withLocalePath } from '~/lib/i18n'
+import { getPostSlug } from '~/lib/data'
 
 interface Props extends CardProps {}
 
 const { post, class: className, style }: Props = Astro.props
+const locale = getLocaleFromPathname(Astro.url.pathname)
 ---
 
 <div class:list={['group relative block py-6 border-b border-border/60 last:border-none', className]} {style}>
@@ -14,7 +17,7 @@ const { post, class: className, style }: Props = Astro.props
       <span class="inline-flex items-center gap-1.5">
         <span class="icon-[ph--calendar-blank] size-3.5 sm:size-4"></span>
         <time datetime={post.data.pubDate.toISOString()} class="text-xs sm:text-sm">
-          {formatDate(post.data.pubDate)}
+          {formatDate(post.data.pubDate, 'default', locale)}
         </time>
       </span>
       {
@@ -22,13 +25,13 @@ const { post, class: className, style }: Props = Astro.props
           <span class="inline-flex items-center gap-1.5">
             <span class="icon-[ph--clock-clockwise] size-3.5 sm:size-4" />
             <time datetime={post.data.updatedDate.toISOString()} class="text-xs sm:text-sm">
-              {formatDate(post.data.updatedDate)}
+              {formatDate(post.data.updatedDate, 'default', locale)}
             </time>
           </span>
         )
       }
     </div>
-    <a href={`/posts/${post.id}`} class="block">
+    <a href={withLocalePath(locale, `/posts/${getPostSlug(post)}`)} class="block">
       <div class="text-base font-semibold text-foreground leading-tight group-hover:text-primary transition-colors line-clamp-2">
         {post.data.title}
       </div>
@@ -41,7 +44,7 @@ const { post, class: className, style }: Props = Astro.props
           {post.data.tags.slice(0, 5).map((tag) => (
             <Badge type="tag" content={tag} />
           ))}
-          {post.data.tags.length > 5 && <span class="text-xs text-muted-foreground/60">+{post.data.tags.length - 5} more</span>}
+          {post.data.tags.length > 5 && <span class="text-xs text-muted-foreground/60">+{post.data.tags.length - 5} {locale === 'pt' ? 'a mais' : 'more'}</span>}
         </div>
       )
     }

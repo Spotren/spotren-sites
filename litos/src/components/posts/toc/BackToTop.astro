@@ -1,5 +1,7 @@
 ---
 import { cn } from '~/lib/utils'
+import { getLocaleConfig } from '~/config'
+import { getLocaleFromPathname } from '~/lib/i18n'
 
 interface Props {
   class?: string
@@ -7,6 +9,8 @@ interface Props {
 }
 
 const { class: className, id = 'backToTopDesktop' } = Astro.props
+const locale = getLocaleFromPathname(Astro.url.pathname)
+const { UI } = getLocaleConfig(locale)
 ---
 
 <button
@@ -22,7 +26,7 @@ const { class: className, id = 'backToTopDesktop' } = Astro.props
     'opacity-0 invisible translate-y-4 transition-all duration-300 ease-out',
     className
   )}
-  aria-label="Back to top"
+  aria-label={UI.backToTop}
 >
   <span class="icon-[ph--arrow-up] transition-transform duration-200 group-hover:-translate-y-0.5 size-4w"></span>
 </button>

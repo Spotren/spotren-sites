@@ -182,7 +182,7 @@ export interface ProjectConfig {
 export type IconType = 'icon' | 'image'
 
 /**
- * 拍立得照片变体类型 / Polaroid photo variant types
+ * 拍立得照片变体类型 / Polaroid case variant types
  * @description 定义不同宽高比的拍立得照片样式
  * - 1x1: 正方形比例
  * - 4x5: 标准拍立得比例
@@ -193,18 +193,18 @@ export type IconType = 'icon' | 'image'
 export type PolaroidVariant = '1x1' | '4x5' | '4x3' | '3x4' | '9x16'
 
 /**
- * 图片配置接口 / Photo configuration interface
+ * 图片配置接口 / Case configuration interface
  * @property {string | ImageMetadata} src - 图片路径 / Image path
  * @property {string} alt - 图片描述 / Image description
  * @property {number} width - 图片宽度 / Image width
  * @property {number} height - 图片高度 / Image height
- * @property {PolaroidVariant} variant - 拍立得照片变体 / Polaroid photo variant
+ * @property {PolaroidVariant} variant - 拍立得照片变体 / Polaroid case variant
  * @property {string} location - 拍摄地点 / Shooting location
  * @property {string} date - 拍摄日期 / Shooting date
  * @property {string} camera - 拍摄设备 / Shooting equipment
  * @property {string} description - 图片描述 / Image description
  */
-export interface Photo {
+export interface Case {
   src: string | ImageMetadata
   alt: string
   width: number
@@ -217,12 +217,12 @@ export interface Photo {
 }
 
 /**
- * 图片页面配置接口 / Photos page configuration interface
+ * 图片页面配置接口 / Cases page configuration interface
  * @property {string} title - 页面标题 / Page title
  * @property {string} description - 页面描述 / Page description
  * @property {string} introduce - 页面介绍 / Page introduction
  */
-export interface PhotosConfig {
+export interface CasesConfig {
   title: string
   description: string
   introduce: string
@@ -230,7 +230,7 @@ export interface PhotosConfig {
 
 export type TimelineIconType = 'emoji' | 'icon' | 'color' | 'number' | 'image'
 
-export interface PhotoData {
+export interface CaseData {
   title: string
   icon: {
     type: TimelineIconType
@@ -239,7 +239,7 @@ export interface PhotoData {
   }
   description?: string
   date: string
-  photos: Photo[]
+  cases: Case[]
   travel?: string
 }
 

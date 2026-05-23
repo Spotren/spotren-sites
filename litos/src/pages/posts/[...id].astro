@@ -8,15 +8,15 @@ import PostFeatures from '~/components/posts/toc/PostFeatures.astro'
 import TocMobile from '~/components/posts/toc/TocMobile.astro'
 import { POSTS_CONFIG, SITE } from '~/config'
 import { render } from 'astro:content'
-import { getAllPosts } from '~/lib/data'
+import { getAllPosts, getPostSlug } from '~/lib/data'
 import SectionDivider from '~/components/base/SectionDivider.astro'
 import Comment from '~/components/posts/base/Comment.astro'
 import License from '~/components/posts/base/License.astro'
 
 export async function getStaticPaths() {
-  const sortedPosts = await getAllPosts()
+  const sortedPosts = await getAllPosts('en')
   return sortedPosts.map((post, index) => ({
-    params: { id: post.id },
+    params: { id: getPostSlug(post) },
     props: {
       post,
       posts: sortedPosts,
@@ -43,12 +43,14 @@ const layoutMap: Record<LayoutKey, any> = {
 
 const layoutKey: LayoutKey = (frontmatter.postType as LayoutKey) || (POSTS_CONFIG.postType as LayoutKey)
 const PostLayout = layoutMap[layoutKey]
+const locale = 'en'
 ---
 
 <Layout
   title={frontmatter.title}
   description={frontmatter.description || frontmatter.title}
   image={frontmatter.ogImage?.src ? `${SITE.website}${frontmatter.ogImage.src}` : SITE.ogImage}
+  {locale}
 >
   <div class="relative flex flex-col justify-between h-fit z-[1]">
     <TocMobile {post} {posts} headings={filterHeadings} />

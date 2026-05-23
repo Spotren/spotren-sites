@@ -3,6 +3,7 @@ import { formatDate } from '~/lib/utils'
 import { ANALYTICS_CONFIG, POSTS_CONFIG } from '~/config'
 import Prose from '~/components/posts/base/Prose.astro'
 import Badge from '~/components/posts/base/Badge.astro'
+import { getLocaleFromPathname } from '~/lib/i18n'
 
 interface Props {
   frontmatter: any
@@ -12,6 +13,7 @@ interface Props {
 
 const { frontmatter, minutesRead, wordCount } = Astro.props
 const recommendText = POSTS_CONFIG.recommendText
+const locale = getLocaleFromPathname(Astro.url.pathname)
 ---
 
 <article class="relative fade-up">
@@ -29,13 +31,13 @@ const recommendText = POSTS_CONFIG.recommendText
             <div class="flex items-center gap-1.5">
               <span class="icon-[ph--calendar-blank] w-4 h-4 opacity-85"></span>
               <time datetime={frontmatter.pubDate.toISOString()}>
-                {formatDate(frontmatter.pubDate)}
+                {formatDate(frontmatter.pubDate, 'default', locale)}
               </time>
               {
                 frontmatter.updatedDate && (
                   <div class="flex items-center gap-1.5">
                     / Update
-                    <time datetime={frontmatter.updatedDate.toISOString()}>{formatDate(frontmatter.updatedDate)}</time>
+                    <time datetime={frontmatter.updatedDate.toISOString()}>{formatDate(frontmatter.updatedDate, 'default', locale)}</time>
                   </div>
                 )
               }

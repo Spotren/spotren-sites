@@ -1,0 +1,29 @@
+---
+import { getLocaleConfig } from '~/config'
+import Layout from '~/layouts/Layout.astro'
+import CaseTimeline from '~/components/cases/CaseTimeline.astro'
+import PageTitle from '~/components/base/PageTitle.astro'
+import { getCasesList } from '~/lib/cases'
+
+const locale = 'en'
+const { CASES_CONFIG, UI } = getLocaleConfig(locale)
+const { title, description, introduce } = CASES_CONFIG
+const casesList = getCasesList(locale)
+---
+
+<Layout {title} {description} disableViewTransition {locale}>
+  <div class="relative z-[1] py-8 pb-10 px-6 sm:px-8">
+    <PageTitle {title} {introduce} />
+    <div class="mt-12">
+      {
+        casesList.length > 0 ? (
+          <CaseTimeline caseEntries={casesList} />
+        ) : (
+          <div class="text-muted-foreground mb-4">
+            <p class="text-sm">{UI.casesEmpty}</p>
+          </div>
+        )
+      }
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,87 @@
+{
+  "site": {
+    "title": "Spotren",
+    "description": "Litos e um template moderno em Astro.js para publicacao de conteudo, projetos e paginas com foco em clareza, performance e estrutura semantica.",
+    "lang": "pt-BR"
+  },
+  "header": {
+    "casesLabel": "Cases"
+  },
+  "posts": {
+    "title": "Posts",
+    "description": "Posts da Spotren",
+    "introduce": "Aqui eu compartilho como construimos sites praticos, bem estruturados e orientados a resultado.",
+    "author": "Spotren",
+    "readMoreText": "Ler mais",
+    "prevPageText": "Anterior",
+    "nextPageText": "Proximo",
+    "tocText": "Nesta pagina",
+    "backToPostsText": "Voltar para Posts",
+    "nextPostText": "Proximo Post",
+    "prevPostText": "Post Anterior",
+    "recommendText": "REC"
+  },
+  "tags": {
+    "title": "Tags",
+    "description": "Todas as tags dos posts",
+    "introduce": "Veja todas as tags e entre direto no recorte de conteudo que faz sentido para voce."
+  },
+  "projects": {
+    "title": "Projetos",
+    "description": "Exemplos de projetos e templates.",
+    "introduce": "Alguns exemplos de sites, templates e ativos digitais."
+  },
+  "cases": {
+    "title": "Cases",
+    "description": "Selecao de cases e registros visuais.",
+    "introduce": "Uma colecao de destaques, exemplos e fragmentos visuais."
+  },
+  "home": {
+    "title": "ndEX",
+    "subtitle": "Site para indexação otimizada de PMEs",
+    "intro": "Criado para Negócios Locais e PMEs, o ndEX estrutura e esquematiza as informações da empresa, melhorando a indexação e o entendimento semântico em LLMs.",
+    "socialLabel": "seguidores",
+    "contributionsTitle": "Utilização",
+    "contributionsDescription": "Sites criados no último ano:",
+    "skillsTitle": "Otimização",
+    "skillsDescription": "Frameworks e linguagens usadas no ndEX.",
+    "postsTitle": "Posts",
+    "pinnedLabel": "Fixados",
+    "recentLabel": "Recentes",
+    "postsSummarySuffix": "para explorar."
+  },
+  "comments": {
+    "language": "pt-BR"
+  },
+  "ui": {
+    "rssFeedLabel": "Feed RSS",
+    "languageSwitcherLabel": "Seletor de idioma",
+    "languageOptionEnglish": "Ingles",
+    "languageOptionPortuguese": "Portugues",
+    "githubSourceLabel": "Codigo no GitHub",
+    "searchLabel": "Buscar",
+    "searchTitle": "Buscar (Ctrl+K)",
+    "searchPlaceholder": "Buscar",
+    "searchExact": "Exata",
+    "searchTypePrompt": "Digite para buscar",
+    "searchNoResults": "Nenhum resultado encontrado",
+    "searchNoResultsDev": "Sem resultados no modo de desenvolvimento",
+    "commentsTitle": "Comentarios",
+    "tagSingular": "tag",
+    "tagPlural": "tags",
+    "postSingular": "post",
+    "postPlural": "posts",
+    "totalSuffix": "no total",
+    "tagsEmpty": "Nenhuma tag disponivel",
+    "tagBackLabel": "Tags",
+    "projectsStars": "Stars",
+    "projectsForks": "Forks",
+    "projectsWebsite": "Site",
+    "projectsGithub": "GitHub",
+    "casesEmpty": "Ainda nao ha cases. Volte em breve.",
+    "backToTop": "Voltar ao topo",
+    "recommendedPostTitle": "Post recomendado",
+    "viewPostsTaggedWithPrefix": "Ver posts com a tag",
+    "socialAriaLabelPrefix": "Link para"
+  }
+}

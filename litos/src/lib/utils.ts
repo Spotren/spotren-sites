@@ -1,6 +1,7 @@
 import type { CollectionEntry } from 'astro:content'
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import { type SiteLocale } from '~/lib/i18n'
 
 export function cn(...classes: ClassValue[]) {
   return twMerge(clsx(classes))
@@ -19,7 +20,9 @@ export function postsSort(posts: CollectionEntry<'posts'>[]) {
 export type DateFormat = 'default' | 'dot' | 'short' | 'iso' | 'chinese'
 
 // 日期格式化函数
-export const formatDate = (date: Date, format: DateFormat = 'default'): string => {
+export const formatDate = (date: Date, format: DateFormat = 'default', locale: SiteLocale = 'en'): string => {
+  const browserLocale = locale === 'pt' ? 'pt-BR' : 'en-US'
+
   switch (format) {
     case 'dot':
       // 2020.03.03 格式
@@ -29,8 +32,7 @@ export const formatDate = (date: Date, format: DateFormat = 'default'): string =
       return `${year}.${month}.${day}`
 
     case 'short':
-      // Mar 3, 2020 格式
-      return date.toLocaleDateString('en-US', {
+      return date.toLocaleDateString(browserLocale, {
         year: 'numeric',
         month: 'short',
         day: 'numeric',
@@ -41,16 +43,15 @@ export const formatDate = (date: Date, format: DateFormat = 'default'): string =
       return date.toISOString().split('T')[0]
 
     case 'chinese':
-      // 2020年3月3日 格式
-      const chineseYear = date.getFullYear()
-      const chineseMonth = date.getMonth() + 1
-      const chineseDay = date.getDate()
-      return `${chineseYear}年${chineseMonth}月${chineseDay}日`
+      return date.toLocaleDateString(browserLocale, {
+        year: 'numeric',
+        month: locale === 'pt' ? '2-digit' : 'long',
+        day: 'numeric',
+      })
 
     case 'default':
     default:
-      // March 3, 2020 格式（默认）
-      return date.toLocaleDateString('en-US', {
+      return date.toLocaleDateString(browserLocale, {
         year: 'numeric',
         month: 'long',
         day: 'numeric',

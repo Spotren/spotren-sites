@@ -1,11 +1,12 @@
-import { SITE } from '~/config'
-import { getAllPosts } from '../lib/data'
+import { getLocaleConfig } from '~/config'
+import { getAllPosts, getPostSlug } from '../lib/data'
 import type { CollectionEntry } from 'astro:content'
 import sanitizeHtml from 'sanitize-html'
 import { createMarkdownProcessor } from '@astrojs/markdown-remark'
 import { remarkPlugins, rehypePlugins } from '../../plugins'
 import { getImage } from 'astro:assets'
 import type { ImageMetadata } from 'astro'
+import { type SiteLocale, withLocalePath } from '~/lib/i18n'
 
 interface RSSConfig {
   siteUrl: string
@@ -13,17 +14,22 @@ interface RSSConfig {
   description: string
   author: string
   lang: string
+  locale: SiteLocale
   posts: CollectionEntry<'posts'>[]
 }
 
-// 站点配置
-const config: RSSConfig = {
-  siteUrl: SITE.website,
-  title: SITE.title,
-  description: SITE.description,
-  author: SITE.author,
-  lang: SITE.lang,
-  posts: await getAllPosts(),
+async function getFeedConfig(locale: SiteLocale): Promise<RSSConfig> {
+  const { SITE, POSTS_CONFIG } = getLocaleConfig(locale)
+
+  return {
+    siteUrl: SITE.website,
+    title: SITE.title,
+    description: SITE.description,
+    author: POSTS_CONFIG.author,
+    lang: SITE.lang,
+    locale,
+    posts: await getAllPosts(locale),
+  }
 }
 
 // XML转义函数
@@ -147,7 +153,7 @@ async function addCoverImage(post: CollectionEntry<'posts'>, siteUrl: string): P
 }
 
 // 共享的文章处理逻辑
-async function processPostsForFeed() {
+async function processPostsForFeed(config: RSSConfig) {
   const { posts, siteUrl } = config
 
   // 创建与项目相同配置的 markdown 处理器
@@ -203,11 +209,14 @@ async function processPostsForFeed() {
   return processedPosts
 }
 
-export async function generateRSS20(): Promise<string> {
+export async function generateRSS20(locale: SiteLocale = 'en'): Promise<string> {
+  const config = await getFeedConfig(locale)
   const { title, description, siteUrl, author, lang } = config
   const lastBuildDate = new Date().toISOString()
 
-  const processedPosts = await processPostsForFeed()
+  const processedPosts = await processPostsForFeed(config)
+  const feedPath = withLocalePath(locale, '/rss.xml')
+  const homePath = withLocalePath(locale, '/')
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/rss/rss-styles.xsl"?>
@@ -215,7 +224,7 @@ export async function generateRSS20(): Promise<string> {
   <channel>
     <title>${escapeXml(title)}</title>
     <description>${escapeXml(description)}</description>
-    <link>${siteUrl}</link>
+    <link>${siteUrl}${homePath === '/' ? '' : homePath}</link>
     <language>${lang}</language>
     <managingEditor>${escapeXml(author)}</managingEditor>
     <webMaster>${escapeXml(author)}</webMaster>
@@ -223,14 +232,14 @@ export async function generateRSS20(): Promise<string> {
     <pubDate>${lastBuildDate}</pubDate>
     <lastBuildDate>${lastBuildDate}</lastBuildDate>
     <generator>Astro Litos Theme</generator>
-    <atom:link href="${siteUrl}/rss.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="${siteUrl}${feedPath}" rel="self" type="application/rss+xml" />
     ${processedPosts
       .map(
         (post) => `
     <item>
       <title>${escapeXml(post.data.title)}</title>
-      <link>${siteUrl}/posts/${post.id}</link>
-      <guid>${siteUrl}/posts/${post.id}</guid>
+      <link>${siteUrl}${withLocalePath(locale, `/posts/${getPostSlug(post)}`)}</link>
+      <guid>${siteUrl}${withLocalePath(locale, `/posts/${getPostSlug(post)}`)}</guid>
       <updated>${(post.data.updatedDate || post.data.pubDate).toISOString()}</updated>
       <pubDate>${post.data.pubDate.toISOString()}</pubDate>
       <description><![CDATA[${post.data.description || ''}]]></description>
@@ -244,25 +253,28 @@ export async function generateRSS20(): Promise<string> {
 </rss>`
 }
 
-export async function generateAtom10(): Promise<string> {
+export async function generateAtom10(locale: SiteLocale = 'en'): Promise<string> {
+  const config = await getFeedConfig(locale)
   const { title, description, siteUrl, author, lang } = config
   const lastBuildDate = new Date().toISOString()
 
-  const processedPosts = await processPostsForFeed()
+  const processedPosts = await processPostsForFeed(config)
+  const feedPath = withLocalePath(locale, '/atom.xml')
+  const homePath = withLocalePath(locale, '/')
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/rss/atom-styles.xsl"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>${escapeXml(title)}</title>
   <subtitle>${escapeXml(description)}</subtitle>
-  <link href="${siteUrl}/atom.xml" rel="self" type="application/atom+xml"/>
-  <link href="${siteUrl}" rel="alternate" type="text/html"/>
+  <link href="${siteUrl}${feedPath}" rel="self" type="application/atom+xml"/>
+  <link href="${siteUrl}${homePath === '/' ? '' : homePath}" rel="alternate" type="text/html"/>
   <updated>${lastBuildDate}</updated>
   <language>${lang}</language>
-  <id>${siteUrl}/</id>
+  <id>${siteUrl}${homePath}</id>
   <author>
     <name>${escapeXml(author)}</name>
-    <uri>${siteUrl}</uri>
+    <uri>${siteUrl}${homePath === '/' ? '' : homePath}</uri>
   </author>
   <generator uri="https://github.com/Dnzzk2/Litos" version="5.0">Astro Litos Theme</generator>
   <rights>Copyright © ${new Date().getFullYear()} ${escapeXml(author)}</rights>
@@ -271,8 +283,8 @@ export async function generateAtom10(): Promise<string> {
       (post) => `
   <entry>
     <title>${escapeXml(post.data.title)}</title>
-    <link href="${siteUrl}/posts/${post.id}" rel="alternate" type="text/html"/>
-    <id>${siteUrl}/posts/${post.id}</id>
+    <link href="${siteUrl}${withLocalePath(locale, `/posts/${getPostSlug(post)}`)}" rel="alternate" type="text/html"/>
+    <id>${siteUrl}${withLocalePath(locale, `/posts/${getPostSlug(post)}`)}</id>
     <updated>${(post.data.updatedDate || post.data.pubDate).toISOString()}</updated>
     <published>${post.data.pubDate.toISOString()}</published>
     <author>

@@ -1,6 +1,7 @@
 ---
-import { COMMENT_CONFIG } from '~/config'
+import { getLocaleConfig } from '~/config'
 import Gitalk from './Gitalk.astro'
+import { getLocaleFromPathname } from '~/lib/i18n'
 
 interface Props {
   id: string
@@ -8,6 +9,8 @@ interface Props {
 }
 
 const { id, title } = Astro.props
+const locale = getLocaleFromPathname(Astro.url.pathname)
+const { COMMENT_CONFIG, UI } = getLocaleConfig(locale)
 const { enabled, system } = COMMENT_CONFIG
 
 if (!enabled || system === 'none') {
@@ -16,7 +19,7 @@ if (!enabled || system === 'none') {
 ---
 
 <div class="comment-container">
-  <h3 class="text-xl font-semibold mb-6 text-[var(--color-heading)]">Comments</h3>
+  <h3 class="text-xl font-semibold mb-6 text-[var(--color-heading)]">{UI.commentsTitle}</h3>
 
   {system === 'gitalk' && <Gitalk id={id} title={title} />}
 </div>

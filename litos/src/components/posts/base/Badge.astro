@@ -1,5 +1,7 @@
 ---
 import { cn } from '~/lib/utils'
+import { getLocaleConfig } from '~/config'
+import { getLocaleFromPathname, withLocalePath } from '~/lib/i18n'
 
 interface Props {
   type: 'tag' | 'recommend'
@@ -11,6 +13,8 @@ interface Props {
 }
 
 const { type, content, class: className, variant = 'default', size = 'sm', showIcon = true }: Props = Astro.props
+const locale = getLocaleFromPathname(Astro.url.pathname)
+const { UI } = getLocaleConfig(locale)
 
 const sizeClasses = {
   sm: 'text-xs px-2 py-0.5 gap-1',
@@ -41,8 +45,8 @@ const iconClass = iconConfig[type]
 {
   type === 'tag' ? (
     <a
-      href={`/tags/${content}`}
-      aria-label={`View posts tagged with ${content}`}
+      href={withLocalePath(locale, `/tags/${content}`)}
+      aria-label={UI.viewPostsTaggedWith(content)}
       class={cn(
         'inline-flex items-center font-medium  transition-colors duration-200 select-none',
         sizeClasses[size],
@@ -61,7 +65,7 @@ const iconClass = iconConfig[type]
         variantClasses[finalVariant],
         className
       )}
-      title="Recommended post"
+      title={UI.recommendedPostTitle}
     >
       {showIcon && <span class={iconClass} />}
       <span class="font-semibold tracking-wide">{content}</span>

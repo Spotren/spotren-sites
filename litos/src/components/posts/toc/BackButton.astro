@@ -1,7 +1,8 @@
 ---
 import { cn } from '~/lib/utils'
-import { POSTS_CONFIG } from '~/config'
+import { getLocaleConfig } from '~/config'
 import type { CollectionEntry } from 'astro:content'
+import { getLocaleFromPathname, withLocalePath } from '~/lib/i18n'
 
 interface Props {
   class?: string
@@ -10,12 +11,14 @@ interface Props {
 }
 
 const { class: className, post, posts } = Astro.props
+const locale = getLocaleFromPathname(Astro.url.pathname)
+const { POSTS_CONFIG } = getLocaleConfig(locale)
 
 // 计算文章在第几页
 const postIndex = posts.findIndex((p) => p.id === post.id)
 const pageSize = POSTS_CONFIG.postPageConfig.size
 const pageNumber = Math.floor(postIndex / pageSize) + 1
-const pageUrl = pageNumber === 1 ? '/posts' : `/posts/${pageNumber}`
+const pageUrl = pageNumber === 1 ? withLocalePath(locale, '/posts') : withLocalePath(locale, `/posts/${pageNumber}`)
 ---
 
 <a

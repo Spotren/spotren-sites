@@ -1,12 +1,12 @@
 import React from 'react'
 import { motion, useInView } from 'motion/react'
-import type { Photo } from '~/types'
+import type { Case } from '~/types'
 import { cn } from '~/lib/utils'
 import PolaroidCard from './PolaroidCard'
-import PhotoGalleryModal from './PhotoGalleryModal'
+import CaseGalleryModal from './CaseGalleryModal'
 
 interface Props {
-  photos: Photo[]
+  cases: Case[]
   title: string
   description?: string
   className?: string
@@ -15,20 +15,20 @@ interface Props {
 // 生成随机旋转角度
 const generateRotations = (count: number) => Array.from({ length: count }, () => Math.random() * 20 - 10)
 
-const PolaroidStack: React.FC<Props> = ({ photos, title, description, className }) => {
+const PolaroidStack: React.FC<Props> = ({ cases, title, description, className }) => {
   const ref = React.useRef(null)
   const isInView = useInView(ref, { once: true, amount: 0.4 })
   const [isModalOpen, setIsModalOpen] = React.useState(false)
   const [shouldRenderModal, setShouldRenderModal] = React.useState(false)
-  const [selectedPhotoIndex, setSelectedPhotoIndex] = React.useState(0)
-  const [clickedPhotoIndex, setClickedPhotoIndex] = React.useState<number | null>(null)
+  const [selectedCaseIndex, setSelectedCaseIndex] = React.useState(0)
+  const [clickedCaseIndex, setClickedCaseIndex] = React.useState<number | null>(null)
   const openTimerRef = React.useRef<number | null>(null)
   const closeTimerRef = React.useRef<number | null>(null)
 
-  // 为每张照片生成固定的旋转角度
-  const photoRotations = React.useMemo(() => generateRotations(photos.length), [photos.length])
+  // Generate a stable rotation for each card in the stack.
+  const caseRotations = React.useMemo(() => generateRotations(cases.length), [cases.length])
 
-  const handlePhotoClick = (index: number) => {
+  const handleCaseClick = (index: number) => {
     if (closeTimerRef.current) {
       window.clearTimeout(closeTimerRef.current)
       closeTimerRef.current = null
@@ -40,8 +40,8 @@ const PolaroidStack: React.FC<Props> = ({ photos, title, description, className 
     }
 
     setShouldRenderModal(true)
-    setClickedPhotoIndex(index)
-    setSelectedPhotoIndex(index)
+    setClickedCaseIndex(index)
+    setSelectedCaseIndex(index)
 
     openTimerRef.current = window.setTimeout(() => {
       setIsModalOpen(true)
@@ -58,7 +58,7 @@ const PolaroidStack: React.FC<Props> = ({ photos, title, description, className 
     setIsModalOpen(false)
 
     closeTimerRef.current = window.setTimeout(() => {
-      setClickedPhotoIndex(null)
+      setClickedCaseIndex(null)
       setShouldRenderModal(false)
       closeTimerRef.current = null
     }, 200)
@@ -79,29 +79,29 @@ const PolaroidStack: React.FC<Props> = ({ photos, title, description, className 
   return (
     <>
       <motion.div ref={ref} className={cn('relative perspective-1000 ml-4 flex flex-wrap items-center ', className)}>
-        {photos.map((photo, index) => (
-          <div key={typeof photo.src === 'string' ? photo.src : photo.src.src} onClick={() => handlePhotoClick(index)}>
+        {cases.map((caseItem, index) => (
+          <div key={typeof caseItem.src === 'string' ? caseItem.src : caseItem.src.src} onClick={() => handleCaseClick(index)}>
             <PolaroidCard
-              photo={photo}
+              caseItem={caseItem}
               index={index}
-              totalPhotos={photos.length}
-              rotation={photoRotations[index]}
-              variant={photo.variant}
+              totalCases={cases.length}
+              rotation={caseRotations[index]}
+              variant={caseItem.variant}
               isVisible={isInView}
-              isClicked={clickedPhotoIndex === index}
+              isClicked={clickedCaseIndex === index}
             />
           </div>
         ))}
       </motion.div>
 
       {shouldRenderModal && (
-        <PhotoGalleryModal
-          photos={photos}
+        <CaseGalleryModal
+          cases={cases}
           title={title}
           description={description}
           isOpen={isModalOpen}
           onClose={handleModalClose}
-          initialIndex={selectedPhotoIndex}
+          initialIndex={selectedCaseIndex}
         />
       )}
     </>
