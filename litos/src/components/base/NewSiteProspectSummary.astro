@@ -1,0 +1,139 @@
+---
+interface Props {
+  detailURL: string
+  placeId: string
+  loadingLabel: string
+  missingPlaceIdLabel: string
+  unavailableLabel: string
+  failedLabel: string
+  companyNameLabel: string
+  addressLabel: string
+  coordinatesLabel: string
+  qualificationLabel: string
+  pipelineLabel: string
+  placeIdLabel: string
+}
+
+const {
+  detailURL,
+  placeId,
+  loadingLabel,
+  missingPlaceIdLabel,
+  unavailableLabel,
+  failedLabel,
+  companyNameLabel,
+  addressLabel,
+  coordinatesLabel,
+  qualificationLabel,
+  pipelineLabel,
+  placeIdLabel,
+} = Astro.props
+---
+
+<section
+  class="mt-6 rounded-3xl border border-border/70 bg-background/70 p-6"
+  data-prospect-summary
+  data-detail-url={detailURL}
+  data-place-id={placeId}
+  data-loading-label={loadingLabel}
+  data-missing-place-id-label={missingPlaceIdLabel}
+  data-unavailable-label={unavailableLabel}
+  data-failed-label={failedLabel}
+>
+  <p class="text-sm text-muted-foreground" data-prospect-status>
+    {loadingLabel}
+  </p>
+  <dl class="mt-4 grid gap-4 sm:grid-cols-2 hidden" data-prospect-grid>
+    <div class="rounded-2xl border border-border/60 bg-background/60 p-4">
+      <dt class="text-xs uppercase tracking-wide text-muted-foreground">{companyNameLabel}</dt>
+      <dd class="mt-2 text-base font-medium text-foreground" data-company-name></dd>
+    </div>
+    <div class="rounded-2xl border border-border/60 bg-background/60 p-4">
+      <dt class="text-xs uppercase tracking-wide text-muted-foreground">{placeIdLabel}</dt>
+      <dd class="mt-2 text-sm text-foreground break-all" data-place-id-value></dd>
+    </div>
+    <div class="rounded-2xl border border-border/60 bg-background/60 p-4 sm:col-span-2">
+      <dt class="text-xs uppercase tracking-wide text-muted-foreground">{addressLabel}</dt>
+      <dd class="mt-2 text-sm text-foreground" data-address-text></dd>
+    </div>
+    <div class="rounded-2xl border border-border/60 bg-background/60 p-4">
+      <dt class="text-xs uppercase tracking-wide text-muted-foreground">{coordinatesLabel}</dt>
+      <dd class="mt-2 text-sm text-foreground" data-coordinates></dd>
+    </div>
+    <div class="rounded-2xl border border-border/60 bg-background/60 p-4">
+      <dt class="text-xs uppercase tracking-wide text-muted-foreground">{qualificationLabel}</dt>
+      <dd class="mt-2 text-sm text-foreground" data-qualification-stage></dd>
+    </div>
+    <div class="rounded-2xl border border-border/60 bg-background/60 p-4">
+      <dt class="text-xs uppercase tracking-wide text-muted-foreground">{pipelineLabel}</dt>
+      <dd class="mt-2 text-sm text-foreground" data-pipeline-stage></dd>
+    </div>
+  </dl>
+</section>
+
+<script is:inline>
+  const summaries = document.querySelectorAll("[data-prospect-summary]");
+
+  for (const summary of summaries) {
+    const detailURL = String(summary.getAttribute("data-detail-url") || "").trim();
+    const placeId = String(summary.getAttribute("data-place-id") || "").trim();
+    const loadingLabel = String(summary.getAttribute("data-loading-label") || "Loading prospect...").trim();
+    const missingPlaceIdLabel = String(summary.getAttribute("data-missing-place-id-label") || "Place ID is missing.").trim();
+    const unavailableLabel = String(summary.getAttribute("data-unavailable-label") || "Prospect detail is unavailable right now.").trim();
+    const failedLabel = String(summary.getAttribute("data-failed-label") || "Unable to load prospect detail.").trim();
+
+    const status = summary.querySelector("[data-prospect-status]");
+    const grid = summary.querySelector("[data-prospect-grid]");
+    if (!(status instanceof HTMLParagraphElement) || !(grid instanceof HTMLElement)) {
+      continue;
+    }
+
+    const assignText = (selector, value) => {
+      const node = summary.querySelector(selector);
+      if (node instanceof HTMLElement) {
+        node.textContent = value;
+      }
+    };
+
+    if (!placeId) {
+      status.textContent = missingPlaceIdLabel;
+      continue;
+    }
+    if (!detailURL) {
+      status.textContent = unavailableLabel;
+      continue;
+    }
+
+    status.textContent = loadingLabel;
+
+    fetch(`${detailURL}?placeId=${encodeURIComponent(placeId)}`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    }).then(async (response) => {
+      const payload = await response.json().catch(() => null);
+      if (!response.ok) {
+        status.textContent = payload?.error?.message || failedLabel;
+        return;
+      }
+
+      const prospect = payload?.prospect;
+      const basicData = prospect?.basicData || {};
+      assignText("[data-company-name]", String(basicData.companyName || "—"));
+      assignText("[data-place-id-value]", String(prospect?.placeId || placeId));
+      assignText("[data-address-text]", String(basicData.addressText || "—"));
+
+      const latitude = typeof basicData.latitude === "number" ? basicData.latitude : null;
+      const longitude = typeof basicData.longitude === "number" ? basicData.longitude : null;
+      assignText("[data-coordinates]", latitude !== null && longitude !== null ? `${latitude}, ${longitude}` : "—");
+      assignText("[data-qualification-stage]", String(prospect?.qualificationStage || "—"));
+      assignText("[data-pipeline-stage]", String(prospect?.pipelineStage || "—"));
+
+      status.classList.add("hidden");
+      grid.classList.remove("hidden");
+    }).catch(() => {
+      status.textContent = unavailableLabel;
+    });
+  }
+</script>

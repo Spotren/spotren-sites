@@ -18,7 +18,7 @@ const { ENABLED, TOOLTIP_ENABLED } = GITHUB_CONFIG
 const { size, type } = POSTS_CONFIG.homePageConfig
 const { SKILLS_ENABLED, SKILLS_DATA } = SKILLSSHOWCASE_CONFIG
 const repoHeatmapData = normalizeRepoHeatmapSnapshot(rawGithubRepoHeatmap)
-const placeResolveURL = import.meta.env.PUBLIC_SPOTREN_PLACE_RESOLVE_URL?.trim() ?? 'http://localhost:3001/api/public/spotren-sites/resolve-place-input'
+const createProspectURL = import.meta.env.PUBLIC_SPOTREN_CREATE_PROSPECT_URL?.trim() ?? 'http://localhost:3001/api/public/spotren-sites/prospects/from-gmn'
 
 let showPosts = []
 const pinnedPosts = await getPinnedPosts(locale)
@@ -44,14 +44,14 @@ if (hasPinnedPosts) {
       </div>
       <PlaceResolveLaunchForm
         action="/pt/new-site"
-        resolveURL={placeResolveURL}
+        createProspectURL={createProspectURL}
         label="URL do Google Maps"
         placeholder="Cole aqui a URL completa do perfil da empresa no Google Maps."
         submitLabel="Criar site"
-        resolvingLabel="Resolvendo..."
+        creatingLabel="Preparando..."
         invalidURLMessage="Use uma URL valida do perfil da empresa no Google Maps."
         unavailableMessage="O resolvedor de locais esta indisponivel agora."
-        resolveFailedMessage="Nao foi possivel resolver essa URL do Google Maps."
+        createFailedMessage="Nao foi possivel preparar esse perfil do Google Maps."
       />
       <div class="mt-6 flex gap-6">
         {

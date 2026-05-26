@@ -2,14 +2,31 @@
 import { getLocaleConfig } from '~/config'
 import Layout from '~/layouts/Layout.astro'
 import PageTitle from '~/components/base/PageTitle.astro'
+import NewSiteProspectSummary from '~/components/base/NewSiteProspectSummary.astro'
 
 const locale = 'pt'
 const { NEW_SITE_CONFIG } = getLocaleConfig(locale)
 const { title, description, introduce } = NEW_SITE_CONFIG
+const placeId = Astro.url.searchParams.get('gmn')?.trim() ?? ''
+const prospectDetailURL = import.meta.env.PUBLIC_SPOTREN_PROSPECT_DETAIL_URL?.trim() ?? 'http://localhost:3001/api/public/spotren-sites/prospects/by-place-id'
 ---
 
 <Layout {title} {description} {locale}>
   <div class="relative z-[1] py-8 pb-10 px-6 sm:px-8">
     <PageTitle {title} introduce={introduce} />
+    <NewSiteProspectSummary
+      detailURL={prospectDetailURL}
+      placeId={placeId}
+      loadingLabel="Carregando dados da empresa..."
+      missingPlaceIdLabel="Falta o placeId na URL."
+      unavailableLabel="Os dados da empresa estao indisponiveis agora."
+      failedLabel="Nao foi possivel carregar os dados da empresa."
+      companyNameLabel="Empresa"
+      addressLabel="Endereco"
+      coordinatesLabel="Coordenadas"
+      qualificationLabel="Etapa de qualificacao"
+      pipelineLabel="Etapa do pipeline"
+      placeIdLabel="Place ID"
+    />
   </div>
 </Layout>

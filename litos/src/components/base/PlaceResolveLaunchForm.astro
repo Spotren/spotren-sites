@@ -1,26 +1,26 @@
 ---
 interface Props {
   action: string
-  resolveURL: string
+  createProspectURL: string
   label: string
   placeholder: string
   submitLabel: string
-  resolvingLabel: string
+  creatingLabel: string
   invalidURLMessage: string
   unavailableMessage: string
-  resolveFailedMessage: string
+  createFailedMessage: string
 }
 
 const {
   action,
-  resolveURL,
+  createProspectURL,
   label,
   placeholder,
   submitLabel,
-  resolvingLabel,
+  creatingLabel,
   invalidURLMessage,
   unavailableMessage,
-  resolveFailedMessage,
+  createFailedMessage,
 } = Astro.props
 ---
 
@@ -29,11 +29,11 @@ const {
   method="get"
   class="mt-6 sm:max-w-2xl"
   data-place-resolve-form
-  data-resolve-url={resolveURL}
+  data-create-prospect-url={createProspectURL}
   data-invalid-url-message={invalidURLMessage}
   data-unavailable-message={unavailableMessage}
-  data-resolve-failed-message={resolveFailedMessage}
-  data-resolving-label={resolvingLabel}
+  data-create-failed-message={createFailedMessage}
+  data-creating-label={creatingLabel}
   data-submit-label={submitLabel}
 >
   <div class="flex flex-col gap-3 sm:flex-row sm:items-start">
@@ -98,16 +98,16 @@ const {
       continue;
     }
 
-    const resolveURL = String(form.getAttribute("data-resolve-url") || "").trim();
+    const createProspectURL = String(form.getAttribute("data-create-prospect-url") || "").trim();
     const invalidURLMessage = String(form.getAttribute("data-invalid-url-message") || "Use a valid Google Maps URL.").trim();
     const unavailableMessage = String(form.getAttribute("data-unavailable-message") || "Resolver is unavailable right now.").trim();
-    const resolveFailedMessage = String(form.getAttribute("data-resolve-failed-message") || "Unable to resolve Google Maps input.").trim();
-    const resolvingLabel = String(form.getAttribute("data-resolving-label") || "Resolving...").trim();
+    const createFailedMessage = String(form.getAttribute("data-create-failed-message") || "Unable to create the prospect from Google Maps input.").trim();
+    const creatingLabel = String(form.getAttribute("data-creating-label") || "Preparing...").trim();
     const submitLabel = String(form.getAttribute("data-submit-label") || "Create site").trim();
 
     const setBusy = (busy) => {
       submitButton.disabled = busy;
-      submitButton.textContent = busy ? resolvingLabel : submitLabel;
+      submitButton.textContent = busy ? creatingLabel : submitLabel;
     };
 
     const setError = (message) => {
@@ -133,7 +133,7 @@ const {
         textarea.focus();
         return;
       }
-      if (!resolveURL) {
+      if (!createProspectURL) {
         setError(unavailableMessage);
         return;
       }
@@ -142,21 +142,25 @@ const {
       setError("");
 
       try {
-        const response = await fetch(`${resolveURL}?input=${encodeURIComponent(rawValue)}`, {
-          method: "GET",
+        const response = await fetch(createProspectURL, {
+          method: "POST",
           headers: {
             Accept: "application/json",
+            "Content-Type": "application/json",
           },
+          body: JSON.stringify({
+            input: rawValue,
+          }),
         });
         const payload = await response.json().catch(() => null);
         if (!response.ok) {
-          const message = payload?.error?.message || resolveFailedMessage;
+          const message = payload?.error?.message || createFailedMessage;
           setError(String(message));
           return;
         }
         const placeId = typeof payload?.placeId === "string" ? payload.placeId.trim() : "";
         if (!placeId) {
-          setError(resolveFailedMessage);
+          setError(createFailedMessage);
           return;
         }
 
