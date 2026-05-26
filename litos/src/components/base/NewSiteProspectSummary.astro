@@ -26,6 +26,7 @@ interface Props {
   checkoutStateCancelledLabel: string
   checkoutStateUnknownLabel: string
   checkoutSiteReadyLabel: string
+  checkoutFallbackLinkLabel: string
 }
 
 const {
@@ -55,6 +56,7 @@ const {
   checkoutStateCancelledLabel,
   checkoutStateUnknownLabel,
   checkoutSiteReadyLabel,
+  checkoutFallbackLinkLabel,
 } = Astro.props
 ---
 
@@ -81,6 +83,7 @@ const {
   data-checkout-state-cancelled-label={checkoutStateCancelledLabel}
   data-checkout-state-unknown-label={checkoutStateUnknownLabel}
   data-checkout-site-ready-label={checkoutSiteReadyLabel}
+  data-checkout-fallback-link-label={checkoutFallbackLinkLabel}
 >
   <p class="text-sm text-muted-foreground" data-prospect-status>
     {loadingLabel}
@@ -120,12 +123,22 @@ const {
     >
       {checkoutButtonLabel}
     </button>
+    <p class="mt-3 hidden text-sm" data-checkout-link-row>
+      <a
+        href="#"
+        class="text-primary underline underline-offset-4"
+        data-checkout-link
+      >
+        {checkoutFallbackLinkLabel}
+      </a>
+    </p>
     <p class="mt-2 hidden text-sm text-red-500" data-checkout-error></p>
   </div>
 </section>
 
 <script is:inline>
   const summaries = document.querySelectorAll("[data-prospect-summary]");
+  const checkoutPollingIntervalMs = 4000;
 
   for (const summary of summaries) {
     const detailURL = String(summary.getAttribute("data-detail-url") || "").trim();
@@ -149,6 +162,7 @@ const {
     const checkoutStateCancelledLabel = String(summary.getAttribute("data-checkout-state-cancelled-label") || "Checkout was cancelled.").trim();
     const checkoutStateUnknownLabel = String(summary.getAttribute("data-checkout-state-unknown-label") || "Checkout status updated.").trim();
     const checkoutSiteReadyLabel = String(summary.getAttribute("data-checkout-site-ready-label") || "Your site has already been created.").trim();
+    const checkoutFallbackLinkLabel = String(summary.getAttribute("data-checkout-fallback-link-label") || "Open checkout manually").trim();
 
     const status = summary.querySelector("[data-prospect-status]");
     const grid = summary.querySelector("[data-prospect-grid]");
@@ -156,18 +170,23 @@ const {
     const checkoutButton = summary.querySelector("[data-create-checkout-button]");
     const checkoutError = summary.querySelector("[data-checkout-error]");
     const checkoutState = summary.querySelector("[data-checkout-state]");
+    const checkoutLinkRow = summary.querySelector("[data-checkout-link-row]");
+    const checkoutLink = summary.querySelector("[data-checkout-link]");
     if (
       !(status instanceof HTMLParagraphElement) ||
       !(grid instanceof HTMLElement) ||
       !(checkoutActions instanceof HTMLElement) ||
       !(checkoutButton instanceof HTMLButtonElement) ||
       !(checkoutError instanceof HTMLParagraphElement) ||
-      !(checkoutState instanceof HTMLParagraphElement)
+      !(checkoutState instanceof HTMLParagraphElement) ||
+      !(checkoutLinkRow instanceof HTMLParagraphElement) ||
+      !(checkoutLink instanceof HTMLAnchorElement)
     ) {
       continue;
     }
 
     let activeCheckoutURL = "";
+    let pollingTimer = 0;
 
     const assignText = (selector, value) => {
       const node = summary.querySelector(selector);
@@ -188,6 +207,17 @@ const {
       checkoutError.textContent = message;
       checkoutError.classList.remove("hidden");
     };
+    const setCheckoutLink = (url) => {
+      if (!url) {
+        checkoutLink.href = "#";
+        checkoutLink.textContent = checkoutFallbackLinkLabel;
+        checkoutLinkRow.classList.add("hidden");
+        return;
+      }
+      checkoutLink.href = url;
+      checkoutLink.textContent = checkoutFallbackLinkLabel;
+      checkoutLinkRow.classList.remove("hidden");
+    };
     const setCheckoutState = (message) => {
       if (!message) {
         checkoutState.textContent = "";
@@ -196,6 +226,87 @@ const {
       }
       checkoutState.textContent = `${checkoutStatusLabel}: ${message}`;
       checkoutState.classList.remove("hidden");
+    };
+    const stopPolling = () => {
+      if (pollingTimer) {
+        window.clearTimeout(pollingTimer);
+        pollingTimer = 0;
+      }
+    };
+    const schedulePolling = () => {
+      stopPolling();
+      pollingTimer = window.setTimeout(() => {
+        void loadProspectDetail();
+      }, checkoutPollingIntervalMs);
+    };
+    const applyCheckoutState = (payload) => {
+      const checkouts = Array.isArray(payload?.checkouts) ? payload.checkouts : [];
+      const latestCheckoutEntry = checkouts[0] && typeof checkouts[0] === "object" ? checkouts[0] : null;
+      const latestCheckout = latestCheckoutEntry?.checkout && typeof latestCheckoutEntry.checkout === "object" ? latestCheckoutEntry.checkout : null;
+      const latestSite = latestCheckoutEntry?.site && typeof latestCheckoutEntry.site === "object" ? latestCheckoutEntry.site : null;
+      const latestStatus = typeof latestCheckout?.status === "string" ? latestCheckout.status : "";
+      activeCheckoutURL = typeof latestCheckout?.checkoutUrl === "string" ? latestCheckout.checkoutUrl.trim() : "";
+
+      checkoutButton.disabled = false;
+      checkoutButton.classList.remove("hidden");
+      checkoutButton.textContent = checkoutButtonLabel;
+      setCheckoutState("");
+      setCheckoutLink(activeCheckoutURL);
+      stopPolling();
+
+      if (latestStatus === "created" || latestStatus === "checkout_completed") {
+        setCheckoutState(checkoutStateCreatedLabel);
+        if (activeCheckoutURL) {
+          checkoutButton.textContent = checkoutResumeButtonLabel;
+        }
+        schedulePolling();
+      } else if (latestStatus === "paid") {
+        setCheckoutState(checkoutStatePaidLabel);
+        checkoutButton.classList.add("hidden");
+        schedulePolling();
+      } else if (latestStatus === "site_provisioning") {
+        setCheckoutState(checkoutStateProvisioningLabel);
+        checkoutButton.classList.add("hidden");
+        schedulePolling();
+      } else if (latestStatus === "site_ready") {
+        setCheckoutState(latestSite?.id ? `${checkoutStateReadyLabel} ${checkoutSiteReadyLabel}` : checkoutStateReadyLabel);
+        checkoutButton.classList.add("hidden");
+      } else if (latestStatus === "failed") {
+        setCheckoutState(checkoutStateFailedLabel);
+      } else if (latestStatus === "cancelled") {
+        setCheckoutState(checkoutStateCancelledLabel);
+      } else if (latestStatus) {
+        setCheckoutState(checkoutStateUnknownLabel);
+      }
+    };
+    const loadProspectDetail = async () => {
+      const response = await fetch(`${detailURL}?placeId=${encodeURIComponent(placeId)}`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      });
+      const payload = await response.json().catch(() => null);
+      if (!response.ok) {
+        throw new Error(String(payload?.error?.message || failedLabel));
+      }
+
+      const prospect = payload?.prospect;
+      const basicData = prospect?.basicData || {};
+      assignText("[data-company-name]", String(basicData.companyName || "—"));
+      assignText("[data-place-id-value]", String(prospect?.placeId || placeId));
+      assignText("[data-address-text]", String(basicData.addressText || "—"));
+
+      const latitude = typeof basicData.latitude === "number" ? basicData.latitude : null;
+      const longitude = typeof basicData.longitude === "number" ? basicData.longitude : null;
+      assignText("[data-coordinates]", latitude !== null && longitude !== null ? `${latitude}, ${longitude}` : "—");
+      assignText("[data-qualification-stage]", String(prospect?.qualificationStage || "—"));
+      assignText("[data-pipeline-stage]", String(prospect?.pipelineStage || "—"));
+
+      status.classList.add("hidden");
+      grid.classList.remove("hidden");
+      checkoutActions.classList.remove("hidden");
+      applyCheckoutState(payload);
     };
 
     if (!placeId) {
@@ -217,69 +328,8 @@ const {
 
     status.textContent = loadingLabel;
 
-    fetch(`${detailURL}?placeId=${encodeURIComponent(placeId)}`, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-      },
-    }).then(async (response) => {
-      const payload = await response.json().catch(() => null);
-      if (!response.ok) {
-        status.textContent = payload?.error?.message || failedLabel;
-        return;
-      }
-
-      const prospect = payload?.prospect;
-      const basicData = prospect?.basicData || {};
-      assignText("[data-company-name]", String(basicData.companyName || "—"));
-      assignText("[data-place-id-value]", String(prospect?.placeId || placeId));
-      assignText("[data-address-text]", String(basicData.addressText || "—"));
-
-      const latitude = typeof basicData.latitude === "number" ? basicData.latitude : null;
-      const longitude = typeof basicData.longitude === "number" ? basicData.longitude : null;
-      assignText("[data-coordinates]", latitude !== null && longitude !== null ? `${latitude}, ${longitude}` : "—");
-      assignText("[data-qualification-stage]", String(prospect?.qualificationStage || "—"));
-      assignText("[data-pipeline-stage]", String(prospect?.pipelineStage || "—"));
-
-      const checkouts = Array.isArray(payload?.checkouts) ? payload.checkouts : [];
-      const latestCheckoutEntry = checkouts[0] && typeof checkouts[0] === "object" ? checkouts[0] : null;
-      const latestCheckout = latestCheckoutEntry?.checkout && typeof latestCheckoutEntry.checkout === "object" ? latestCheckoutEntry.checkout : null;
-      const latestSite = latestCheckoutEntry?.site && typeof latestCheckoutEntry.site === "object" ? latestCheckoutEntry.site : null;
-      const latestStatus = typeof latestCheckout?.status === "string" ? latestCheckout.status : "";
-      activeCheckoutURL = typeof latestCheckout?.checkoutUrl === "string" ? latestCheckout.checkoutUrl.trim() : "";
-
-      checkoutButton.disabled = false;
-      checkoutButton.classList.remove("hidden");
-      checkoutButton.textContent = checkoutButtonLabel;
-      setCheckoutState("");
-
-      if (latestStatus === "created" || latestStatus === "checkout_completed") {
-        setCheckoutState(checkoutStateCreatedLabel);
-        if (activeCheckoutURL) {
-          checkoutButton.textContent = checkoutResumeButtonLabel;
-        }
-      } else if (latestStatus === "paid") {
-        setCheckoutState(checkoutStatePaidLabel);
-        checkoutButton.classList.add("hidden");
-      } else if (latestStatus === "site_provisioning") {
-        setCheckoutState(checkoutStateProvisioningLabel);
-        checkoutButton.classList.add("hidden");
-      } else if (latestStatus === "site_ready") {
-        setCheckoutState(latestSite?.id ? `${checkoutStateReadyLabel} ${checkoutSiteReadyLabel}` : checkoutStateReadyLabel);
-        checkoutButton.classList.add("hidden");
-      } else if (latestStatus === "failed") {
-        setCheckoutState(checkoutStateFailedLabel);
-      } else if (latestStatus === "cancelled") {
-        setCheckoutState(checkoutStateCancelledLabel);
-      } else if (latestStatus) {
-        setCheckoutState(checkoutStateUnknownLabel);
-      }
-
-      status.classList.add("hidden");
-      grid.classList.remove("hidden");
-      checkoutActions.classList.remove("hidden");
-    }).catch(() => {
-      status.textContent = unavailableLabel;
+    void loadProspectDetail().catch((error) => {
+      status.textContent = error instanceof Error && error.message ? error.message : unavailableLabel;
     });
 
     checkoutButton.addEventListener("click", async () => {
@@ -292,7 +342,8 @@ const {
 
       try {
         if (activeCheckoutURL) {
-          window.location.href = activeCheckoutURL;
+          setCheckoutLink(activeCheckoutURL);
+          window.location.assign(activeCheckoutURL);
           return;
         }
         const currentURL = new URL(window.location.href);
@@ -321,12 +372,16 @@ const {
           setCheckoutError(checkoutFailedLabel);
           return;
         }
-        window.location.href = redirectURL;
+        activeCheckoutURL = redirectURL;
+        setCheckoutLink(redirectURL);
+        window.location.assign(redirectURL);
       } catch {
         setCheckoutError(checkoutFailedLabel);
       } finally {
         setCheckoutBusy(false);
       }
     });
+
+    window.addEventListener("beforeunload", stopPolling, { once: true });
   }
 </script>
