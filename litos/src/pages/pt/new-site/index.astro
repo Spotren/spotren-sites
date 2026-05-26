@@ -9,6 +9,7 @@ const { NEW_SITE_CONFIG } = getLocaleConfig(locale)
 const { title, description, introduce } = NEW_SITE_CONFIG
 const placeId = Astro.url.searchParams.get('gmn')?.trim() ?? ''
 const prospectDetailURL = import.meta.env.PUBLIC_SPOTREN_PROSPECT_DETAIL_URL?.trim() ?? 'https://app.localhost:3443/api/public/spotren-sites/prospects/by-place-id'
+const checkoutURL = import.meta.env.PUBLIC_SPOTREN_CREATE_CHECKOUT_URL?.trim() ?? 'https://app.localhost:3443/api/public/spotren-sites/checkouts/from-place-id'
 ---
 
 <Layout {title} {description} {locale}>
@@ -16,6 +17,7 @@ const prospectDetailURL = import.meta.env.PUBLIC_SPOTREN_PROSPECT_DETAIL_URL?.tr
     <PageTitle {title} introduce={introduce} />
     <NewSiteProspectSummary
       detailURL={prospectDetailURL}
+      checkoutURL={checkoutURL}
       placeId={placeId}
       loadingLabel="Carregando dados da empresa..."
       missingPlaceIdLabel="Falta o placeId na URL."
@@ -27,6 +29,9 @@ const prospectDetailURL = import.meta.env.PUBLIC_SPOTREN_PROSPECT_DETAIL_URL?.tr
       qualificationLabel="Etapa de qualificacao"
       pipelineLabel="Etapa do pipeline"
       placeIdLabel="Place ID"
+      checkoutButtonLabel="Continuar para pagamento"
+      checkoutCreatingLabel="Preparando checkout..."
+      checkoutFailedLabel="Nao foi possivel criar o checkout."
     />
   </div>
 </Layout>

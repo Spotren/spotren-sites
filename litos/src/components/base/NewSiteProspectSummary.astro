@@ -1,6 +1,7 @@
 ---
 interface Props {
   detailURL: string
+  checkoutURL: string
   placeId: string
   loadingLabel: string
   missingPlaceIdLabel: string
@@ -12,10 +13,14 @@ interface Props {
   qualificationLabel: string
   pipelineLabel: string
   placeIdLabel: string
+  checkoutButtonLabel: string
+  checkoutCreatingLabel: string
+  checkoutFailedLabel: string
 }
 
 const {
   detailURL,
+  checkoutURL,
   placeId,
   loadingLabel,
   missingPlaceIdLabel,
@@ -27,6 +32,9 @@ const {
   qualificationLabel,
   pipelineLabel,
   placeIdLabel,
+  checkoutButtonLabel,
+  checkoutCreatingLabel,
+  checkoutFailedLabel,
 } = Astro.props
 ---
 
@@ -39,6 +47,10 @@ const {
   data-missing-place-id-label={missingPlaceIdLabel}
   data-unavailable-label={unavailableLabel}
   data-failed-label={failedLabel}
+  data-checkout-url={checkoutURL}
+  data-checkout-button-label={checkoutButtonLabel}
+  data-checkout-creating-label={checkoutCreatingLabel}
+  data-checkout-failed-label={checkoutFailedLabel}
 >
   <p class="text-sm text-muted-foreground" data-prospect-status>
     {loadingLabel}
@@ -69,6 +81,16 @@ const {
       <dd class="mt-2 text-sm text-foreground" data-pipeline-stage></dd>
     </div>
   </dl>
+  <div class="mt-6 hidden" data-checkout-actions>
+    <button
+      type="button"
+      class="inline-flex h-11 items-center justify-center rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+      data-create-checkout-button
+    >
+      {checkoutButtonLabel}
+    </button>
+    <p class="mt-2 hidden text-sm text-red-500" data-checkout-error></p>
+  </div>
 </section>
 
 <script is:inline>
@@ -82,10 +104,23 @@ const {
     const missingPlaceIdLabel = String(summary.getAttribute("data-missing-place-id-label") || "Place ID is missing.").trim();
     const unavailableLabel = String(summary.getAttribute("data-unavailable-label") || "Prospect detail is unavailable right now.").trim();
     const failedLabel = String(summary.getAttribute("data-failed-label") || "Unable to load prospect detail.").trim();
+    const checkoutURL = String(summary.getAttribute("data-checkout-url") || "").trim();
+    const checkoutButtonLabel = String(summary.getAttribute("data-checkout-button-label") || "Continue to payment").trim();
+    const checkoutCreatingLabel = String(summary.getAttribute("data-checkout-creating-label") || "Preparing checkout...").trim();
+    const checkoutFailedLabel = String(summary.getAttribute("data-checkout-failed-label") || "Unable to create checkout.").trim();
 
     const status = summary.querySelector("[data-prospect-status]");
     const grid = summary.querySelector("[data-prospect-grid]");
-    if (!(status instanceof HTMLParagraphElement) || !(grid instanceof HTMLElement)) {
+    const checkoutActions = summary.querySelector("[data-checkout-actions]");
+    const checkoutButton = summary.querySelector("[data-create-checkout-button]");
+    const checkoutError = summary.querySelector("[data-checkout-error]");
+    if (
+      !(status instanceof HTMLParagraphElement) ||
+      !(grid instanceof HTMLElement) ||
+      !(checkoutActions instanceof HTMLElement) ||
+      !(checkoutButton instanceof HTMLButtonElement) ||
+      !(checkoutError instanceof HTMLParagraphElement)
+    ) {
       continue;
     }
 
@@ -94,6 +129,19 @@ const {
       if (node instanceof HTMLElement) {
         node.textContent = value;
       }
+    };
+    const setCheckoutBusy = (busy) => {
+      checkoutButton.disabled = busy;
+      checkoutButton.textContent = busy ? checkoutCreatingLabel : checkoutButtonLabel;
+    };
+    const setCheckoutError = (message) => {
+      if (!message) {
+        checkoutError.textContent = "";
+        checkoutError.classList.add("hidden");
+        return;
+      }
+      checkoutError.textContent = message;
+      checkoutError.classList.remove("hidden");
     };
 
     if (!placeId) {
@@ -141,8 +189,52 @@ const {
 
       status.classList.add("hidden");
       grid.classList.remove("hidden");
+      checkoutActions.classList.remove("hidden");
     }).catch(() => {
       status.textContent = unavailableLabel;
+    });
+
+    checkoutButton.addEventListener("click", async () => {
+      if (!placeId || !checkoutURL) {
+        setCheckoutError(checkoutFailedLabel);
+        return;
+      }
+      setCheckoutBusy(true);
+      setCheckoutError("");
+
+      try {
+        const currentURL = new URL(window.location.href);
+        currentURL.searchParams.set("gmn", placeId);
+        const cancelURL = new URL("/checkout/cancel", window.location.origin).toString();
+        const response = await fetch(checkoutURL, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            placeId,
+            successURL: currentURL.toString(),
+            cancelURL,
+          }),
+        });
+        const payload = await response.json().catch(() => null);
+        if (!response.ok) {
+          setCheckoutError(String(payload?.error?.message || checkoutFailedLabel));
+          return;
+        }
+
+        const redirectURL = typeof payload?.checkoutUrl === "string" ? payload.checkoutUrl.trim() : "";
+        if (!redirectURL) {
+          setCheckoutError(checkoutFailedLabel);
+          return;
+        }
+        window.location.href = redirectURL;
+      } catch {
+        setCheckoutError(checkoutFailedLabel);
+      } finally {
+        setCheckoutBusy(false);
+      }
     });
   }
 </script>
