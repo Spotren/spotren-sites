@@ -9,10 +9,6 @@ interface Props {
   failedLabel: string
   companyNameLabel: string
   addressLabel: string
-  coordinatesLabel: string
-  qualificationLabel: string
-  pipelineLabel: string
-  placeIdLabel: string
   checkoutButtonLabel: string
   checkoutResumeButtonLabel: string
   checkoutCreatingLabel: string
@@ -27,6 +23,13 @@ interface Props {
   checkoutStateUnknownLabel: string
   checkoutSiteReadyLabel: string
   checkoutFallbackLinkLabel: string
+  priceCurrencyLabel: string
+  priceWholeLabel: string
+  priceFractionLabel: string
+  pricePeriodLabel: string
+  staticMapURL: string
+  mapAltLabel: string
+  mapUnavailableLabel: string
 }
 
 const {
@@ -39,10 +42,6 @@ const {
   failedLabel,
   companyNameLabel,
   addressLabel,
-  coordinatesLabel,
-  qualificationLabel,
-  pipelineLabel,
-  placeIdLabel,
   checkoutButtonLabel,
   checkoutResumeButtonLabel,
   checkoutCreatingLabel,
@@ -57,11 +56,18 @@ const {
   checkoutStateUnknownLabel,
   checkoutSiteReadyLabel,
   checkoutFallbackLinkLabel,
+  priceCurrencyLabel,
+  priceWholeLabel,
+  priceFractionLabel,
+  pricePeriodLabel,
+  staticMapURL,
+  mapAltLabel,
+  mapUnavailableLabel,
 } = Astro.props
 ---
 
 <section
-  class="mt-6 rounded-3xl border border-border/70 bg-background/70 p-6"
+  class="mt-6"
   data-prospect-summary
   data-detail-url={detailURL}
   data-place-id={placeId}
@@ -84,45 +90,76 @@ const {
   data-checkout-state-unknown-label={checkoutStateUnknownLabel}
   data-checkout-site-ready-label={checkoutSiteReadyLabel}
   data-checkout-fallback-link-label={checkoutFallbackLinkLabel}
+  data-static-map-url={staticMapURL}
+  data-map-alt-label={mapAltLabel}
+  data-map-unavailable-label={mapUnavailableLabel}
 >
   <p class="text-sm text-muted-foreground" data-prospect-status>
     {loadingLabel}
   </p>
-  <dl class="mt-4 grid gap-4 sm:grid-cols-2 hidden" data-prospect-grid>
-    <div class="rounded-2xl border border-border/60 bg-background/60 p-4">
-      <dt class="text-xs uppercase tracking-wide text-muted-foreground">{companyNameLabel}</dt>
-      <dd class="mt-2 text-base font-medium text-foreground" data-company-name></dd>
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-10">
+    <div class="mt-4 hidden grid gap-4" data-prospect-grid>
+      <div class="flex items-start gap-4">
+        <span
+          class="icon-[ph--buildings] mt-0.5 size-6 flex-shrink-0 text-muted-foreground"
+          aria-label={companyNameLabel}
+          title={companyNameLabel}
+        ></span>
+        <div class="min-w-0">
+          <div class="text-foreground/80 sm:text-base" data-company-name></div>
+        </div>
+      </div>
+      <div class="flex items-start gap-4">
+        <span
+          class="icon-[ph--map-pin] mt-0.5 size-6 flex-shrink-0 text-muted-foreground"
+          aria-label={addressLabel}
+          title={addressLabel}
+        ></span>
+        <div class="min-w-0">
+          <div class="text-foreground/80 sm:text-base" data-address-text></div>
+        </div>
+      </div>
     </div>
-    <div class="rounded-2xl border border-border/60 bg-background/60 p-4">
-      <dt class="text-xs uppercase tracking-wide text-muted-foreground">{placeIdLabel}</dt>
-      <dd class="mt-2 text-sm text-foreground break-all" data-place-id-value></dd>
+    <div class="min-w-[320px] overflow-hidden rounded-3xl border border-border/60 bg-background/60" data-map-panel>
+      <a
+        href="#"
+        target="_blank"
+        rel="noreferrer"
+        class="hidden h-full w-full"
+        data-map-link
+      >
+        <img
+          src=""
+          alt={mapAltLabel}
+          class="h-full min-h-[240px] w-full object-cover"
+          loading="lazy"
+          data-map-image
+        />
+      </a>
+      <div class="flex min-h-[240px] items-center justify-center px-6 text-center text-sm text-muted-foreground" data-map-fallback>
+        {mapUnavailableLabel}
+      </div>
     </div>
-    <div class="rounded-2xl border border-border/60 bg-background/60 p-4 sm:col-span-2">
-      <dt class="text-xs uppercase tracking-wide text-muted-foreground">{addressLabel}</dt>
-      <dd class="mt-2 text-sm text-foreground" data-address-text></dd>
-    </div>
-    <div class="rounded-2xl border border-border/60 bg-background/60 p-4">
-      <dt class="text-xs uppercase tracking-wide text-muted-foreground">{coordinatesLabel}</dt>
-      <dd class="mt-2 text-sm text-foreground" data-coordinates></dd>
-    </div>
-    <div class="rounded-2xl border border-border/60 bg-background/60 p-4">
-      <dt class="text-xs uppercase tracking-wide text-muted-foreground">{qualificationLabel}</dt>
-      <dd class="mt-2 text-sm text-foreground" data-qualification-stage></dd>
-    </div>
-    <div class="rounded-2xl border border-border/60 bg-background/60 p-4">
-      <dt class="text-xs uppercase tracking-wide text-muted-foreground">{pipelineLabel}</dt>
-      <dd class="mt-2 text-sm text-foreground" data-pipeline-stage></dd>
-    </div>
-  </dl>
+  </div>
   <div class="mt-6 hidden" data-checkout-actions>
     <p class="mb-3 text-sm text-muted-foreground hidden" data-checkout-state></p>
-    <button
-      type="button"
-      class="inline-flex h-11 items-center justify-center rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
-      data-create-checkout-button
-    >
-      {checkoutButtonLabel}
-    </button>
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div class="flex items-start gap-2 text-foreground">
+        <span class="pt-1 text-base font-medium text-foreground/70">{priceCurrencyLabel}</span>
+        <span class="text-4xl font-semibold tracking-tight sm:text-5xl">{priceWholeLabel}</span>
+        <div class="flex flex-col pt-1 text-left leading-none">
+          <span class="text-base font-medium text-foreground/80">{priceFractionLabel}</span>
+          <span class="text-xs text-muted-foreground">{pricePeriodLabel}</span>
+        </div>
+      </div>
+      <button
+        type="button"
+        class="inline-flex h-11 items-center justify-center rounded-full bg-primary px-6 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+        data-create-checkout-button
+      >
+        {checkoutButtonLabel}
+      </button>
+    </div>
     <p class="mt-3 hidden text-sm" data-checkout-link-row>
       <a
         href="#"
@@ -163,6 +200,9 @@ const {
     const checkoutStateUnknownLabel = String(summary.getAttribute("data-checkout-state-unknown-label") || "Checkout status updated.").trim();
     const checkoutSiteReadyLabel = String(summary.getAttribute("data-checkout-site-ready-label") || "Your site has already been created.").trim();
     const checkoutFallbackLinkLabel = String(summary.getAttribute("data-checkout-fallback-link-label") || "Open checkout manually").trim();
+    const staticMapURL = String(summary.getAttribute("data-static-map-url") || "").trim();
+    const mapAltLabel = String(summary.getAttribute("data-map-alt-label") || "Business location map").trim();
+    const mapUnavailableLabel = String(summary.getAttribute("data-map-unavailable-label") || "Map unavailable.").trim();
 
     const status = summary.querySelector("[data-prospect-status]");
     const grid = summary.querySelector("[data-prospect-grid]");
@@ -172,6 +212,10 @@ const {
     const checkoutState = summary.querySelector("[data-checkout-state]");
     const checkoutLinkRow = summary.querySelector("[data-checkout-link-row]");
     const checkoutLink = summary.querySelector("[data-checkout-link]");
+    const mapPanel = summary.querySelector("[data-map-panel]");
+    const mapLink = summary.querySelector("[data-map-link]");
+    const mapImage = summary.querySelector("[data-map-image]");
+    const mapFallback = summary.querySelector("[data-map-fallback]");
     if (
       !(status instanceof HTMLParagraphElement) ||
       !(grid instanceof HTMLElement) ||
@@ -180,7 +224,11 @@ const {
       !(checkoutError instanceof HTMLParagraphElement) ||
       !(checkoutState instanceof HTMLParagraphElement) ||
       !(checkoutLinkRow instanceof HTMLParagraphElement) ||
-      !(checkoutLink instanceof HTMLAnchorElement)
+      !(checkoutLink instanceof HTMLAnchorElement) ||
+      !(mapPanel instanceof HTMLDivElement) ||
+      !(mapLink instanceof HTMLAnchorElement) ||
+      !(mapImage instanceof HTMLImageElement) ||
+      !(mapFallback instanceof HTMLDivElement)
     ) {
       continue;
     }
@@ -226,6 +274,31 @@ const {
       }
       checkoutState.textContent = `${checkoutStatusLabel}: ${message}`;
       checkoutState.classList.remove("hidden");
+    };
+    const setMapState = ({ imageURL, destinationURL, visible, fallbackMessage }) => {
+      if (!visible || !imageURL) {
+        mapLink.href = "#";
+        mapLink.classList.add("hidden");
+        mapImage.src = "";
+        mapImage.alt = mapAltLabel;
+        mapFallback.textContent = fallbackMessage || mapUnavailableLabel;
+        mapFallback.classList.remove("hidden");
+        return;
+      }
+      mapImage.src = imageURL;
+      mapImage.alt = mapAltLabel;
+      mapLink.href = destinationURL || "#";
+      mapLink.classList.remove("hidden");
+      mapFallback.classList.add("hidden");
+    };
+    const buildStaticMapURL = (latitude, longitude) => {
+      if (!staticMapURL) {
+        return "";
+      }
+      const mapURL = new URL(staticMapURL);
+      mapURL.searchParams.set("latitude", String(latitude));
+      mapURL.searchParams.set("longitude", String(longitude));
+      return mapURL.toString();
     };
     const stopPolling = () => {
       if (pollingTimer) {
@@ -310,14 +383,27 @@ const {
       const prospect = payload?.prospect;
       const basicData = prospect?.basicData || {};
       assignText("[data-company-name]", String(basicData.companyName || "—"));
-      assignText("[data-place-id-value]", String(prospect?.placeId || placeId));
       assignText("[data-address-text]", String(basicData.addressText || "—"));
-
       const latitude = typeof basicData.latitude === "number" ? basicData.latitude : null;
       const longitude = typeof basicData.longitude === "number" ? basicData.longitude : null;
-      assignText("[data-coordinates]", latitude !== null && longitude !== null ? `${latitude}, ${longitude}` : "—");
-      assignText("[data-qualification-stage]", String(prospect?.qualificationStage || "—"));
-      assignText("[data-pipeline-stage]", String(prospect?.pipelineStage || "—"));
+      const mapSourceURL =
+        typeof basicData.sourceUrl === "string" && basicData.sourceUrl.trim().length > 0
+          ? basicData.sourceUrl.trim()
+          : typeof prospect?.placeId === "string" && prospect.placeId.trim().length > 0
+            ? `https://www.google.com/maps/place/?q=place_id:${encodeURIComponent(prospect.placeId.trim())}`
+          : latitude !== null && longitude !== null
+            ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${latitude},${longitude}`)}`
+            : "";
+      const staticMapURL =
+        latitude !== null && longitude !== null
+          ? buildStaticMapURL(latitude, longitude)
+          : "";
+      setMapState({
+        imageURL: staticMapURL,
+        destinationURL: mapSourceURL,
+        visible: latitude !== null && longitude !== null && staticMapURL.length > 0,
+        fallbackMessage: mapUnavailableLabel,
+      });
 
       status.classList.add("hidden");
       grid.classList.remove("hidden");

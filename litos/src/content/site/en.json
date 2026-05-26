@@ -37,9 +37,9 @@
     "introduce": "A collection of case highlights, examples, and visual fragments."
   },
   "newSite": {
-    "title": "New Site",
-    "description": "A dedicated page for presenting a new ndEX website.",
-    "introduce": "This page will gather the title, description, and future details for a new site."
+    "title": "Create Site",
+    "description": "A dedicated page for creating an ndEX website.",
+    "introduce": "This page gathers the business details, checkout flow, and next steps to create a site."
   },
   "home": {
     "title": "ndEX",

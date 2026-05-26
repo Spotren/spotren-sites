@@ -10,6 +10,7 @@ const { title, description, introduce } = NEW_SITE_CONFIG
 const placeId = Astro.url.searchParams.get('gmn')?.trim() ?? ''
 const prospectDetailURL = import.meta.env.PUBLIC_SPOTREN_PROSPECT_DETAIL_URL?.trim() ?? 'https://app.localhost:3443/api/public/spotren-sites/prospects/by-place-id'
 const checkoutURL = import.meta.env.PUBLIC_SPOTREN_CREATE_CHECKOUT_URL?.trim() ?? 'https://app.localhost:3443/api/public/spotren-sites/checkouts/from-place-id'
+const staticMapURL = import.meta.env.PUBLIC_SPOTREN_STATIC_MAP_URL?.trim() ?? 'https://app.localhost:3443/api/public/spotren-sites/maps/static'
 ---
 
 <Layout {title} {description} {locale}>
@@ -25,12 +26,8 @@ const checkoutURL = import.meta.env.PUBLIC_SPOTREN_CREATE_CHECKOUT_URL?.trim() ?
       failedLabel="Nao foi possivel carregar os dados da empresa."
       companyNameLabel="Empresa"
       addressLabel="Endereco"
-      coordinatesLabel="Coordenadas"
-      qualificationLabel="Etapa de qualificacao"
-      pipelineLabel="Etapa do pipeline"
-      placeIdLabel="Place ID"
-      checkoutButtonLabel="Continuar para pagamento"
-      checkoutResumeButtonLabel="Retomar pagamento"
+      checkoutButtonLabel="Pagar"
+      checkoutResumeButtonLabel="Pagar"
       checkoutCreatingLabel="Preparando checkout..."
       checkoutFailedLabel="Nao foi possivel criar o checkout."
       checkoutStatusLabel="Status do checkout"
@@ -43,6 +40,13 @@ const checkoutURL = import.meta.env.PUBLIC_SPOTREN_CREATE_CHECKOUT_URL?.trim() ?
       checkoutStateUnknownLabel="O status do checkout foi atualizado."
       checkoutSiteReadyLabel="O checkout mais recente ja criou o site."
       checkoutFallbackLinkLabel="Abrir checkout manualmente"
+      priceCurrencyLabel="R$"
+      priceWholeLabel="35"
+      priceFractionLabel="80"
+      pricePeriodLabel="/ mes"
+      staticMapURL={staticMapURL}
+      mapAltLabel="Mapa da localizacao da empresa"
+      mapUnavailableLabel="Mapa indisponivel."
     />
   </div>
 </Layout>
