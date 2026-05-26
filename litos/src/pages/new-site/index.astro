@@ -30,8 +30,18 @@ const checkoutURL = import.meta.env.PUBLIC_SPOTREN_CREATE_CHECKOUT_URL?.trim() ?
       pipelineLabel="Pipeline stage"
       placeIdLabel="Place ID"
       checkoutButtonLabel="Continue to payment"
+      checkoutResumeButtonLabel="Resume payment"
       checkoutCreatingLabel="Preparing checkout..."
       checkoutFailedLabel="Unable to create checkout."
+      checkoutStatusLabel="Checkout status"
+      checkoutStateCreatedLabel="Awaiting payment confirmation."
+      checkoutStatePaidLabel="Payment confirmed. Continue in Spotren to enrich the prospect."
+      checkoutStateProvisioningLabel="Site provisioning is in progress."
+      checkoutStateReadyLabel="Site is ready."
+      checkoutStateFailedLabel="Checkout failed. You can try again."
+      checkoutStateCancelledLabel="Checkout was cancelled. You can start a new one."
+      checkoutStateUnknownLabel="Checkout status was updated."
+      checkoutSiteReadyLabel="The latest checkout already created the site."
     />
   </div>
 </Layout>

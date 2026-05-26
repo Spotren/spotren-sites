@@ -14,8 +14,18 @@ interface Props {
   pipelineLabel: string
   placeIdLabel: string
   checkoutButtonLabel: string
+  checkoutResumeButtonLabel: string
   checkoutCreatingLabel: string
   checkoutFailedLabel: string
+  checkoutStatusLabel: string
+  checkoutStateCreatedLabel: string
+  checkoutStatePaidLabel: string
+  checkoutStateProvisioningLabel: string
+  checkoutStateReadyLabel: string
+  checkoutStateFailedLabel: string
+  checkoutStateCancelledLabel: string
+  checkoutStateUnknownLabel: string
+  checkoutSiteReadyLabel: string
 }
 
 const {
@@ -33,8 +43,18 @@ const {
   pipelineLabel,
   placeIdLabel,
   checkoutButtonLabel,
+  checkoutResumeButtonLabel,
   checkoutCreatingLabel,
   checkoutFailedLabel,
+  checkoutStatusLabel,
+  checkoutStateCreatedLabel,
+  checkoutStatePaidLabel,
+  checkoutStateProvisioningLabel,
+  checkoutStateReadyLabel,
+  checkoutStateFailedLabel,
+  checkoutStateCancelledLabel,
+  checkoutStateUnknownLabel,
+  checkoutSiteReadyLabel,
 } = Astro.props
 ---
 
@@ -49,8 +69,18 @@ const {
   data-failed-label={failedLabel}
   data-checkout-url={checkoutURL}
   data-checkout-button-label={checkoutButtonLabel}
+  data-checkout-resume-button-label={checkoutResumeButtonLabel}
   data-checkout-creating-label={checkoutCreatingLabel}
   data-checkout-failed-label={checkoutFailedLabel}
+  data-checkout-status-label={checkoutStatusLabel}
+  data-checkout-state-created-label={checkoutStateCreatedLabel}
+  data-checkout-state-paid-label={checkoutStatePaidLabel}
+  data-checkout-state-provisioning-label={checkoutStateProvisioningLabel}
+  data-checkout-state-ready-label={checkoutStateReadyLabel}
+  data-checkout-state-failed-label={checkoutStateFailedLabel}
+  data-checkout-state-cancelled-label={checkoutStateCancelledLabel}
+  data-checkout-state-unknown-label={checkoutStateUnknownLabel}
+  data-checkout-site-ready-label={checkoutSiteReadyLabel}
 >
   <p class="text-sm text-muted-foreground" data-prospect-status>
     {loadingLabel}
@@ -82,6 +112,7 @@ const {
     </div>
   </dl>
   <div class="mt-6 hidden" data-checkout-actions>
+    <p class="mb-3 text-sm text-muted-foreground hidden" data-checkout-state></p>
     <button
       type="button"
       class="inline-flex h-11 items-center justify-center rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
@@ -106,23 +137,37 @@ const {
     const failedLabel = String(summary.getAttribute("data-failed-label") || "Unable to load prospect detail.").trim();
     const checkoutURL = String(summary.getAttribute("data-checkout-url") || "").trim();
     const checkoutButtonLabel = String(summary.getAttribute("data-checkout-button-label") || "Continue to payment").trim();
+    const checkoutResumeButtonLabel = String(summary.getAttribute("data-checkout-resume-button-label") || "Resume payment").trim();
     const checkoutCreatingLabel = String(summary.getAttribute("data-checkout-creating-label") || "Preparing checkout...").trim();
     const checkoutFailedLabel = String(summary.getAttribute("data-checkout-failed-label") || "Unable to create checkout.").trim();
+    const checkoutStatusLabel = String(summary.getAttribute("data-checkout-status-label") || "Checkout status").trim();
+    const checkoutStateCreatedLabel = String(summary.getAttribute("data-checkout-state-created-label") || "Awaiting payment.").trim();
+    const checkoutStatePaidLabel = String(summary.getAttribute("data-checkout-state-paid-label") || "Payment confirmed.").trim();
+    const checkoutStateProvisioningLabel = String(summary.getAttribute("data-checkout-state-provisioning-label") || "Site provisioning in progress.").trim();
+    const checkoutStateReadyLabel = String(summary.getAttribute("data-checkout-state-ready-label") || "Site is ready.").trim();
+    const checkoutStateFailedLabel = String(summary.getAttribute("data-checkout-state-failed-label") || "Checkout failed.").trim();
+    const checkoutStateCancelledLabel = String(summary.getAttribute("data-checkout-state-cancelled-label") || "Checkout was cancelled.").trim();
+    const checkoutStateUnknownLabel = String(summary.getAttribute("data-checkout-state-unknown-label") || "Checkout status updated.").trim();
+    const checkoutSiteReadyLabel = String(summary.getAttribute("data-checkout-site-ready-label") || "Your site has already been created.").trim();
 
     const status = summary.querySelector("[data-prospect-status]");
     const grid = summary.querySelector("[data-prospect-grid]");
     const checkoutActions = summary.querySelector("[data-checkout-actions]");
     const checkoutButton = summary.querySelector("[data-create-checkout-button]");
     const checkoutError = summary.querySelector("[data-checkout-error]");
+    const checkoutState = summary.querySelector("[data-checkout-state]");
     if (
       !(status instanceof HTMLParagraphElement) ||
       !(grid instanceof HTMLElement) ||
       !(checkoutActions instanceof HTMLElement) ||
       !(checkoutButton instanceof HTMLButtonElement) ||
-      !(checkoutError instanceof HTMLParagraphElement)
+      !(checkoutError instanceof HTMLParagraphElement) ||
+      !(checkoutState instanceof HTMLParagraphElement)
     ) {
       continue;
     }
+
+    let activeCheckoutURL = "";
 
     const assignText = (selector, value) => {
       const node = summary.querySelector(selector);
@@ -142,6 +187,15 @@ const {
       }
       checkoutError.textContent = message;
       checkoutError.classList.remove("hidden");
+    };
+    const setCheckoutState = (message) => {
+      if (!message) {
+        checkoutState.textContent = "";
+        checkoutState.classList.add("hidden");
+        return;
+      }
+      checkoutState.textContent = `${checkoutStatusLabel}: ${message}`;
+      checkoutState.classList.remove("hidden");
     };
 
     if (!placeId) {
@@ -187,6 +241,40 @@ const {
       assignText("[data-qualification-stage]", String(prospect?.qualificationStage || "—"));
       assignText("[data-pipeline-stage]", String(prospect?.pipelineStage || "—"));
 
+      const checkouts = Array.isArray(payload?.checkouts) ? payload.checkouts : [];
+      const latestCheckoutEntry = checkouts[0] && typeof checkouts[0] === "object" ? checkouts[0] : null;
+      const latestCheckout = latestCheckoutEntry?.checkout && typeof latestCheckoutEntry.checkout === "object" ? latestCheckoutEntry.checkout : null;
+      const latestSite = latestCheckoutEntry?.site && typeof latestCheckoutEntry.site === "object" ? latestCheckoutEntry.site : null;
+      const latestStatus = typeof latestCheckout?.status === "string" ? latestCheckout.status : "";
+      activeCheckoutURL = typeof latestCheckout?.checkoutUrl === "string" ? latestCheckout.checkoutUrl.trim() : "";
+
+      checkoutButton.disabled = false;
+      checkoutButton.classList.remove("hidden");
+      checkoutButton.textContent = checkoutButtonLabel;
+      setCheckoutState("");
+
+      if (latestStatus === "created" || latestStatus === "checkout_completed") {
+        setCheckoutState(checkoutStateCreatedLabel);
+        if (activeCheckoutURL) {
+          checkoutButton.textContent = checkoutResumeButtonLabel;
+        }
+      } else if (latestStatus === "paid") {
+        setCheckoutState(checkoutStatePaidLabel);
+        checkoutButton.classList.add("hidden");
+      } else if (latestStatus === "site_provisioning") {
+        setCheckoutState(checkoutStateProvisioningLabel);
+        checkoutButton.classList.add("hidden");
+      } else if (latestStatus === "site_ready") {
+        setCheckoutState(latestSite?.id ? `${checkoutStateReadyLabel} ${checkoutSiteReadyLabel}` : checkoutStateReadyLabel);
+        checkoutButton.classList.add("hidden");
+      } else if (latestStatus === "failed") {
+        setCheckoutState(checkoutStateFailedLabel);
+      } else if (latestStatus === "cancelled") {
+        setCheckoutState(checkoutStateCancelledLabel);
+      } else if (latestStatus) {
+        setCheckoutState(checkoutStateUnknownLabel);
+      }
+
       status.classList.add("hidden");
       grid.classList.remove("hidden");
       checkoutActions.classList.remove("hidden");
@@ -203,6 +291,10 @@ const {
       setCheckoutError("");
 
       try {
+        if (activeCheckoutURL) {
+          window.location.href = activeCheckoutURL;
+          return;
+        }
         const currentURL = new URL(window.location.href);
         currentURL.searchParams.set("gmn", placeId);
         const cancelURL = new URL("/checkout/cancel", window.location.origin).toString();
