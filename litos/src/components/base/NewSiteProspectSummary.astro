@@ -244,7 +244,23 @@ const {
       const latestCheckoutEntry = checkouts[0] && typeof checkouts[0] === "object" ? checkouts[0] : null;
       const latestCheckout = latestCheckoutEntry?.checkout && typeof latestCheckoutEntry.checkout === "object" ? latestCheckoutEntry.checkout : null;
       const latestSite = latestCheckoutEntry?.site && typeof latestCheckoutEntry.site === "object" ? latestCheckoutEntry.site : null;
+      const latestProvisioning = latestCheckoutEntry?.provisioning && typeof latestCheckoutEntry.provisioning === "object" ? latestCheckoutEntry.provisioning : null;
       const latestStatus = typeof latestCheckout?.status === "string" ? latestCheckout.status : "";
+      const latestSiteStatus = typeof latestSite?.status === "string" ? latestSite.status : "";
+      const latestRunStatus = typeof latestProvisioning?.runStatus === "string" ? latestProvisioning.runStatus : "";
+      const productionDeployment =
+        latestSite?.metadata &&
+        typeof latestSite.metadata === "object" &&
+        latestSite.metadata.managedDeployments &&
+        typeof latestSite.metadata.managedDeployments === "object" &&
+        latestSite.metadata.managedDeployments.production &&
+        typeof latestSite.metadata.managedDeployments.production === "object"
+          ? latestSite.metadata.managedDeployments.production
+          : null;
+      const hasReadyDeployment = typeof productionDeployment?.url === "string" && productionDeployment.url.trim().length > 0;
+      const hasPublishedSite = latestSiteStatus === "published";
+      const hasSucceededProvisioning = latestRunStatus === "succeeded";
+      const effectivelyReady = latestStatus === "site_ready" || hasPublishedSite || hasSucceededProvisioning || hasReadyDeployment;
       activeCheckoutURL = typeof latestCheckout?.checkoutUrl === "string" ? latestCheckout.checkoutUrl.trim() : "";
 
       checkoutButton.disabled = false;
@@ -264,13 +280,13 @@ const {
         setCheckoutState(checkoutStatePaidLabel);
         checkoutButton.classList.add("hidden");
         schedulePolling();
+      } else if (effectivelyReady) {
+        setCheckoutState(latestSite?.id ? `${checkoutStateReadyLabel} ${checkoutSiteReadyLabel}` : checkoutStateReadyLabel);
+        checkoutButton.classList.add("hidden");
       } else if (latestStatus === "site_provisioning") {
         setCheckoutState(checkoutStateProvisioningLabel);
         checkoutButton.classList.add("hidden");
         schedulePolling();
-      } else if (latestStatus === "site_ready") {
-        setCheckoutState(latestSite?.id ? `${checkoutStateReadyLabel} ${checkoutSiteReadyLabel}` : checkoutStateReadyLabel);
-        checkoutButton.classList.add("hidden");
       } else if (latestStatus === "failed") {
         setCheckoutState(checkoutStateFailedLabel);
       } else if (latestStatus === "cancelled") {
