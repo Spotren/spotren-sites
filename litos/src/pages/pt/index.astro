@@ -18,7 +18,7 @@ const { ENABLED, TOOLTIP_ENABLED } = GITHUB_CONFIG
 const { size, type } = POSTS_CONFIG.homePageConfig
 const { SKILLS_ENABLED, SKILLS_DATA } = SKILLSSHOWCASE_CONFIG
 const repoHeatmapData = normalizeRepoHeatmapSnapshot(rawGithubRepoHeatmap)
-const createProspectURL = import.meta.env.PUBLIC_SPOTREN_CREATE_PROSPECT_URL?.trim() ?? 'http://localhost:3001/api/public/spotren-sites/prospects/from-gmn'
+const createProspectURL = import.meta.env.PUBLIC_SPOTREN_CREATE_PROSPECT_URL?.trim() ?? 'https://app.localhost:3443/api/public/spotren-sites/prospects/from-gmn'
 
 let showPosts = []
 const pinnedPosts = await getPinnedPosts(locale)

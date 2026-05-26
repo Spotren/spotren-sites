@@ -76,7 +76,8 @@ const {
 
   for (const summary of summaries) {
     const detailURL = String(summary.getAttribute("data-detail-url") || "").trim();
-    const placeId = String(summary.getAttribute("data-place-id") || "").trim();
+    const initialPlaceId = String(summary.getAttribute("data-place-id") || "").trim();
+    let placeId = initialPlaceId;
     const loadingLabel = String(summary.getAttribute("data-loading-label") || "Loading prospect...").trim();
     const missingPlaceIdLabel = String(summary.getAttribute("data-missing-place-id-label") || "Place ID is missing.").trim();
     const unavailableLabel = String(summary.getAttribute("data-unavailable-label") || "Prospect detail is unavailable right now.").trim();
@@ -94,6 +95,14 @@ const {
         node.textContent = value;
       }
     };
+
+    if (!placeId) {
+      try {
+        placeId = new URL(window.location.href).searchParams.get("gmn")?.trim() || "";
+      } catch {
+        placeId = "";
+      }
+    }
 
     if (!placeId) {
       status.textContent = missingPlaceIdLabel;
