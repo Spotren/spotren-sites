@@ -235,6 +235,8 @@ const {
 
     let activeCheckoutURL = "";
     let pollingTimer = 0;
+    let latestLatitude = null;
+    let latestLongitude = null;
 
     const assignText = (selector, value) => {
       const node = summary.querySelector(selector);
@@ -275,6 +277,12 @@ const {
       checkoutState.textContent = `${checkoutStatusLabel}: ${message}`;
       checkoutState.classList.remove("hidden");
     };
+    const getResolvedTheme = () => {
+      if (typeof document !== "object") {
+        return "light";
+      }
+      return document.documentElement.classList.contains("dark") ? "dark" : "light";
+    };
     const setMapState = ({ imageURL, destinationURL, visible, fallbackMessage }) => {
       if (!visible || !imageURL) {
         mapLink.href = "#";
@@ -298,7 +306,18 @@ const {
       const mapURL = new URL(staticMapURL);
       mapURL.searchParams.set("latitude", String(latitude));
       mapURL.searchParams.set("longitude", String(longitude));
+      mapURL.searchParams.set("theme", getResolvedTheme());
       return mapURL.toString();
+    };
+    const refreshMapForTheme = () => {
+      if (latestLatitude === null || latestLongitude === null) {
+        return;
+      }
+      const refreshedURL = buildStaticMapURL(latestLatitude, latestLongitude);
+      if (!refreshedURL) {
+        return;
+      }
+      mapImage.src = refreshedURL;
     };
     const stopPolling = () => {
       if (pollingTimer) {
@@ -386,6 +405,8 @@ const {
       assignText("[data-address-text]", String(basicData.addressText || "—"));
       const latitude = typeof basicData.latitude === "number" ? basicData.latitude : null;
       const longitude = typeof basicData.longitude === "number" ? basicData.longitude : null;
+      latestLatitude = latitude;
+      latestLongitude = longitude;
       const mapSourceURL =
         typeof basicData.sourceUrl === "string" && basicData.sourceUrl.trim().length > 0
           ? basicData.sourceUrl.trim()
@@ -485,5 +506,16 @@ const {
     });
 
     window.addEventListener("beforeunload", stopPolling, { once: true });
+
+    if (typeof MutationObserver !== "undefined") {
+      const observer = new MutationObserver(() => {
+        refreshMapForTheme();
+      });
+      observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["class"],
+      });
+      window.addEventListener("beforeunload", () => observer.disconnect(), { once: true });
+    }
   }
 </script>
