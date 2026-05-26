@@ -4,6 +4,7 @@ import Layout from '~/layouts/Layout.astro'
 import SectionDivider from '~/components/base/SectionDivider.astro'
 import GithubSitesHeatmap from '~/components/base/GithubSitesHeatmap.tsx'
 import SocialLink from '~/components/base/SocialLink.astro'
+import PlaceResolveLaunchForm from '~/components/base/PlaceResolveLaunchForm.astro'
 import List from '~/components/posts/card/List.astro'
 import SkillsShowcase from '~/components/base/SkillsShowcase.astro'
 import PageSpeedScores from '~/components/base/PageSpeedScores.astro'
@@ -17,6 +18,7 @@ const { ENABLED, TOOLTIP_ENABLED } = GITHUB_CONFIG
 const { size, type } = POSTS_CONFIG.homePageConfig
 const { SKILLS_ENABLED, SKILLS_DATA } = SKILLSSHOWCASE_CONFIG
 const repoHeatmapData = normalizeRepoHeatmapSnapshot(rawGithubRepoHeatmap)
+const placeResolveURL = import.meta.env.PUBLIC_SPOTREN_PLACE_RESOLVE_URL?.trim() ?? 'http://localhost:3001/api/public/spotren-sites/resolve-place-input'
 
 let showPosts = []
 const pinnedPosts = await getPinnedPosts(locale)
@@ -40,20 +42,17 @@ if (hasPinnedPosts) {
       <div class="pro text-muted-foreground text-pretty">
         <p>{HOME_CONFIG.intro}</p>
       </div>
-      <form action="/new-site" method="get" class="mt-6 flex flex-col gap-3 sm:max-w-xl sm:flex-row sm:items-center">
-        <input
-          type="text"
-          name="gmn"
-          class="h-11 min-w-0 flex-1 rounded-full border border-border/70 bg-background/80 px-4 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-primary/60"
-          placeholder="Google Maps name"
-        />
-        <button
-          type="submit"
-          class="inline-flex h-11 shrink-0 items-center justify-center rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
-        >
-          New Site
-        </button>
-      </form>
+      <PlaceResolveLaunchForm
+        action="/new-site"
+        resolveURL={placeResolveURL}
+        label="Google Maps URL"
+        placeholder="Paste the full Google Maps business profile URL here."
+        submitLabel="New Site"
+        resolvingLabel="Resolving..."
+        invalidURLMessage="Use a valid Google Maps business profile URL."
+        unavailableMessage="The place resolver is unavailable right now."
+        resolveFailedMessage="We could not resolve this Google Maps URL."
+      />
       <div class="mt-6 flex gap-6">
         {
           SOCIAL_LINKS.map((item) => {

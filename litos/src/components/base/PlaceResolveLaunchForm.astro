@@ -1,0 +1,172 @@
+---
+interface Props {
+  action: string
+  resolveURL: string
+  label: string
+  placeholder: string
+  submitLabel: string
+  resolvingLabel: string
+  invalidURLMessage: string
+  unavailableMessage: string
+  resolveFailedMessage: string
+}
+
+const {
+  action,
+  resolveURL,
+  label,
+  placeholder,
+  submitLabel,
+  resolvingLabel,
+  invalidURLMessage,
+  unavailableMessage,
+  resolveFailedMessage,
+} = Astro.props
+---
+
+<form
+  action={action}
+  method="get"
+  class="mt-6 sm:max-w-2xl"
+  data-place-resolve-form
+  data-resolve-url={resolveURL}
+  data-invalid-url-message={invalidURLMessage}
+  data-unavailable-message={unavailableMessage}
+  data-resolve-failed-message={resolveFailedMessage}
+  data-resolving-label={resolvingLabel}
+  data-submit-label={submitLabel}
+>
+  <div class="flex flex-col gap-3 sm:flex-row sm:items-start">
+    <div class="min-w-0 flex-1">
+      <label for="gmn-place-input" class="mb-2 block text-sm font-medium text-foreground">
+        {label}
+      </label>
+      <textarea
+        id="gmn-place-input"
+        rows="3"
+        class="min-h-28 w-full rounded-3xl border border-border/70 bg-background/80 px-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-primary/60"
+        placeholder={placeholder}
+        spellcheck="false"
+        autocomplete="off"
+        data-place-input
+      ></textarea>
+      <p class="mt-2 hidden text-sm text-red-500" data-place-error></p>
+    </div>
+    <input type="hidden" name="gmn" value="" data-place-id-field />
+    <button
+      type="submit"
+      class="inline-flex h-11 shrink-0 items-center justify-center rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60 sm:mt-8"
+      data-submit-button
+    >
+      {submitLabel}
+    </button>
+  </div>
+</form>
+
+<script is:inline>
+  const forms = document.querySelectorAll("[data-place-resolve-form]");
+
+  function isValidGoogleMapsInput(value) {
+    try {
+      const url = new URL(value);
+      const hostname = url.hostname.toLowerCase();
+      if (hostname === "maps.app.goo.gl") {
+        return true;
+      }
+      const isGoogleHost = hostname.includes("google.");
+      if (!isGoogleHost) {
+        return false;
+      }
+      return (
+        url.pathname.startsWith("/maps") ||
+        url.pathname.includes("/place/") ||
+        url.searchParams.has("cid") ||
+        url.searchParams.has("q")
+      );
+    } catch {
+      return false;
+    }
+  }
+
+  for (const form of forms) {
+    const textarea = form.querySelector("[data-place-input]");
+    const hiddenPlaceIdField = form.querySelector("[data-place-id-field]");
+    const submitButton = form.querySelector("[data-submit-button]");
+    const errorElement = form.querySelector("[data-place-error]");
+
+    if (!(textarea instanceof HTMLTextAreaElement) || !(hiddenPlaceIdField instanceof HTMLInputElement) || !(submitButton instanceof HTMLButtonElement) || !(errorElement instanceof HTMLParagraphElement)) {
+      continue;
+    }
+
+    const resolveURL = String(form.getAttribute("data-resolve-url") || "").trim();
+    const invalidURLMessage = String(form.getAttribute("data-invalid-url-message") || "Use a valid Google Maps URL.").trim();
+    const unavailableMessage = String(form.getAttribute("data-unavailable-message") || "Resolver is unavailable right now.").trim();
+    const resolveFailedMessage = String(form.getAttribute("data-resolve-failed-message") || "Unable to resolve Google Maps input.").trim();
+    const resolvingLabel = String(form.getAttribute("data-resolving-label") || "Resolving...").trim();
+    const submitLabel = String(form.getAttribute("data-submit-label") || "Create site").trim();
+
+    const setBusy = (busy) => {
+      submitButton.disabled = busy;
+      submitButton.textContent = busy ? resolvingLabel : submitLabel;
+    };
+
+    const setError = (message) => {
+      if (!message) {
+        errorElement.textContent = "";
+        errorElement.classList.add("hidden");
+        textarea.setAttribute("aria-invalid", "false");
+        return;
+      }
+      errorElement.textContent = message;
+      errorElement.classList.remove("hidden");
+      textarea.setAttribute("aria-invalid", "true");
+    };
+
+    textarea.addEventListener("input", () => setError(""));
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const rawValue = textarea.value.trim();
+      if (!isValidGoogleMapsInput(rawValue)) {
+        setError(invalidURLMessage);
+        textarea.focus();
+        return;
+      }
+      if (!resolveURL) {
+        setError(unavailableMessage);
+        return;
+      }
+
+      setBusy(true);
+      setError("");
+
+      try {
+        const response = await fetch(`${resolveURL}?input=${encodeURIComponent(rawValue)}`, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+          },
+        });
+        const payload = await response.json().catch(() => null);
+        if (!response.ok) {
+          const message = payload?.error?.message || resolveFailedMessage;
+          setError(String(message));
+          return;
+        }
+        const placeId = typeof payload?.placeId === "string" ? payload.placeId.trim() : "";
+        if (!placeId) {
+          setError(resolveFailedMessage);
+          return;
+        }
+
+        hiddenPlaceIdField.value = placeId;
+        HTMLFormElement.prototype.submit.call(form);
+      } catch {
+        setError(unavailableMessage);
+      } finally {
+        setBusy(false);
+      }
+    });
+  }
+</script>
