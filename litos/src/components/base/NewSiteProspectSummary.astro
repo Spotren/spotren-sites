@@ -1,8 +1,16 @@
 ---
 interface Props {
+  templatesURL: string
+  defaultSiteTemplateId: string
   detailURL: string
   checkoutURL: string
+  homeURL: string
   placeId: string
+  templatesHeadingLabel: string
+  templatesLoadingLabel: string
+  templatesUnavailableLabel: string
+  templatesEmptyLabel: string
+  templatesSelectedLabel: string
   loadingLabel: string
   missingPlaceIdLabel: string
   unavailableLabel: string
@@ -30,12 +38,22 @@ interface Props {
   staticMapURL: string
   mapAltLabel: string
   mapUnavailableLabel: string
+  searchAgainLabel: string
+  mapHeadlineLabel: string
 }
 
 const {
+  templatesURL,
+  defaultSiteTemplateId,
   detailURL,
   checkoutURL,
+  homeURL,
   placeId,
+  templatesHeadingLabel,
+  templatesLoadingLabel,
+  templatesUnavailableLabel,
+  templatesEmptyLabel,
+  templatesSelectedLabel,
   loadingLabel,
   missingPlaceIdLabel,
   unavailableLabel,
@@ -63,14 +81,38 @@ const {
   staticMapURL,
   mapAltLabel,
   mapUnavailableLabel,
+  searchAgainLabel,
+  mapHeadlineLabel,
 } = Astro.props
 ---
 
 <section
   class="mt-6"
+  data-site-templates
+  data-templates-url={templatesURL}
+  data-default-site-template-id={defaultSiteTemplateId}
+  data-templates-loading-label={templatesLoadingLabel}
+  data-templates-unavailable-label={templatesUnavailableLabel}
+  data-templates-empty-label={templatesEmptyLabel}
+  data-templates-selected-label={templatesSelectedLabel}
+>
+  <div class="flex items-end justify-between gap-4">
+    <h3 class="text-lg font-medium tracking-tight text-foreground">{templatesHeadingLabel}</h3>
+  </div>
+  <p class="mt-3 text-sm text-muted-foreground" data-templates-status>
+    {templatesLoadingLabel}
+  </p>
+  <div class="mt-4 hidden grid gap-4 sm:grid-cols-2 xl:grid-cols-3" data-templates-list></div>
+</section>
+
+<section
+  class="mt-6"
   data-prospect-summary
+  data-templates-url={templatesURL}
+  data-default-site-template-id={defaultSiteTemplateId}
   data-detail-url={detailURL}
   data-place-id={placeId}
+  data-home-url={homeURL}
   data-loading-label={loadingLabel}
   data-missing-place-id-label={missingPlaceIdLabel}
   data-unavailable-label={unavailableLabel}
@@ -98,7 +140,44 @@ const {
     {loadingLabel}
   </p>
   <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-10">
-    <div class="mt-4 hidden grid gap-4" data-prospect-grid>
+    <div class="hidden min-w-[320px] flex-col gap-3 sm:flex" data-map-column>
+      <div class="overflow-hidden rounded-t-3xl rounded-b-xl border border-border/60 bg-background/60" data-map-panel>
+        <a
+          href="#"
+          target="_blank"
+          rel="noreferrer"
+          class="relative hidden h-full w-full"
+          data-map-link
+        >
+          <img
+            src=""
+            alt={mapAltLabel}
+            class="h-full min-h-[568px] w-full object-cover"
+            loading="lazy"
+            data-map-image
+          />
+          <div class="pointer-events-none absolute inset-x-0 bottom-0 h-[58%] bg-gradient-to-b from-transparent via-background/75 to-background"></div>
+          <div class="absolute inset-x-0 bottom-0 p-6">
+            <h3 class="mx-auto max-w-[16rem] text-center text-xl font-medium tracking-tight text-foreground">
+              {mapHeadlineLabel}
+            </h3>
+          </div>
+        </a>
+        <div class="flex min-h-[568px] items-center justify-center px-6 text-center text-sm text-muted-foreground" data-map-fallback>
+          {mapUnavailableLabel}
+        </div>
+      </div>
+      <a
+        href={homeURL}
+        class="inline-flex items-center gap-2 text-xs text-muted-foreground transition-colors hover:text-foreground"
+        data-search-again-link
+      >
+        <span class="icon-[ph--magnifying-glass] size-4"></span>
+        <span>{searchAgainLabel}</span>
+      </a>
+    </div>
+    <div class="mt-4 hidden grid gap-6" data-prospect-grid>
+      <h3 class="text-base font-medium tracking-tight text-foreground">Seus dados</h3>
       <div class="flex items-start gap-4">
         <span
           class="icon-[ph--buildings] mt-0.5 size-6 flex-shrink-0 text-muted-foreground"
@@ -119,68 +198,212 @@ const {
           <div class="text-foreground/80 sm:text-base" data-address-text></div>
         </div>
       </div>
-    </div>
-    <div class="min-w-[320px] overflow-hidden rounded-3xl border border-border/60 bg-background/60" data-map-panel>
-      <a
-        href="#"
-        target="_blank"
-        rel="noreferrer"
-        class="hidden h-full w-full"
-        data-map-link
-      >
-        <img
-          src=""
-          alt={mapAltLabel}
-          class="h-full min-h-[240px] w-full object-cover"
-          loading="lazy"
-          data-map-image
-        />
-      </a>
-      <div class="flex min-h-[240px] items-center justify-center px-6 text-center text-sm text-muted-foreground" data-map-fallback>
-        {mapUnavailableLabel}
-      </div>
-    </div>
-  </div>
-  <div class="mt-6 hidden" data-checkout-actions>
-    <p class="mb-3 text-sm text-muted-foreground hidden" data-checkout-state></p>
-    <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-      <div class="flex items-start gap-2 text-foreground">
-        <span class="pt-1 text-base font-medium text-foreground/70">{priceCurrencyLabel}</span>
-        <span class="text-4xl font-semibold tracking-tight sm:text-5xl">{priceWholeLabel}</span>
-        <div class="flex flex-col pt-1 text-left leading-none">
-          <span class="text-base font-medium text-foreground/80">{priceFractionLabel}</span>
-          <span class="text-xs text-muted-foreground">{pricePeriodLabel}</span>
+      <div class="h-px w-full bg-border/70"></div>
+      <div class="hidden" data-checkout-actions>
+        <p class="mb-3 text-sm text-muted-foreground hidden" data-checkout-state></p>
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div class="flex items-start gap-2 text-foreground">
+            <span class="pt-1 text-base font-medium text-foreground/70">{priceCurrencyLabel}</span>
+            <span class="text-4xl font-semibold tracking-tight sm:text-5xl">{priceWholeLabel}</span>
+            <div class="flex flex-col pt-1 text-left leading-none">
+              <span class="text-base font-medium text-foreground/80">{priceFractionLabel}</span>
+              <span class="text-xs text-muted-foreground">{pricePeriodLabel}</span>
+            </div>
+          </div>
+          <button
+            type="button"
+            class="inline-flex h-11 items-center justify-center rounded-full bg-primary px-6 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+            data-create-checkout-button
+          >
+            {checkoutButtonLabel}
+          </button>
         </div>
+        <p class="mt-3 hidden text-sm" data-checkout-link-row>
+          <a
+            href="#"
+            class="text-primary underline underline-offset-4"
+            data-checkout-link
+          >
+            {checkoutFallbackLinkLabel}
+          </a>
+        </p>
+        <p class="mt-2 hidden text-sm text-red-500" data-checkout-error></p>
       </div>
-      <button
-        type="button"
-        class="inline-flex h-11 items-center justify-center rounded-full bg-primary px-6 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
-        data-create-checkout-button
-      >
-        {checkoutButtonLabel}
-      </button>
     </div>
-    <p class="mt-3 hidden text-sm" data-checkout-link-row>
-      <a
-        href="#"
-        class="text-primary underline underline-offset-4"
-        data-checkout-link
-      >
-        {checkoutFallbackLinkLabel}
-      </a>
-    </p>
-    <p class="mt-2 hidden text-sm text-red-500" data-checkout-error></p>
   </div>
 </section>
 
 <script is:inline>
+  const templateSections = document.querySelectorAll("[data-site-templates]");
+  for (const section of templateSections) {
+    const templatesURL = String(section.getAttribute("data-templates-url") || "").trim();
+    const defaultSiteTemplateId = String(section.getAttribute("data-default-site-template-id") || "").trim();
+    const loadingLabel = String(section.getAttribute("data-templates-loading-label") || "Loading templates...").trim();
+    const unavailableLabel = String(section.getAttribute("data-templates-unavailable-label") || "Templates are unavailable right now.").trim();
+    const emptyLabel = String(section.getAttribute("data-templates-empty-label") || "No templates are available right now.").trim();
+    const selectedLabel = String(section.getAttribute("data-templates-selected-label") || "Selected").trim();
+    const status = section.querySelector("[data-templates-status]");
+    const list = section.querySelector("[data-templates-list]");
+
+    if (!(status instanceof HTMLParagraphElement) || !(list instanceof HTMLDivElement)) {
+      continue;
+    }
+
+    const updateSelection = (templateId) => {
+      for (const button of list.querySelectorAll("[data-template-option]")) {
+        if (!(button instanceof HTMLButtonElement)) {
+          continue;
+        }
+        const isSelected = String(button.getAttribute("data-template-id") || "") === templateId;
+        button.dataset.selected = isSelected ? "true" : "false";
+        button.setAttribute("aria-pressed", isSelected ? "true" : "false");
+        button.classList.toggle("border-primary", isSelected);
+        button.classList.toggle("bg-primary/5", isSelected);
+        button.classList.toggle("shadow-[0_0_0_1px_rgba(0,0,0,0.04)]", isSelected);
+        button.classList.toggle("border-border/60", !isSelected);
+        const badge = button.querySelector("[data-template-selected-badge]");
+        if (badge instanceof HTMLElement) {
+          badge.classList.toggle("hidden", !isSelected);
+        }
+      }
+      for (const summary of document.querySelectorAll("[data-prospect-summary]")) {
+        summary.setAttribute("data-selected-site-template-id", templateId);
+      }
+    };
+
+    const renderTemplateCard = (item, isSelected) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "group flex h-full flex-col overflow-hidden rounded-3xl border border-border/60 bg-background/70 text-left transition hover:border-primary/60 hover:bg-accent/20";
+      button.setAttribute("data-template-option", "");
+      button.setAttribute("data-template-id", item.id);
+
+      const imageWrap = document.createElement("div");
+      imageWrap.className = "relative aspect-[4/3] overflow-hidden bg-muted/40";
+      if (item.featuredImageUrl) {
+        const image = document.createElement("img");
+        image.src = item.featuredImageUrl;
+        image.alt = item.name;
+        image.className = "h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]";
+        image.loading = "lazy";
+        imageWrap.appendChild(image);
+      }
+      button.appendChild(imageWrap);
+
+      const content = document.createElement("div");
+      content.className = "flex flex-1 flex-col gap-2 p-4";
+
+      const headingRow = document.createElement("div");
+      headingRow.className = "flex items-start justify-between gap-3";
+
+      const title = document.createElement("div");
+      title.className = "text-sm font-medium text-foreground";
+      title.textContent = item.name;
+      headingRow.appendChild(title);
+
+      const selectedBadge = document.createElement("span");
+      selectedBadge.className = "hidden rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-medium text-primary";
+      selectedBadge.setAttribute("data-template-selected-badge", "");
+      selectedBadge.textContent = selectedLabel;
+      headingRow.appendChild(selectedBadge);
+
+      content.appendChild(headingRow);
+
+      if (item.description) {
+        const description = document.createElement("p");
+        description.className = "text-sm leading-6 text-muted-foreground";
+        description.textContent = item.description;
+        content.appendChild(description);
+      }
+
+      button.appendChild(content);
+      list.appendChild(button);
+
+      if (isSelected) {
+        updateSelection(item.id);
+      }
+    };
+
+    status.textContent = loadingLabel;
+    void fetch(templatesURL, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    }).then(async (response) => {
+      const payload = await response.json().catch(() => null);
+      if (!response.ok) {
+        throw new Error(String(payload?.error?.message || unavailableLabel));
+      }
+
+      const items = Array.isArray(payload?.items) ? payload.items : [];
+      list.innerHTML = "";
+      if (items.length === 0) {
+        status.textContent = emptyLabel;
+        return;
+      }
+
+      let activeTemplateId = defaultSiteTemplateId;
+      const hasDefaultTemplate = items.some((item) => item && typeof item === "object" && String(item.id || "").trim() === defaultSiteTemplateId);
+      if (!hasDefaultTemplate) {
+        const firstItem = items[0];
+        activeTemplateId = firstItem && typeof firstItem === "object" ? String(firstItem.id || "").trim() : "";
+      }
+
+      for (const item of items) {
+        if (!item || typeof item !== "object") {
+          continue;
+        }
+        const normalized = {
+          id: String(item.id || "").trim(),
+          name: String(item.name || "").trim(),
+          description: String(item.description || "").trim(),
+          featuredImageUrl: String(item.featuredImageUrl || "").trim(),
+        };
+        if (!normalized.id || !normalized.name) {
+          continue;
+        }
+        renderTemplateCard(normalized, normalized.id === activeTemplateId);
+      }
+
+      if (!list.children.length) {
+        status.textContent = emptyLabel;
+        return;
+      }
+
+      list.classList.remove("hidden");
+      status.classList.add("hidden");
+      updateSelection(activeTemplateId);
+    }).catch((error) => {
+      status.textContent = error instanceof Error && error.message ? error.message : unavailableLabel;
+    });
+
+    list.addEventListener("click", (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) {
+        return;
+      }
+      const button = target.closest("[data-template-option]");
+      if (!(button instanceof HTMLButtonElement)) {
+        return;
+      }
+      const templateId = String(button.getAttribute("data-template-id") || "").trim();
+      if (!templateId) {
+        return;
+      }
+      updateSelection(templateId);
+    });
+  }
+
   const summaries = document.querySelectorAll("[data-prospect-summary]");
   const checkoutPollingIntervalMs = 4000;
 
   for (const summary of summaries) {
+    const defaultSiteTemplateId = String(summary.getAttribute("data-default-site-template-id") || "").trim();
     const detailURL = String(summary.getAttribute("data-detail-url") || "").trim();
     const initialPlaceId = String(summary.getAttribute("data-place-id") || "").trim();
     let placeId = initialPlaceId;
+    let selectedSiteTemplateId = String(summary.getAttribute("data-selected-site-template-id") || defaultSiteTemplateId).trim();
     const loadingLabel = String(summary.getAttribute("data-loading-label") || "Loading prospect...").trim();
     const missingPlaceIdLabel = String(summary.getAttribute("data-missing-place-id-label") || "Place ID is missing.").trim();
     const unavailableLabel = String(summary.getAttribute("data-unavailable-label") || "Prospect detail is unavailable right now.").trim();
@@ -212,6 +435,7 @@ const {
     const checkoutState = summary.querySelector("[data-checkout-state]");
     const checkoutLinkRow = summary.querySelector("[data-checkout-link-row]");
     const checkoutLink = summary.querySelector("[data-checkout-link]");
+    const mapColumn = summary.querySelector("[data-map-column]");
     const mapPanel = summary.querySelector("[data-map-panel]");
     const mapLink = summary.querySelector("[data-map-link]");
     const mapImage = summary.querySelector("[data-map-image]");
@@ -225,6 +449,7 @@ const {
       !(checkoutState instanceof HTMLParagraphElement) ||
       !(checkoutLinkRow instanceof HTMLParagraphElement) ||
       !(checkoutLink instanceof HTMLAnchorElement) ||
+      !(mapColumn instanceof HTMLDivElement) ||
       !(mapPanel instanceof HTMLDivElement) ||
       !(mapLink instanceof HTMLAnchorElement) ||
       !(mapImage instanceof HTMLImageElement) ||
@@ -428,6 +653,7 @@ const {
 
       status.classList.add("hidden");
       grid.classList.remove("hidden");
+      mapColumn.classList.remove("hidden");
       checkoutActions.classList.remove("hidden");
       applyCheckoutState(payload);
     };
@@ -462,6 +688,7 @@ const {
       }
       setCheckoutBusy(true);
       setCheckoutError("");
+      selectedSiteTemplateId = String(summary.getAttribute("data-selected-site-template-id") || defaultSiteTemplateId).trim();
 
       try {
         if (activeCheckoutURL) {
@@ -482,6 +709,7 @@ const {
             placeId,
             successURL: currentURL.toString(),
             cancelURL,
+            siteTemplateId: selectedSiteTemplateId,
           }),
         });
         const payload = await response.json().catch(() => null);

@@ -9,28 +9,37 @@ const locale = 'pt'
 const { NEW_SITE_CONFIG } = getLocaleConfig(locale)
 const { title, description } = NEW_SITE_CONFIG
 const placeId = Astro.url.searchParams.get('gmn')?.trim() ?? ''
+const templatesURL = import.meta.env.PUBLIC_SPOTREN_SITE_TEMPLATES_URL?.trim() ?? 'https://app.localhost:3443/api/public/spotren-sites/templates'
 const prospectDetailURL = import.meta.env.PUBLIC_SPOTREN_PROSPECT_DETAIL_URL?.trim() ?? 'https://app.localhost:3443/api/public/spotren-sites/prospects/by-place-id'
 const checkoutURL = import.meta.env.PUBLIC_SPOTREN_CREATE_CHECKOUT_URL?.trim() ?? 'https://app.localhost:3443/api/public/spotren-sites/checkouts/from-place-id'
 const staticMapURL = import.meta.env.PUBLIC_SPOTREN_STATIC_MAP_URL?.trim() ?? 'https://app.localhost:3443/api/public/spotren-sites/maps/static'
 const homeURL = withLocalePath(locale, '/')
+const defaultSiteTemplateId = '86ef914e-fb4e-4228-b092-1170b2a86c74'
 ---
 
 <Layout {title} {description} {locale}>
   <div class="relative z-[1] py-8 pb-10 px-6 sm:px-8">
     <PageTitle {title} introduce="" />
     <NewSiteProspectSummary
+      templatesURL={templatesURL}
+      defaultSiteTemplateId={defaultSiteTemplateId}
       detailURL={prospectDetailURL}
       checkoutURL={checkoutURL}
       homeURL={homeURL}
       placeId={placeId}
+      templatesHeadingLabel="Templates"
+      templatesLoadingLabel="Carregando templates..."
+      templatesUnavailableLabel="Os templates estao indisponiveis agora."
+      templatesEmptyLabel="Nao ha templates disponiveis agora."
+      templatesSelectedLabel="Selecionado"
       loadingLabel="Carregando dados da empresa..."
       missingPlaceIdLabel="Falta o placeId na URL."
       unavailableLabel="Os dados da empresa estao indisponiveis agora."
       failedLabel="Nao foi possivel carregar os dados da empresa."
       companyNameLabel="Empresa"
       addressLabel="Endereco"
-      checkoutButtonLabel="Pagar"
-      checkoutResumeButtonLabel="Pagar"
+      checkoutButtonLabel="Assinar"
+      checkoutResumeButtonLabel="Assinar"
       checkoutCreatingLabel="Preparando checkout..."
       checkoutFailedLabel="Nao foi possivel criar o checkout."
       checkoutStatusLabel="Status do checkout"
