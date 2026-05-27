@@ -13,6 +13,7 @@ interface NumberTickerProps {
   githubUser?: string
   githubRepo?: string
   githubType?: 'stars' | 'forks'
+  hideBelow?: number
 }
 
 export default function NumberTicker({
@@ -25,6 +26,7 @@ export default function NumberTicker({
   githubUser,
   githubRepo,
   githubType,
+  hideBelow,
 }: NumberTickerProps) {
   const [value, setValue] = useState(initialValue)
   const ref = useRef<HTMLSpanElement>(null)
@@ -85,5 +87,5 @@ export default function NumberTicker({
     return () => unsubscribe()
   }, [springValue, label])
 
-  return <motion.span className={cn('inline-block tabular-nums', className)} ref={ref} />
+  return <motion.span className={cn('inline-block tabular-nums', hideBelow !== undefined && value < hideBelow && 'hidden', className)} ref={ref} />
 }

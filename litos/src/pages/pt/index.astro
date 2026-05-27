@@ -19,6 +19,9 @@ const { size, type } = POSTS_CONFIG.homePageConfig
 const { SKILLS_ENABLED, SKILLS_DATA } = SKILLSSHOWCASE_CONFIG
 const repoHeatmapData = normalizeRepoHeatmapSnapshot(rawGithubRepoHeatmap)
 const createProspectURL = import.meta.env.PUBLIC_SPOTREN_CREATE_PROSPECT_URL?.trim() ?? 'https://app.localhost:3443/api/public/spotren-sites/prospects/from-gmn'
+const mapsHelpURL = import.meta.env.PUBLIC_SPOTREN_MAPS_HELP_URL?.trim() ?? '#'
+const googleMapsURL = import.meta.env.PUBLIC_SPOTREN_GOOGLE_MAPS_URL?.trim() ?? 'https://www.google.com/maps'
+const createBusinessURL = import.meta.env.PUBLIC_SPOTREN_CREATE_BUSINESS_URL?.trim() ?? 'https://business.google.com/create/new'
 
 let showPosts = []
 const pinnedPosts = await getPinnedPosts(locale)
@@ -40,23 +43,29 @@ if (hasPinnedPosts) {
         </span>
       </h1>
       <div class="pro text-muted-foreground text-pretty">
-        <p>{HOME_CONFIG.intro}</p>
+        <p set:html={HOME_CONFIG.intro}></p>
       </div>
       <PlaceResolveLaunchForm
         action="/pt/new-site"
         createProspectURL={createProspectURL}
-        label="URL do Google Maps"
-        placeholder="Cole aqui a URL completa do perfil da empresa no Google Maps."
+        helpURL={mapsHelpURL}
+        mapsURL={googleMapsURL}
+        createBusinessURL={createBusinessURL}
+        label="Link da empresa no Maps"
+        placeholder="cole aqui o link da empresa no google maps..."
         submitLabel="Criar site"
         creatingLabel="Preparando..."
         invalidURLMessage="Use uma URL valida do perfil da empresa no Google Maps."
         unavailableMessage="O resolvedor de locais esta indisponivel agora."
         createFailedMessage="Nao foi possivel preparar esse perfil do Google Maps."
+        helpLabel="Veja como copiar o link"
+        mapsLabel="Abrir Google Maps"
+        createBusinessLabel="Criar um perfil de negócios"
       />
-      <div class="mt-6 flex gap-6">
+      <div class="mt-6 flex gap-4">
         {
           SOCIAL_LINKS.map((item) => {
-            return <SocialLink href={item.url} icon={item.icon} aria-label={UI.socialAriaLabel(item.name)} count={item.count} label={HOME_CONFIG.socialLabel} />
+            return <SocialLink href={item.url} icon={item.icon} aria-label={UI.socialAriaLabel(item.name)} count={item.count} hideCountBelow={100} label={HOME_CONFIG.socialLabel} />
           })
         }
       </div>

@@ -37,14 +37,14 @@
     "introduce": "Uma colecao de destaques, exemplos e fragmentos visuais."
   },
   "newSite": {
-    "title": "Novo site",
+    "title": "Criando seu Site",
     "description": "Uma pagina dedicada para criar um site ndEX.",
-    "introduce": "Encontramos seus dados:"
+    "introduce": "Você está a um passo de publicar seu site otimizado"
   },
   "home": {
     "title": "ndEX",
-    "subtitle": "Site para indexação otimizada de PMEs",
-    "intro": "Criado para Negócios Locais e PMEs, o ndEX estrutura e esquematiza as informações da empresa, melhorando a indexação e o entendimento semântico em LLMs.",
+    "subtitle": "Indexação otimizada de Negócios Locais",
+    "intro": "O ndEX estrutura e esquematiza as informações do seu perfil comercial em um site simples e veloz, otimizando a indexação nos buscadores e o entendimento semântico em agentes de <abbr title=\"Inteligência Artificial\">IA</abbr>",
     "socialLabel": "seguidores",
     "sitesTitle": "Utilização",
     "sitesDescription": "Sites criados no último ano:",

@@ -6,10 +6,11 @@ interface Props extends Omit<astroHTML.JSX.AnchorHTMLAttributes, 'class' | 'chil
   icon: string
   count?: number
   label?: string
+  hideCountBelow?: number
   class?: string | Record<string, boolean>
 }
 
-const { label, icon, count, class: className, ...props }: Props = Astro.props
+const { label, icon, count, hideCountBelow, class: className, ...props }: Props = Astro.props
 const href = props.href as string
 const isGithub = href?.includes('github.com')
 const githubUser = isGithub ? href.split('/').filter(Boolean).pop() : undefined
@@ -30,7 +31,7 @@ const githubUser = isGithub ? href.split('/').filter(Boolean).pop() : undefined
   {
     count !== undefined && (
       <span class="text-muted-foreground text-sm transition-colors duration-300 group-hover:text-primary">
-        <NumberTicker play value={count} label={label} client:load githubUser={githubUser} />
+        <NumberTicker play value={count} label={label} hideBelow={hideCountBelow} client:load githubUser={githubUser} />
       </span>
     )
   }

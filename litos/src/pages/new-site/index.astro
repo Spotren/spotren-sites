@@ -15,11 +15,36 @@ const checkoutURL = import.meta.env.PUBLIC_SPOTREN_CREATE_CHECKOUT_URL?.trim() ?
 const staticMapURL = import.meta.env.PUBLIC_SPOTREN_STATIC_MAP_URL?.trim() ?? 'https://app.localhost:3443/api/public/spotren-sites/maps/static'
 const homeURL = withLocalePath(locale, '/')
 const defaultSiteTemplateId = '86ef914e-fb4e-4228-b092-1170b2a86c74'
+const highlights = [
+  {
+    icon: 'icon-[ph--rocket-launch]',
+    text: 'A lightweight, fast site designed to load well on mobile devices.',
+  },
+  {
+    icon: 'icon-[ph--globe-hemisphere-west]',
+    text: 'A clear structure that helps search engines and LLMs understand your business better.',
+  },
+  {
+    icon: 'icon-[ph--sparkle]',
+    text: 'A guided publishing flow with less friction to get your presence online.',
+  },
+]
 ---
 
 <Layout {title} {description} {locale}>
   <div class="relative z-[1] py-8 pb-10 px-6 sm:px-8">
-    <PageTitle {title} introduce="" />
+    <div class="mx-auto max-w-3xl text-center">
+      <p class="mb-3 text-sm font-medium text-muted-foreground">ndEX</p>
+      <PageTitle {title} introduce={NEW_SITE_CONFIG.introduce} />
+    </div>
+    <section class="mx-auto mt-8 grid max-w-5xl gap-8 sm:grid-cols-3">
+      {highlights.map((item) => (
+        <div class="flex flex-col items-center text-center">
+          <span class:list={[item.icon, 'size-10 text-primary']}></span>
+          <p class="mt-4 max-w-xs text-sm leading-6 text-muted-foreground">{item.text}</p>
+        </div>
+      ))}
+    </section>
     <NewSiteProspectSummary
       templatesURL={templatesURL}
       defaultSiteTemplateId={defaultSiteTemplateId}
@@ -31,7 +56,6 @@ const defaultSiteTemplateId = '86ef914e-fb4e-4228-b092-1170b2a86c74'
       templatesLoadingLabel="Loading templates..."
       templatesUnavailableLabel="Templates are unavailable right now."
       templatesEmptyLabel="No templates are available right now."
-      templatesSelectedLabel="Selected"
       loadingLabel="Loading business details..."
       missingPlaceIdLabel="Missing placeId in the URL."
       unavailableLabel="Business details are unavailable right now."

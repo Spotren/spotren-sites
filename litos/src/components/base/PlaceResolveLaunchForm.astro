@@ -2,6 +2,9 @@
 interface Props {
   action: string
   createProspectURL: string
+  helpURL: string
+  mapsURL: string
+  createBusinessURL: string
   label: string
   placeholder: string
   submitLabel: string
@@ -9,11 +12,17 @@ interface Props {
   invalidURLMessage: string
   unavailableMessage: string
   createFailedMessage: string
+  helpLabel: string
+  mapsLabel: string
+  createBusinessLabel: string
 }
 
 const {
   action,
   createProspectURL,
+  helpURL,
+  mapsURL,
+  createBusinessURL,
   label,
   placeholder,
   submitLabel,
@@ -21,6 +30,9 @@ const {
   invalidURLMessage,
   unavailableMessage,
   createFailedMessage,
+  helpLabel,
+  mapsLabel,
+  createBusinessLabel,
 } = Astro.props
 ---
 
@@ -36,30 +48,93 @@ const {
   data-creating-label={creatingLabel}
   data-submit-label={submitLabel}
 >
-  <div class="flex flex-col gap-3 sm:flex-row sm:items-start">
+  <div class="mb-2 flex items-center gap-3">
+    <label for="gmn-place-input" class="block text-sm font-medium text-foreground">
+      {label}
+    </label>
+    <div class="flex items-center gap-2">
+      <a
+        href={helpURL}
+        target="_blank"
+        rel="noreferrer"
+        aria-label={helpLabel}
+        aria-describedby="maps-help-tooltip"
+        class="group relative shrink-0 text-muted-foreground/45 transition-colors hover:text-muted-foreground focus:text-muted-foreground"
+      >
+        <span
+          id="maps-help-tooltip"
+          role="tooltip"
+          class="pointer-events-none absolute bottom-full right-0 z-20 mb-2 whitespace-nowrap rounded-full bg-foreground px-3 py-1.5 text-xs font-medium text-background opacity-0 shadow-sm transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"
+        >
+          {helpLabel}
+        </span>
+        <span class="icon-[ph--question] h-5 w-5 cursor-pointer"></span>
+      </a>
+      <a
+        href={mapsURL}
+        target="_blank"
+        rel="noreferrer"
+        aria-label={mapsLabel}
+        aria-describedby="maps-open-tooltip"
+        class="group relative shrink-0 text-muted-foreground/55 transition-colors hover:text-muted-foreground focus:text-muted-foreground"
+      >
+        <span
+          id="maps-open-tooltip"
+          role="tooltip"
+          class="pointer-events-none absolute bottom-full right-0 z-20 mb-2 whitespace-nowrap rounded-full bg-foreground px-3 py-1.5 text-xs font-medium text-background opacity-0 shadow-sm transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"
+        >
+          {mapsLabel}
+        </span>
+        <span class="icon-[ph--map-trifold] h-5 w-5 cursor-pointer"></span>
+      </a>
+    </div>
+  </div>
+  <div class="rounded-[35px] border border-border/70 bg-background/50 px-3 py-2 sm:h-[70px] sm:px-4">
+    <div class="flex flex-col gap-3 sm:h-full sm:flex-row sm:items-center">
+    <div class="hidden h-full flex-col items-center justify-center gap-3 pl-4 text-muted-foreground sm:flex">
+      <span class="icon-[ph--link-simple-horizontal] h-6 w-6"></span>
+    </div>
     <div class="min-w-0 flex-1">
-      <label for="gmn-place-input" class="mb-2 block text-sm font-medium text-foreground">
-        {label}
-      </label>
-      <textarea
+      <input
         id="gmn-place-input"
-        rows="3"
-        class="min-h-28 w-full rounded-3xl border border-border/70 bg-background/80 px-4 py-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-primary/60"
+        type="text"
+        class="w-full rounded-3xl bg-background/80 px-4 py-3 text-xs text-foreground outline-none ring-0 transition-colors placeholder:text-muted-foreground/70 focus:outline-none focus:ring-0 sm:text-sm"
         placeholder={placeholder}
         spellcheck="false"
         autocomplete="off"
         data-place-input
-      ></textarea>
+      />
       <p class="mt-2 hidden text-sm text-red-500" data-place-error></p>
+    </div>
+    <div class="hidden h-full flex-col items-center justify-center gap-3 sm:flex">
+      <a
+        href={createBusinessURL}
+        target="_blank"
+        rel="noreferrer"
+        aria-label={createBusinessLabel}
+        aria-describedby="maps-create-business-tooltip"
+        class="group relative text-muted-foreground/55 transition-colors hover:text-muted-foreground focus:text-muted-foreground"
+      >
+        <span
+          id="maps-create-business-tooltip"
+          role="tooltip"
+          class="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 -translate-x-1/2 whitespace-nowrap rounded-full bg-foreground px-3 py-1.5 text-xs font-medium text-background opacity-0 shadow-sm transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"
+        >
+          {createBusinessLabel}
+        </span>
+        <span class="icon-[ph--map-pin-plus] h-6 w-6 cursor-pointer"></span>
+      </a>
     </div>
     <input type="hidden" name="gmn" value="" data-place-id-field />
     <button
       type="submit"
-      class="inline-flex h-11 shrink-0 items-center justify-center rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60 sm:mt-8"
+      class="inline-flex h-10 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-full bg-primary px-4 text-sm font-medium text-primary-foreground transition-[background-image,opacity] hover:bg-[linear-gradient(90deg,#3eed69_0%,#09cd3a_100%)] disabled:cursor-not-allowed disabled:opacity-60"
       data-submit-button
     >
-      {submitLabel}
+      <span>{submitLabel}</span>
+      <span class="icon-[ph--plus] h-4 w-4"></span>
     </button>
+    </div>
   </div>
 </form>
 
@@ -94,7 +169,7 @@ const {
     const submitButton = form.querySelector("[data-submit-button]");
     const errorElement = form.querySelector("[data-place-error]");
 
-    if (!(textarea instanceof HTMLTextAreaElement) || !(hiddenPlaceIdField instanceof HTMLInputElement) || !(submitButton instanceof HTMLButtonElement) || !(errorElement instanceof HTMLParagraphElement)) {
+    if (!(textarea instanceof HTMLInputElement) || !(hiddenPlaceIdField instanceof HTMLInputElement) || !(submitButton instanceof HTMLButtonElement) || !(errorElement instanceof HTMLParagraphElement)) {
       continue;
     }
 

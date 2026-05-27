@@ -19,6 +19,9 @@ const { size, type } = POSTS_CONFIG.homePageConfig
 const { SKILLS_ENABLED, SKILLS_DATA } = SKILLSSHOWCASE_CONFIG
 const repoHeatmapData = normalizeRepoHeatmapSnapshot(rawGithubRepoHeatmap)
 const createProspectURL = import.meta.env.PUBLIC_SPOTREN_CREATE_PROSPECT_URL?.trim() ?? 'https://app.localhost:3443/api/public/spotren-sites/prospects/from-gmn'
+const mapsHelpURL = import.meta.env.PUBLIC_SPOTREN_MAPS_HELP_URL?.trim() ?? '#'
+const googleMapsURL = import.meta.env.PUBLIC_SPOTREN_GOOGLE_MAPS_URL?.trim() ?? 'https://www.google.com/maps'
+const createBusinessURL = import.meta.env.PUBLIC_SPOTREN_CREATE_BUSINESS_URL?.trim() ?? 'https://business.google.com/create/new'
 
 let showPosts = []
 const pinnedPosts = await getPinnedPosts(locale)
@@ -45,6 +48,9 @@ if (hasPinnedPosts) {
       <PlaceResolveLaunchForm
         action="/new-site"
         createProspectURL={createProspectURL}
+        helpURL={mapsHelpURL}
+        mapsURL={googleMapsURL}
+        createBusinessURL={createBusinessURL}
         label="Google Maps URL"
         placeholder="Paste the full Google Maps business profile URL here."
         submitLabel="New Site"
@@ -52,11 +58,14 @@ if (hasPinnedPosts) {
         invalidURLMessage="Use a valid Google Maps business profile URL."
         unavailableMessage="The place resolver is unavailable right now."
         createFailedMessage="We could not prepare this Google Maps business profile."
+        helpLabel="See how to copy the link"
+        mapsLabel="Open Google Maps"
+        createBusinessLabel="Create a business profile"
       />
-      <div class="mt-6 flex gap-6">
+      <div class="mt-6 flex gap-4">
         {
           SOCIAL_LINKS.map((item) => {
-            return <SocialLink href={item.url} icon={item.icon} aria-label={UI.socialAriaLabel(item.name)} count={item.count} label={HOME_CONFIG.socialLabel} />
+            return <SocialLink href={item.url} icon={item.icon} aria-label={UI.socialAriaLabel(item.name)} count={item.count} hideCountBelow={100} label={HOME_CONFIG.socialLabel} />
           })
         }
       </div>

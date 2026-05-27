@@ -116,6 +116,11 @@ const SHARED_SOCIAL_LINKS: SocialLink[] = [
     url: 'https://www.linkedin.com/company/spotren/about/',
     icon: 'icon-[ri--linkedin-fill]',
   },
+  {
+    name: 'instagram',
+    url: 'https://www.instagram.com/ndex.br/',
+    icon: 'icon-[ri--instagram-line]',
+  },
 ]
 
 const SKILLSSHOWCASE_CONFIG: SkillsShowcaseConfig = {

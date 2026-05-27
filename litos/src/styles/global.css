@@ -165,6 +165,13 @@
     @apply underline-offset-4;
   }
 
+  abbr[title] {
+    text-decoration: none;
+    color: inherit;
+    font-weight: 500;
+    cursor: help;
+  }
+
   /* 工具类 */
   .pro {
     @apply prose prose-zinc dark:prose-invert;
