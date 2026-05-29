@@ -1,0 +1,835 @@
+---
+interface Props {
+  detailURL: string
+  placeId: string
+  pageIntroCreatingLabel: string
+  pageIntroReadyLabel: string
+  copyLinkLabel: string
+  statusCreatedLabel: string
+  statusCheckoutCompletedLabel: string
+  statusPaidLabel: string
+  statusSiteProvisioningLabel: string
+  statusSiteReadyLabel: string
+  statusPublishedLabel: string
+  statusQueuedLabel: string
+  statusRunningLabel: string
+  statusSucceededLabel: string
+  statusFailedLabel: string
+  statusCancelledLabel: string
+  loadingLabel: string
+  missingPlaceIdLabel: string
+  unavailableLabel: string
+  failedLabel: string
+  noSiteLabel: string
+  pendingSiteLabel: string
+  repositoryLabel: string
+  projectLabel: string
+  deploymentsLabel: string
+  projectsHeadingLabel: string
+  accessHeadingLabel: string
+  accessCardLabel: string
+  accessFirstNameLabel: string
+  accessLastNameLabel: string
+  accessEmailLabel: string
+  accessAddedLabel: string
+  accessLoginLabel: string
+  accessSubmitLabel: string
+  accessSubmittingLabel: string
+  accessRequestFailedLabel: string
+}
+
+const {
+  detailURL,
+  placeId,
+  pageIntroCreatingLabel,
+  pageIntroReadyLabel,
+  copyLinkLabel,
+  statusCreatedLabel,
+  statusCheckoutCompletedLabel,
+  statusPaidLabel,
+  statusSiteProvisioningLabel,
+  statusSiteReadyLabel,
+  statusPublishedLabel,
+  statusQueuedLabel,
+  statusRunningLabel,
+  statusSucceededLabel,
+  statusFailedLabel,
+  statusCancelledLabel,
+  loadingLabel,
+  missingPlaceIdLabel,
+  unavailableLabel,
+  failedLabel,
+  noSiteLabel,
+  pendingSiteLabel,
+  repositoryLabel,
+  projectLabel,
+  deploymentsLabel,
+  projectsHeadingLabel,
+  accessHeadingLabel,
+  accessCardLabel,
+  accessFirstNameLabel,
+  accessLastNameLabel,
+  accessEmailLabel,
+  accessAddedLabel,
+  accessLoginLabel,
+  accessSubmitLabel,
+  accessSubmittingLabel,
+  accessRequestFailedLabel,
+} = Astro.props
+---
+
+<section
+  class="mt-8 text-left"
+  data-my-site-summary
+  data-detail-url={detailURL}
+  data-place-id={placeId}
+  data-page-intro-creating-label={pageIntroCreatingLabel}
+  data-page-intro-ready-label={pageIntroReadyLabel}
+  data-copy-link-label={copyLinkLabel}
+  data-status-created-label={statusCreatedLabel}
+  data-status-checkout-completed-label={statusCheckoutCompletedLabel}
+  data-status-paid-label={statusPaidLabel}
+  data-status-site-provisioning-label={statusSiteProvisioningLabel}
+  data-status-site-ready-label={statusSiteReadyLabel}
+  data-status-published-label={statusPublishedLabel}
+  data-status-queued-label={statusQueuedLabel}
+  data-status-running-label={statusRunningLabel}
+  data-status-succeeded-label={statusSucceededLabel}
+  data-status-failed-label={statusFailedLabel}
+  data-status-cancelled-label={statusCancelledLabel}
+  data-loading-label={loadingLabel}
+  data-missing-place-id-label={missingPlaceIdLabel}
+  data-unavailable-label={unavailableLabel}
+  data-failed-label={failedLabel}
+  data-no-site-label={noSiteLabel}
+  data-pending-site-label={pendingSiteLabel}
+  data-repository-label={repositoryLabel}
+  data-project-label={projectLabel}
+  data-deployments-label={deploymentsLabel}
+  data-projects-heading-label={projectsHeadingLabel}
+  data-access-heading-label={accessHeadingLabel}
+  data-access-card-label={accessCardLabel}
+  data-access-first-name-label={accessFirstNameLabel}
+  data-access-last-name-label={accessLastNameLabel}
+  data-access-email-label={accessEmailLabel}
+  data-access-added-label={accessAddedLabel}
+  data-access-login-label={accessLoginLabel}
+  data-access-submit-label={accessSubmitLabel}
+  data-access-submitting-label={accessSubmittingLabel}
+  data-access-request-failed-label={accessRequestFailedLabel}
+>
+  <div class="hidden grid gap-6" data-my-site-grid>
+    <div class="grid gap-1">
+      <p class="text-sm text-muted-foreground" data-site-status></p>
+      <div class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-6">
+        <div class="min-w-0">
+          <h3 class="text-xl font-medium tracking-tight text-foreground" data-site-name></h3>
+          <p class="mt-1 text-sm text-muted-foreground" data-site-subtitle></p>
+        </div>
+        <span class="icon-[ph--circle-notch] mt-0.5 size-14 animate-spin text-ndex-green" data-site-status-icon></span>
+      </div>
+    </div>
+    <div class="grid gap-4" data-site-resource-list></div>
+  </div>
+</section>
+
+<template data-resource-card-template>
+  <article class="rounded-3xl border border-border/60 bg-background/60 p-5">
+    <div class="flex items-start justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <span class="icon-[ph--check-circle] size-5 flex-shrink-0 text-ndex-green" data-resource-leading-icon></span>
+        <h4 class="text-base font-medium tracking-tight text-foreground" data-resource-title></h4>
+      </div>
+      <span class="hidden size-5 flex-shrink-0 text-muted-foreground/25" data-resource-trailing-icon></span>
+    </div>
+    <div class="mt-3 grid gap-2 pl-8" data-resource-rows></div>
+  </article>
+</template>
+
+<script is:inline>
+  const summaries = document.querySelectorAll("[data-my-site-summary]");
+  const pollingIntervalMs = 4000;
+
+  function normalizeURL(value) {
+    const trimmed = String(value || "").trim();
+    if (!trimmed) {
+      return "";
+    }
+    return trimmed.startsWith("http://") || trimmed.startsWith("https://") ? trimmed : `https://${trimmed}`;
+  }
+
+  function readMetadataRecord(value) {
+    return value && typeof value === "object" && !Array.isArray(value) ? value : null;
+  }
+
+  function readMetadataString(record, key) {
+    if (!record || typeof record !== "object") {
+      return "";
+    }
+    const value = record[key];
+    return typeof value === "string" ? value.trim() : "";
+  }
+
+  function readMetadataStringList(record, key) {
+    if (!record || typeof record !== "object") {
+      return [];
+    }
+    const value = record[key];
+    return Array.isArray(value) ? value.filter((item) => typeof item === "string" && item.trim().length > 0).map((item) => item.trim()) : [];
+  }
+
+  function resolveDeploymentTimestamp(deployment) {
+    if (!deployment || typeof deployment !== "object") {
+      return "";
+    }
+    return String(deployment.completedAt || deployment.startedAt || deployment.createdAt || "").trim();
+  }
+
+  function buildDeploymentHistoryRows(deployments, provisioning) {
+    const rows = [];
+    const seen = new Set();
+
+    const stages = Array.isArray(provisioning?.stages) ? provisioning.stages : [];
+    const previewStage = stages.find((stage) => stage && typeof stage === "object" && stage.key === "vercel_preview_deployed" && stage.status === "completed");
+    const previewMetadata = previewStage && typeof previewStage.metadata === "object" ? previewStage.metadata : null;
+    const previewURLLabel = readMetadataString(previewMetadata, "vercelPreviewUrl");
+    const previewURL = normalizeURL(previewURLLabel);
+    const previewDeploymentID = readMetadataString(previewMetadata, "vercelPreviewDeploymentId");
+    const previewTimestamp = String(previewStage?.completedAt || previewStage?.startedAt || "").trim();
+    if (previewURL && previewURLLabel) {
+      seen.add(previewURL);
+      rows.push({
+        key: previewDeploymentID || previewURL,
+        href: previewURL,
+        label: previewURLLabel,
+        createdAt: previewTimestamp,
+      });
+    }
+
+    for (const deployment of Array.isArray(deployments) ? deployments : []) {
+      if (!deployment || typeof deployment !== "object" || String(deployment.status || "").trim() !== "succeeded") {
+        continue;
+      }
+      const deploymentLabel = readMetadataString(deployment.metadata, "vercelDeploymentUrl");
+      const deploymentURL = normalizeURL(deploymentLabel);
+      if (!deploymentURL || seen.has(deploymentURL)) {
+        continue;
+      }
+      seen.add(deploymentURL);
+      rows.push({
+        key: String(deployment.id || deploymentURL).trim(),
+        href: deploymentURL,
+        label: deploymentLabel,
+        createdAt: resolveDeploymentTimestamp(deployment),
+      });
+    }
+
+    rows.sort((left, right) => new Date(String(right.createdAt || "")).getTime() - new Date(String(left.createdAt || "")).getTime());
+    return rows.map((row, index) => ({
+      iconClass: "icon-[ph--git-commit]",
+      text: `v${index + 1} • ${row.label}`,
+      href: row.href,
+    }));
+  }
+
+  function createInfoRow({ iconClass, text, href, copyLabel, copyValue }) {
+    const row = document.createElement("div");
+    row.className = "flex items-start gap-2 text-sm text-foreground/80";
+
+    const icon = document.createElement("span");
+    icon.className = `${iconClass} mt-0.5 size-4 flex-shrink-0 text-muted-foreground`;
+    row.appendChild(icon);
+
+    const contentWrap = document.createElement("div");
+    contentWrap.className = "flex min-w-0 flex-1 items-center justify-between gap-3";
+
+    if (href) {
+      const link = document.createElement("a");
+      link.href = href;
+      link.target = "_blank";
+      link.rel = "noreferrer";
+      link.className = "truncate text-primary underline underline-offset-4";
+      link.textContent = text;
+      contentWrap.appendChild(link);
+    } else {
+      const content = document.createElement("span");
+      content.className = "truncate";
+      content.textContent = text;
+      contentWrap.appendChild(content);
+    }
+
+    if (copyLabel && copyValue) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "inline-flex flex-shrink-0 cursor-pointer items-center gap-1.5 text-sm font-medium text-muted-foreground transition hover:text-foreground";
+      button.innerHTML = '<span class="icon-[ph--copy] size-3.5"></span><span></span>';
+      const buttonIcon = button.querySelector("span:first-child");
+      const buttonLabel = button.querySelector("span:last-child");
+      if (buttonLabel instanceof HTMLSpanElement) {
+        buttonLabel.textContent = copyLabel;
+      }
+      let resetTimer = 0;
+      button.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(copyValue);
+          if (buttonIcon instanceof HTMLSpanElement) {
+            buttonIcon.className = "icon-[ph--check] size-4 flex-shrink-0 text-ndex-green";
+          }
+          if (buttonLabel instanceof HTMLSpanElement) {
+            buttonLabel.textContent = "copiado";
+          }
+          if (resetTimer) {
+            window.clearTimeout(resetTimer);
+          }
+          resetTimer = window.setTimeout(() => {
+            if (buttonIcon instanceof HTMLSpanElement) {
+              buttonIcon.className = "icon-[ph--copy] size-4 flex-shrink-0";
+            }
+            if (buttonLabel instanceof HTMLSpanElement) {
+              buttonLabel.textContent = copyLabel;
+            }
+            button.classList.remove("text-ndex-green");
+            resetTimer = 0;
+          }, 3000);
+          button.classList.add("text-ndex-green");
+        } catch {}
+      });
+      contentWrap.appendChild(button);
+    }
+
+    row.appendChild(contentWrap);
+    return row;
+  }
+
+  function renderSectionHeading(title) {
+    const heading = document.createElement("h3");
+    heading.className = "text-left text-lg font-medium tracking-tight text-foreground";
+    heading.textContent = title;
+    return heading;
+  }
+
+  function resolveLoginURL(detailURL) {
+    try {
+      return new URL("/sites", detailURL).toString();
+    } catch {
+      return "/sites";
+    }
+  }
+
+  function resolveCustomerAccessURL(detailURL) {
+    try {
+      return new URL("/api/public/spotren-sites/sites/checkouts/customer-access", detailURL).toString();
+    } catch {
+      return "/api/public/spotren-sites/sites/checkouts/customer-access";
+    }
+  }
+
+  function createLabeledInput(id, label, type, value, autocomplete) {
+    const field = document.createElement("label");
+    field.className = "grid gap-1.5 text-left";
+    field.htmlFor = id;
+
+    const text = document.createElement("span");
+    text.className = "text-sm font-medium text-foreground";
+    text.textContent = label;
+    field.appendChild(text);
+
+    const input = document.createElement("input");
+    input.id = id;
+    input.name = id;
+    input.type = type;
+    input.value = value;
+    input.required = true;
+    input.autocomplete = autocomplete;
+    input.className = "h-11 w-full rounded-2xl border border-border/70 bg-background/80 px-4 text-sm text-foreground outline-none transition placeholder:text-muted-foreground focus:border-ndex-green/70";
+    field.appendChild(input);
+
+    return { field, input };
+  }
+
+  function updateButtonEnabledState(button, form) {
+    if (!(button instanceof HTMLButtonElement) || !(form instanceof HTMLFormElement)) {
+      return;
+    }
+    button.disabled = !form.checkValidity();
+  }
+
+  function renderAccessCard(
+    template,
+    {
+      title,
+      emailValue,
+      firstNameValue,
+      lastNameValue,
+      firstNameLabel,
+      lastNameLabel,
+      emailLabel,
+      buttonLabel,
+      submittingLabel,
+      failedLabel,
+      loginURL,
+      showLoginAction,
+      requestURL,
+      checkoutId,
+      onSuccess,
+    },
+  ) {
+    const fragment = template.content.cloneNode(true);
+    const root = fragment.firstElementChild;
+    const titleNode = fragment.querySelector("[data-resource-title]");
+    const rowsNode = fragment.querySelector("[data-resource-rows]");
+    const leadingIcon = fragment.querySelector("[data-resource-leading-icon]");
+    if (
+      !(root instanceof HTMLElement) ||
+      !(titleNode instanceof HTMLElement) ||
+      !(rowsNode instanceof HTMLDivElement) ||
+      !(leadingIcon instanceof HTMLSpanElement)
+    ) {
+      return null;
+    }
+
+    titleNode.textContent = title;
+    leadingIcon.className = "icon-[ph--lock-open] size-5 flex-shrink-0 text-ndex-green";
+    rowsNode.className = "mt-3 grid gap-2";
+
+    if (showLoginAction) {
+      const link = document.createElement("a");
+      link.href = loginURL;
+      link.className = "inline-flex h-11 w-fit self-start items-center justify-center gap-2 rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground transition-[background-image,opacity] hover:bg-[linear-gradient(90deg,#3eed69_0%,#09cd3a_100%)]";
+      link.innerHTML = `<span>${buttonLabel}</span><span class="icon-[ph--arrow-right] size-4"></span>`;
+      rowsNode.appendChild(link);
+    } else {
+      const form = document.createElement("form");
+      form.className = "grid gap-3";
+      form.noValidate = true;
+
+      const firstNameField = createLabeledInput("givenName", firstNameLabel, "text", firstNameValue, "given-name");
+      const lastNameField = createLabeledInput("familyName", lastNameLabel, "text", lastNameValue, "family-name");
+      const emailField = createLabeledInput("email", emailLabel, "email", emailValue, "email");
+
+      const errorNode = document.createElement("p");
+      errorNode.className = "hidden text-sm text-destructive";
+
+      const submitButton = document.createElement("button");
+      submitButton.type = "submit";
+      submitButton.className = "inline-flex h-11 w-fit cursor-pointer items-center justify-center gap-2 rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground transition-[background-image,opacity] hover:bg-[linear-gradient(90deg,#3eed69_0%,#09cd3a_100%)] disabled:cursor-not-allowed disabled:opacity-70";
+      submitButton.innerHTML = `<span>${buttonLabel}</span><span class="icon-[ph--arrow-right] size-4"></span>`;
+      submitButton.disabled = true;
+
+      const nameRow = document.createElement("div");
+      nameRow.className = "grid gap-3 sm:grid-cols-2";
+      nameRow.append(firstNameField.field, lastNameField.field);
+
+      const actionRow = document.createElement("div");
+      actionRow.className = "grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end";
+      submitButton.className = "inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground transition-[background-image,opacity] hover:bg-[linear-gradient(90deg,#3eed69_0%,#09cd3a_100%)] disabled:cursor-not-allowed disabled:opacity-70 sm:w-fit";
+      actionRow.append(emailField.field, submitButton);
+
+      form.append(nameRow, actionRow, errorNode);
+      const syncSubmitState = () => updateButtonEnabledState(submitButton, form);
+      for (const input of [firstNameField.input, lastNameField.input, emailField.input]) {
+        input.addEventListener("input", syncSubmitState);
+        input.addEventListener("blur", syncSubmitState);
+      }
+      syncSubmitState();
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        errorNode.hidden = true;
+        errorNode.textContent = "";
+        if (!form.reportValidity()) {
+          return;
+        }
+        if (!requestURL || !checkoutId) {
+          errorNode.hidden = false;
+          errorNode.textContent = failedLabel;
+          return;
+        }
+
+        const payload = {
+          checkoutId,
+          email: emailField.input.value.trim(),
+          givenName: firstNameField.input.value.trim(),
+          familyName: lastNameField.input.value.trim(),
+        };
+
+        submitButton.disabled = true;
+        submitButton.innerHTML = `<span>${submittingLabel}</span><span class="icon-[ph--circle-notch] size-4 animate-spin"></span>`;
+        try {
+          const response = await fetch(requestURL, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          });
+          const responsePayload = await response.json().catch(() => null);
+          if (!response.ok) {
+            const message = String(responsePayload?.error?.message || failedLabel).trim() || failedLabel;
+            throw new Error(message);
+          }
+          if (typeof onSuccess === "function") {
+            await onSuccess();
+          }
+        } catch (error) {
+          errorNode.hidden = false;
+          errorNode.textContent = error instanceof Error && error.message ? error.message : failedLabel;
+        } finally {
+          submitButton.innerHTML = `<span>${buttonLabel}</span><span class="icon-[ph--arrow-right] size-4"></span>`;
+          syncSubmitState();
+        }
+      });
+
+      rowsNode.appendChild(form);
+    }
+
+    return root;
+  }
+
+  function renderResourceCard(template, title, rows, options = {}) {
+    const fragment = template.content.cloneNode(true);
+    const root = fragment.firstElementChild;
+    const titleNode = fragment.querySelector("[data-resource-title]");
+    const rowsNode = fragment.querySelector("[data-resource-rows]");
+    const leadingIcon = fragment.querySelector("[data-resource-leading-icon]");
+    const trailingIcon = fragment.querySelector("[data-resource-trailing-icon]");
+    if (
+      !(root instanceof HTMLElement) ||
+      !(titleNode instanceof HTMLElement) ||
+      !(rowsNode instanceof HTMLDivElement) ||
+      !(leadingIcon instanceof HTMLSpanElement) ||
+      !(trailingIcon instanceof HTMLSpanElement)
+    ) {
+      return null;
+    }
+
+    titleNode.textContent = title;
+    if (typeof options.leadingIconClass === "string" && options.leadingIconClass.trim()) {
+      leadingIcon.className = options.leadingIconClass.trim();
+    }
+    if (typeof options.trailingIconClass === "string" && options.trailingIconClass.trim()) {
+      trailingIcon.className = `${options.trailingIconClass.trim()} block size-5 flex-shrink-0 text-muted-foreground/25`;
+      trailingIcon.classList.remove("hidden");
+    }
+    for (const row of rows) {
+      rowsNode.appendChild(createInfoRow(row));
+    }
+    return root;
+  }
+
+  for (const summary of summaries) {
+    const detailURL = String(summary.getAttribute("data-detail-url") || "").trim();
+    let placeId = String(summary.getAttribute("data-place-id") || "").trim();
+    const pageIntroCreatingLabel = String(summary.getAttribute("data-page-intro-creating-label") || "").trim();
+    const pageIntroReadyLabel = String(summary.getAttribute("data-page-intro-ready-label") || "").trim();
+    const loadingLabel = String(summary.getAttribute("data-loading-label") || "Loading site...").trim();
+    const missingPlaceIdLabel = String(summary.getAttribute("data-missing-place-id-label") || "Place ID is missing.").trim();
+    const unavailableLabel = String(summary.getAttribute("data-unavailable-label") || "Site detail is unavailable right now.").trim();
+    const failedLabel = String(summary.getAttribute("data-failed-label") || "Unable to load site detail.").trim();
+    const noSiteLabel = String(summary.getAttribute("data-no-site-label") || "No site has been created yet.").trim();
+    const pendingSiteLabel = String(summary.getAttribute("data-pending-site-label") || "Site creation is still in progress.").trim();
+    const copyLinkLabel = String(summary.getAttribute("data-copy-link-label") || "Copy").trim();
+    const statusLabels = {
+      created: String(summary.getAttribute("data-status-created-label") || "Created").trim(),
+      checkout_completed: String(summary.getAttribute("data-status-checkout-completed-label") || "Checkout completed").trim(),
+      paid: String(summary.getAttribute("data-status-paid-label") || "Paid").trim(),
+      site_provisioning: String(summary.getAttribute("data-status-site-provisioning-label") || "Site provisioning").trim(),
+      site_ready: String(summary.getAttribute("data-status-site-ready-label") || "Site ready").trim(),
+      published: String(summary.getAttribute("data-status-published-label") || "Published").trim(),
+      queued: String(summary.getAttribute("data-status-queued-label") || "Queued").trim(),
+      running: String(summary.getAttribute("data-status-running-label") || "Running").trim(),
+      succeeded: String(summary.getAttribute("data-status-succeeded-label") || "Succeeded").trim(),
+      failed: String(summary.getAttribute("data-status-failed-label") || "Failed").trim(),
+      cancelled: String(summary.getAttribute("data-status-cancelled-label") || "Cancelled").trim(),
+    };
+    const repositoryLabel = String(summary.getAttribute("data-repository-label") || "GitHub Repository").trim();
+    const projectLabel = String(summary.getAttribute("data-project-label") || "Vercel Project").trim();
+    const deploymentsLabel = String(summary.getAttribute("data-deployments-label") || "Deployments").trim();
+    const projectsHeadingLabel = String(summary.getAttribute("data-projects-heading-label") || "Projects").trim();
+    const accessHeadingLabel = String(summary.getAttribute("data-access-heading-label") || "Access").trim();
+    const accessCardLabel = String(summary.getAttribute("data-access-card-label") || "Request access to projects").trim();
+    const accessFirstNameLabel = String(summary.getAttribute("data-access-first-name-label") || "First name").trim();
+    const accessLastNameLabel = String(summary.getAttribute("data-access-last-name-label") || "Last name").trim();
+    const accessEmailLabel = String(summary.getAttribute("data-access-email-label") || "Email").trim();
+    const accessAddedLabel = String(summary.getAttribute("data-access-added-label") || "The projects were added to your Spotren account").trim();
+    const accessLoginLabel = String(summary.getAttribute("data-access-login-label") || "Log in").trim();
+    const accessSubmitLabel = String(summary.getAttribute("data-access-submit-label") || "Request access").trim();
+    const accessSubmittingLabel = String(summary.getAttribute("data-access-submitting-label") || "Requesting...").trim();
+    const accessRequestFailedLabel = String(summary.getAttribute("data-access-request-failed-label") || "Unable to request project access.").trim();
+    const pageTitleIntro = document.querySelector("[data-my-site-page-title] .pro > p");
+
+    const grid = summary.querySelector("[data-my-site-grid]");
+    const siteStatus = summary.querySelector("[data-site-status]");
+    const siteName = summary.querySelector("[data-site-name]");
+    const siteSubtitle = summary.querySelector("[data-site-subtitle]");
+    const siteStatusIcon = summary.querySelector("[data-site-status-icon]");
+    const resourceList = summary.querySelector("[data-site-resource-list]");
+    const resourceTemplate = document.querySelector("[data-resource-card-template]");
+
+    if (
+      !(grid instanceof HTMLDivElement) ||
+      !(siteStatus instanceof HTMLParagraphElement) ||
+      !(siteName instanceof HTMLElement) ||
+      !(siteSubtitle instanceof HTMLParagraphElement) ||
+      !(siteStatusIcon instanceof HTMLSpanElement) ||
+      !(resourceList instanceof HTMLDivElement) ||
+      !(resourceTemplate instanceof HTMLTemplateElement)
+    ) {
+      continue;
+    }
+
+    let pollingTimer = 0;
+
+    const stopPolling = () => {
+      if (pollingTimer) {
+        window.clearTimeout(pollingTimer);
+        pollingTimer = 0;
+      }
+    };
+
+    const schedulePolling = () => {
+      stopPolling();
+      pollingTimer = window.setTimeout(() => {
+        void loadSiteDetail();
+      }, pollingIntervalMs);
+    };
+
+    const setStatus = (message) => {
+      grid.classList.remove("hidden");
+      siteStatus.hidden = false;
+      siteStatus.textContent = message;
+      siteName.textContent = "";
+      siteSubtitle.textContent = "";
+      siteStatusIcon.className = "icon-[ph--circle-notch] size-14 animate-spin text-ndex-green";
+      resourceList.innerHTML = "";
+    };
+
+    const resolveStatusLabel = (value) => {
+      const normalized = String(value || "").trim();
+      if (!normalized) {
+        return "";
+      }
+      return statusLabels[normalized] || normalized;
+    };
+
+    const renderResources = (payload) => {
+      const prospect = payload?.prospect && typeof payload.prospect === "object" ? payload.prospect : null;
+      const checkouts = Array.isArray(payload?.checkouts) ? payload.checkouts : [];
+      const latestEntryWithSite =
+        checkouts.find((item) => item && typeof item === "object" && item.site && typeof item.site === "object" && String(item.site.id || "").trim()) ||
+        checkouts[0] ||
+        null;
+      const latestEntry = latestEntryWithSite && typeof latestEntryWithSite === "object" ? latestEntryWithSite : null;
+      const site = latestEntry?.site && typeof latestEntry.site === "object" ? latestEntry.site : null;
+      const provisioning = latestEntry?.provisioning && typeof latestEntry.provisioning === "object" ? latestEntry.provisioning : null;
+      const checkout = latestEntry?.checkout && typeof latestEntry.checkout === "object" ? latestEntry.checkout : null;
+      const deployments = Array.isArray(latestEntry?.deployments) ? latestEntry.deployments : [];
+      const siteStatusValue = typeof site?.status === "string" ? site.status.trim() : "";
+      const checkoutStatus = typeof checkout?.status === "string" ? checkout.status.trim() : "";
+      const provisioningStatus = typeof provisioning?.runStatus === "string" ? provisioning.runStatus.trim() : "";
+      const companyName = typeof prospect?.basicData?.companyName === "string" ? prospect.basicData.companyName.trim() : "";
+      const checkoutMetadata = readMetadataRecord(checkout?.metadataSnapshot);
+
+      if (!site || !String(site.id || "").trim()) {
+        const waitingStatuses = new Set(["created", "checkout_completed", "paid", "site_provisioning"]);
+        if (waitingStatuses.has(checkoutStatus)) {
+          schedulePolling();
+          grid.classList.remove("hidden");
+          siteStatus.hidden = true;
+          siteStatus.textContent = "";
+          siteName.textContent = companyName || "Site";
+          siteSubtitle.textContent = resolveStatusLabel(checkoutStatus || provisioningStatus);
+          siteStatusIcon.className = "icon-[ph--circle-notch] size-14 animate-spin text-ndex-green";
+          resourceList.innerHTML = "";
+          if (pageTitleIntro instanceof HTMLParagraphElement && pageIntroCreatingLabel) {
+            pageTitleIntro.textContent = pageIntroCreatingLabel;
+          }
+        } else {
+          stopPolling();
+          setStatus(noSiteLabel);
+        }
+        return;
+      }
+      const siteDisplayName = typeof site.name === "string" && site.name.trim().length > 0 ? site.name.trim() : companyName || "Site";
+
+      const production = readMetadataRecord(readMetadataRecord(site.metadata)?.managedDeployments)?.production;
+      const productionRecord = readMetadataRecord(production);
+      const productionURL = normalizeURL(readMetadataString(productionRecord, "url"));
+      const aliases = readMetadataStringList(productionRecord, "aliases");
+      const hasPublishedSite = siteStatusValue === "published";
+      const hasSucceededProvisioning = provisioningStatus === "succeeded";
+      const hasReadyDeployment = Boolean(productionURL || aliases.length > 0);
+      const effectivelyReady = checkoutStatus === "site_ready" || hasPublishedSite || hasSucceededProvisioning || hasReadyDeployment;
+
+      if (effectivelyReady) {
+        stopPolling();
+        siteStatusIcon.className = "icon-[ph--check-circle] size-14 text-ndex-green";
+        siteStatus.hidden = true;
+        siteStatus.textContent = "";
+        if (pageTitleIntro instanceof HTMLParagraphElement && pageIntroReadyLabel) {
+          pageTitleIntro.textContent = pageIntroReadyLabel;
+        }
+      } else {
+        schedulePolling();
+        siteStatusIcon.className = "icon-[ph--circle-notch] size-14 animate-spin text-ndex-green";
+        siteStatus.hidden = false;
+        siteStatus.textContent = pendingSiteLabel;
+        if (pageTitleIntro instanceof HTMLParagraphElement && pageIntroCreatingLabel) {
+          pageTitleIntro.textContent = pageIntroCreatingLabel;
+        }
+      }
+      grid.classList.remove("hidden");
+      siteName.textContent = siteDisplayName;
+      siteSubtitle.textContent = resolveStatusLabel(siteStatusValue || checkoutStatus || provisioningStatus);
+
+      const inspectorURL = normalizeURL(readMetadataString(productionRecord, "inspectorUrl"));
+      const githubOwner = typeof site.githubRepoOwner === "string" ? site.githubRepoOwner.trim() : "";
+      const githubRepoName = typeof site.githubRepoName === "string" ? site.githubRepoName.trim() : "";
+      const githubBranch = typeof site.githubBranch === "string" ? site.githubBranch.trim() : "";
+      const githubURL = githubOwner && githubRepoName ? `https://github.com/${githubOwner}/${githubRepoName}` : "";
+      const vercelProjectName = typeof site.vercelProjectName === "string" ? site.vercelProjectName.trim() : "";
+      const vercelProjectId = typeof site.vercelProjectId === "string" ? site.vercelProjectId.trim() : "";
+      const checkoutCustomerEmail =
+        readMetadataString(checkoutMetadata, "spotren_customer_email") ||
+        readMetadataString(checkoutMetadata, "customer_email") ||
+        readMetadataString(checkoutMetadata, "email");
+      const checkoutCustomerName =
+        readMetadataString(checkoutMetadata, "spotren_customer_name") ||
+        readMetadataString(checkoutMetadata, "customer_name") ||
+        readMetadataString(checkoutMetadata, "name");
+      const [checkoutFirstName, ...checkoutLastNameParts] = String(checkoutCustomerName || "").trim().split(/\s+/).filter(Boolean);
+      const checkoutLastName = checkoutLastNameParts.join(" ");
+      const hasAssignedCustomerUser = Boolean(String(prospect?.assignedCustomerUserId || "").trim());
+
+      const repositoryRows = [];
+      if (githubOwner || githubRepoName) {
+        repositoryRows.push({
+          iconClass: "icon-[ph--git-branch]",
+          text: githubRepoName || githubOwner,
+          href: githubURL || "",
+        });
+      }
+      if (githubBranch) {
+        repositoryRows.push({
+          iconClass: "icon-[ph--git-commit]",
+          text: githubBranch,
+          href: "",
+        });
+      }
+
+      const projectRows = [];
+      if (vercelProjectName || vercelProjectId) {
+        projectRows.push({
+          iconClass: "icon-[ph--app-window]",
+          text: vercelProjectName || vercelProjectId,
+          href: inspectorURL || "",
+        });
+      }
+
+      const deploymentRows = [];
+      const primaryAlias = aliases[0] ? normalizeURL(aliases[0]) : "";
+      const primaryAliasLabel = aliases[0] || "";
+      if (primaryAlias || productionURL) {
+        deploymentRows.push({
+          iconClass: "icon-[ph--arrow-up-right]",
+          text: primaryAliasLabel || productionURL.replace(/^https?:\/\//, ""),
+          href: primaryAlias || productionURL,
+          copyLabel: copyLinkLabel,
+          copyValue: primaryAlias || productionURL,
+        });
+      }
+      deploymentRows.push(...buildDeploymentHistoryRows(deployments, provisioning));
+
+      resourceList.innerHTML = "";
+      if (deploymentRows.length) {
+        const deploymentCard = renderResourceCard(resourceTemplate, deploymentsLabel, deploymentRows);
+        if (deploymentCard) {
+          resourceList.appendChild(deploymentCard);
+        }
+      }
+
+      const projectCards = [];
+      if (repositoryRows.length) {
+        projectCards.push(renderResourceCard(resourceTemplate, repositoryLabel, repositoryRows, {
+          trailingIconClass: "icon-[ph--lock-key]",
+        }));
+      }
+      if (projectRows.length) {
+        projectCards.push(renderResourceCard(resourceTemplate, projectLabel, projectRows, {
+          trailingIconClass: "icon-[ph--lock-key]",
+        }));
+      }
+      const visibleProjectCards = projectCards.filter(Boolean);
+      if (visibleProjectCards.length) {
+        resourceList.appendChild(renderSectionHeading(projectsHeadingLabel));
+        for (const card of visibleProjectCards) {
+          resourceList.appendChild(card);
+        }
+      }
+
+      if (effectivelyReady) {
+        resourceList.appendChild(renderSectionHeading(accessHeadingLabel));
+        const accessCard = renderAccessCard(
+          resourceTemplate,
+          {
+            title: hasAssignedCustomerUser ? accessAddedLabel : accessCardLabel,
+            emailValue: checkoutCustomerEmail,
+            firstNameValue: checkoutFirstName || "",
+            lastNameValue: checkoutLastName || "",
+            firstNameLabel: accessFirstNameLabel,
+            lastNameLabel: accessLastNameLabel,
+            emailLabel: accessEmailLabel,
+            buttonLabel: hasAssignedCustomerUser ? accessLoginLabel : accessSubmitLabel,
+            submittingLabel: accessSubmittingLabel,
+            failedLabel: accessRequestFailedLabel,
+            loginURL: resolveLoginURL(detailURL),
+            showLoginAction: hasAssignedCustomerUser,
+            requestURL: resolveCustomerAccessURL(detailURL),
+            checkoutId: typeof checkout?.id === "string" ? checkout.id.trim() : "",
+            onSuccess: loadSiteDetail,
+          },
+        );
+        if (accessCard) {
+          resourceList.appendChild(accessCard);
+        }
+      }
+    };
+
+    const loadSiteDetail = async () => {
+      const response = await fetch(`${detailURL}?placeId=${encodeURIComponent(placeId)}`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      });
+      const payload = await response.json().catch(() => null);
+      if (!response.ok) {
+        throw new Error(String(payload?.error?.message || failedLabel));
+      }
+      renderResources(payload);
+    };
+
+    if (!placeId) {
+      try {
+        placeId = new URL(window.location.href).searchParams.get("gmn")?.trim() || "";
+      } catch {
+        placeId = "";
+      }
+    }
+
+    if (!placeId) {
+      setStatus(missingPlaceIdLabel);
+      continue;
+    }
+    if (!detailURL) {
+      setStatus(unavailableLabel);
+      continue;
+    }
+
+    setStatus(loadingLabel);
+    void loadSiteDetail().catch((error) => {
+      setStatus(error instanceof Error && error.message ? error.message : failedLabel);
+    });
+
+    window.addEventListener("beforeunload", stopPolling, { once: true });
+  }
+</script>

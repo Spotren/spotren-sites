@@ -104,7 +104,25 @@ const {
         autocomplete="off"
         data-place-input
       />
-      <p class="mt-2 hidden text-sm text-red-500" data-place-error></p>
+      <div
+        class="fixed left-1/2 top-4 z-50 hidden w-[min(92vw,32rem)] -translate-x-1/2 rounded-2xl border border-red-500/20 bg-red-500/15 px-4 py-3 shadow-[0_16px_48px_rgba(0,0,0,0.28)] backdrop-blur-md"
+        data-place-error
+        role="alert"
+        aria-live="polite"
+      >
+        <div class="flex items-start gap-3">
+          <span class="icon-[ph--warning-circle] mt-0.5 h-5 w-5 shrink-0 text-red-200"></span>
+          <p class="min-w-0 flex-1 text-sm leading-6 text-red-50/90" data-place-error-message></p>
+          <button
+            type="button"
+            class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-red-100/80 transition-colors hover:bg-white/10 hover:text-red-50"
+            aria-label="Fechar mensagem de erro"
+            data-place-error-dismiss
+          >
+            <span class="icon-[ph--x] h-4 w-4"></span>
+          </button>
+        </div>
+      </div>
     </div>
     <div class="hidden h-full flex-col items-center justify-center gap-3 sm:flex">
       <a
@@ -131,7 +149,7 @@ const {
       class="inline-flex h-10 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-full bg-primary px-4 text-sm font-medium text-primary-foreground transition-[background-image,opacity] hover:bg-[linear-gradient(90deg,#3eed69_0%,#09cd3a_100%)] disabled:cursor-not-allowed disabled:opacity-60"
       data-submit-button
     >
-      <span>{submitLabel}</span>
+      <span data-submit-button-text>{submitLabel}</span>
       <span class="icon-[ph--plus] h-4 w-4"></span>
     </button>
     </div>
@@ -167,9 +185,18 @@ const {
     const textarea = form.querySelector("[data-place-input]");
     const hiddenPlaceIdField = form.querySelector("[data-place-id-field]");
     const submitButton = form.querySelector("[data-submit-button]");
+    const submitButtonText = form.querySelector("[data-submit-button-text]");
     const errorElement = form.querySelector("[data-place-error]");
+    const errorDismissButton = form.querySelector("[data-place-error-dismiss]");
 
-    if (!(textarea instanceof HTMLInputElement) || !(hiddenPlaceIdField instanceof HTMLInputElement) || !(submitButton instanceof HTMLButtonElement) || !(errorElement instanceof HTMLParagraphElement)) {
+    if (
+      !(textarea instanceof HTMLInputElement) ||
+      !(hiddenPlaceIdField instanceof HTMLInputElement) ||
+      !(submitButton instanceof HTMLButtonElement) ||
+      !(submitButtonText instanceof HTMLSpanElement) ||
+      !(errorElement instanceof HTMLDivElement) ||
+      !(errorDismissButton instanceof HTMLButtonElement)
+    ) {
       continue;
     }
 
@@ -179,23 +206,35 @@ const {
     const createFailedMessage = String(form.getAttribute("data-create-failed-message") || "Unable to create the prospect from Google Maps input.").trim();
     const creatingLabel = String(form.getAttribute("data-creating-label") || "Preparing...").trim();
     const submitLabel = String(form.getAttribute("data-submit-label") || "Create site").trim();
+    const errorMessageElement = form.querySelector("[data-place-error-message]");
 
     const setBusy = (busy) => {
       submitButton.disabled = busy;
-      submitButton.textContent = busy ? creatingLabel : submitLabel;
+      submitButtonText.textContent = busy ? creatingLabel : submitLabel;
     };
 
     const setError = (message) => {
       if (!message) {
-        errorElement.textContent = "";
+        if (errorMessageElement instanceof HTMLParagraphElement) {
+          errorMessageElement.textContent = "";
+        }
         errorElement.classList.add("hidden");
         textarea.setAttribute("aria-invalid", "false");
         return;
       }
-      errorElement.textContent = message;
+      if (errorMessageElement instanceof HTMLParagraphElement) {
+        errorMessageElement.textContent = message;
+      } else {
+        errorElement.textContent = message;
+      }
       errorElement.classList.remove("hidden");
       textarea.setAttribute("aria-invalid", "true");
     };
+
+    errorDismissButton.addEventListener("click", () => {
+      setError("");
+      textarea.focus();
+    });
 
     textarea.addEventListener("input", () => setError(""));
 

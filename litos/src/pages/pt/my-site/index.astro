@@ -1,0 +1,59 @@
+---
+import Layout from '~/layouts/Layout.astro'
+import PageTitle from '~/components/base/PageTitle.astro'
+import MySiteResourceSummary from '~/components/base/MySiteResourceSummary.astro'
+
+const locale = 'pt'
+const title = 'Meu site'
+const description = 'Uma pagina dedicada ao seu site ndEX publicado.'
+const placeId = Astro.url.searchParams.get('gmn')?.trim() ?? ''
+const prospectDetailURL = import.meta.env.PUBLIC_SPOTREN_PROSPECT_DETAIL_URL?.trim() ?? 'https://app.localhost:3443/api/public/spotren-sites/prospects/by-place-id'
+---
+
+<Layout {title} {description} {locale}>
+  <div class="relative z-[1] py-8 pb-10 px-6 sm:px-8">
+    <div class="mx-auto max-w-3xl text-center">
+      <div data-my-site-page-title>
+        <PageTitle title={title} introduce="Seu site está sendo criado" />
+      </div>
+      <MySiteResourceSummary
+        detailURL={prospectDetailURL}
+        placeId={placeId}
+        pageIntroCreatingLabel="Seu site está sendo criado"
+        pageIntroReadyLabel="Seu site está pronto"
+        copyLinkLabel="copiar"
+        statusCreatedLabel="Criado"
+        statusCheckoutCompletedLabel="Checkout concluído"
+        statusPaidLabel="Pago"
+        statusSiteProvisioningLabel="Criando site"
+        statusSiteReadyLabel="Site pronto"
+        statusPublishedLabel="Publicado"
+        statusQueuedLabel="Na fila"
+        statusRunningLabel="Em andamento"
+        statusSucceededLabel="Concluído"
+        statusFailedLabel="Falhou"
+        statusCancelledLabel="Cancelado"
+        loadingLabel="Carregando recursos do site..."
+        missingPlaceIdLabel="Falta o placeId na URL."
+        unavailableLabel="Os dados do site estao indisponiveis agora."
+        failedLabel="Nao foi possivel carregar os dados do site."
+        noSiteLabel="Ainda nao existe um site criado para esta empresa."
+        pendingSiteLabel="A criacao do site ainda esta em andamento."
+        repositoryLabel="Repositório GitHub"
+        projectLabel="Projeto Vercel"
+        deploymentsLabel="Publicações"
+        projectsHeadingLabel="Projetos"
+        accessHeadingLabel="Acesso"
+        accessCardLabel="Solicite acesso aos projetos na Spotren"
+        accessFirstNameLabel="Primeiro nome"
+        accessLastNameLabel="Sobrenome"
+        accessEmailLabel="Email"
+        accessAddedLabel="Os projetos foram adicionados a sua conta Spotren"
+        accessLoginLabel="Fazer login"
+        accessSubmitLabel="Solicitar acesso"
+        accessSubmittingLabel="Solicitando..."
+        accessRequestFailedLabel="Nao foi possivel solicitar acesso aos projetos."
+      />
+    </div>
+  </div>
+</Layout>

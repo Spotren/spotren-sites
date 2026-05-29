@@ -1,0 +1,38 @@
+---
+import Layout from '~/layouts/Layout.astro'
+import { withLocalePath } from '~/lib/i18n'
+
+const locale = 'pt'
+const title = 'Checkout cancelado'
+const description = 'O checkout foi cancelado antes da confirmação do pagamento.'
+const homeURL = withLocalePath(locale, '/')
+---
+
+<Layout {title} {description} {locale}>
+  <div class="relative z-[1] flex min-h-[calc(100vh-10rem)] items-center justify-center px-6 py-16 sm:px-8">
+    <div class="w-full max-w-xl rounded-[32px] border border-border/70 bg-background/80 px-6 py-8 shadow-[0_18px_60px_rgba(0,0,0,0.18)] backdrop-blur-sm sm:px-8">
+      <div class="flex items-start gap-4">
+        <span class="flex size-12 shrink-0 items-center justify-center rounded-full border border-yellow-500/25 bg-yellow-500/10 text-yellow-300">
+          <span class="icon-[ph--x-circle] size-6"></span>
+        </span>
+        <div class="min-w-0">
+          <p class="text-sm font-medium uppercase tracking-[0.24em] text-muted-foreground">Spotren</p>
+          <h1 class="mt-2 text-3xl font-semibold tracking-tight text-foreground">Checkout cancelado</h1>
+          <p class="mt-3 text-sm leading-6 text-muted-foreground">
+            O fluxo de pagamento foi encerrado antes da conclusão. Você pode voltar ao início e tentar novamente quando quiser.
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+        <a
+          href={homeURL}
+          class="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground transition-[background-image,opacity] hover:bg-[linear-gradient(90deg,#3eed69_0%,#09cd3a_100%)]"
+        >
+          <span>Começar de novo</span>
+          <span class="icon-[ph--arrow-right] size-4"></span>
+        </a>
+      </div>
+    </div>
+  </div>
+</Layout>

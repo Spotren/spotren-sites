@@ -14,19 +14,23 @@ const prospectDetailURL = import.meta.env.PUBLIC_SPOTREN_PROSPECT_DETAIL_URL?.tr
 const checkoutURL = import.meta.env.PUBLIC_SPOTREN_CREATE_CHECKOUT_URL?.trim() ?? 'https://app.localhost:3443/api/public/spotren-sites/checkouts/from-place-id'
 const staticMapURL = import.meta.env.PUBLIC_SPOTREN_STATIC_MAP_URL?.trim() ?? 'https://app.localhost:3443/api/public/spotren-sites/maps/static'
 const homeURL = withLocalePath(locale, '/')
+const checkoutCancelURL = new URL(withLocalePath(locale, '/checkout/cancel'), Astro.url.origin).toString()
 const defaultSiteTemplateId = '86ef914e-fb4e-4228-b092-1170b2a86c74'
 const highlights = [
   {
-    icon: 'icon-[ph--rocket-launch]',
-    text: 'Site leve e rapido, pensado para carregar bem em dispositivos moveis.',
+    icon: 'icon-[ph--rocket]',
+    lead: 'Ultra-rápido',
+    text: 'Leve e veloz com Nota máxima 100/100 em performance',
   },
   {
-    icon: 'icon-[ph--globe-hemisphere-west]',
-    text: 'Estrutura clara para ajudar sua empresa a ser melhor entendida por buscadores e LLMs.',
+    icon: 'icon-[ph--tree]',
+    lead: 'Estruturado',
+    text: 'Sua empresa melhor entendida por buscadores e LLMs',
   },
   {
-    icon: 'icon-[ph--sparkle]',
-    text: 'Publicacao guiada, com menos atrito para colocar sua presenca no ar.',
+    icon: 'icon-[ph--git-branch]',
+    lead: 'Versionável',
+    text: 'Repositório GitHub para você modificar quando quiser',
   },
 ]
 ---
@@ -41,7 +45,10 @@ const highlights = [
       {highlights.map((item) => (
         <div class="flex flex-col items-center text-center">
           <span class:list={[item.icon, 'size-10 text-primary']}></span>
-          <p class="mt-4 max-w-xs text-sm leading-6 text-muted-foreground">{item.text}</p>
+          <p class="mt-4 max-w-xs text-sm leading-6 text-muted-foreground">
+            <span class="mb-1 block font-medium text-foreground">{item.lead}</span>
+            {item.text}
+          </p>
         </div>
       ))}
     </section>
@@ -50,6 +57,7 @@ const highlights = [
       defaultSiteTemplateId={defaultSiteTemplateId}
       detailURL={prospectDetailURL}
       checkoutURL={checkoutURL}
+      checkoutCancelURL={checkoutCancelURL}
       homeURL={homeURL}
       placeId={placeId}
       templatesHeadingLabel="Modelos prontos"
@@ -62,6 +70,14 @@ const highlights = [
       failedLabel="Nao foi possivel carregar os dados da empresa."
       companyNameLabel="Empresa"
       addressLabel="Endereco"
+      advantagesHeadingLabel="Vantagens"
+      advantagesItems={[
+        'Indexação otimizada',
+        'Hospedagem inclusa',
+        'Publicações gerenciadas',
+        'Projeto versionado',
+        'Domínio próprio',
+      ]}
       checkoutButtonLabel="Assinar"
       checkoutResumeButtonLabel="Assinar"
       checkoutCreatingLabel="Preparando checkout..."
@@ -76,6 +92,8 @@ const highlights = [
       checkoutStateUnknownLabel="O status do checkout foi atualizado."
       checkoutSiteReadyLabel="O checkout mais recente ja criou o site."
       checkoutFallbackLinkLabel="Abrir checkout manualmente"
+      mySiteURLBase="/pt/my-site"
+      mySiteLinkLabel="Ir para meu site"
       priceCurrencyLabel="R$"
       priceWholeLabel="35"
       priceFractionLabel="80"
@@ -84,7 +102,7 @@ const highlights = [
       mapAltLabel="Mapa da localizacao da empresa"
       mapUnavailableLabel="Mapa indisponivel."
       searchAgainLabel="Não é sua empresa? Busque novamente"
-      mapHeadlineLabel="Performance máxima no dispositivos móveis"
+      mapHeadlineLabel="Performance máxima nos dispositivos móveis"
     />
   </div>
 </Layout>

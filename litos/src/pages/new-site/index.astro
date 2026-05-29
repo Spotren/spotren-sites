@@ -14,18 +14,22 @@ const prospectDetailURL = import.meta.env.PUBLIC_SPOTREN_PROSPECT_DETAIL_URL?.tr
 const checkoutURL = import.meta.env.PUBLIC_SPOTREN_CREATE_CHECKOUT_URL?.trim() ?? 'https://app.localhost:3443/api/public/spotren-sites/checkouts/from-place-id'
 const staticMapURL = import.meta.env.PUBLIC_SPOTREN_STATIC_MAP_URL?.trim() ?? 'https://app.localhost:3443/api/public/spotren-sites/maps/static'
 const homeURL = withLocalePath(locale, '/')
+const checkoutCancelURL = new URL(withLocalePath(locale, '/checkout/cancel'), Astro.url.origin).toString()
 const defaultSiteTemplateId = '86ef914e-fb4e-4228-b092-1170b2a86c74'
 const highlights = [
   {
     icon: 'icon-[ph--rocket-launch]',
+    lead: 'Mobile-first',
     text: 'A lightweight, fast site designed to load well on mobile devices.',
   },
   {
     icon: 'icon-[ph--globe-hemisphere-west]',
+    lead: 'Structured',
     text: 'A clear structure that helps search engines and LLMs understand your business better.',
   },
   {
-    icon: 'icon-[ph--sparkle]',
+    icon: 'icon-[ph--git-branch]',
+    lead: 'Versionable',
     text: 'A guided publishing flow with less friction to get your presence online.',
   },
 ]
@@ -41,7 +45,10 @@ const highlights = [
       {highlights.map((item) => (
         <div class="flex flex-col items-center text-center">
           <span class:list={[item.icon, 'size-10 text-primary']}></span>
-          <p class="mt-4 max-w-xs text-sm leading-6 text-muted-foreground">{item.text}</p>
+          <p class="mt-4 max-w-xs text-sm leading-6 text-muted-foreground">
+            <span class="mb-1 block font-medium text-foreground">{item.lead}</span>
+            {item.text}
+          </p>
         </div>
       ))}
     </section>
@@ -50,6 +57,7 @@ const highlights = [
       defaultSiteTemplateId={defaultSiteTemplateId}
       detailURL={prospectDetailURL}
       checkoutURL={checkoutURL}
+      checkoutCancelURL={checkoutCancelURL}
       homeURL={homeURL}
       placeId={placeId}
       templatesHeadingLabel="Templates"
@@ -62,6 +70,14 @@ const highlights = [
       failedLabel="Unable to load business details."
       companyNameLabel="Company"
       addressLabel="Address"
+      advantagesHeadingLabel="Benefits"
+      advantagesItems={[
+        'Optimized indexing',
+        'Hosting included',
+        'Managed publishing',
+        'Versioned project',
+        'Custom domain',
+      ]}
       checkoutButtonLabel="Assinar"
       checkoutResumeButtonLabel="Assinar"
       checkoutCreatingLabel="Preparing checkout..."
@@ -76,6 +92,8 @@ const highlights = [
       checkoutStateUnknownLabel="Checkout status was updated."
       checkoutSiteReadyLabel="The latest checkout already created the site."
       checkoutFallbackLinkLabel="Open checkout manually"
+      mySiteURLBase="/my-site"
+      mySiteLinkLabel="Go to my site"
       priceCurrencyLabel="R$"
       priceWholeLabel="35"
       priceFractionLabel="80"
