@@ -28,11 +28,13 @@ interface Props {
   projectsHeadingLabel: string
   accessHeadingLabel: string
   accessCardLabel: string
+  accessCardDescription: string
   accessFirstNameLabel: string
   accessLastNameLabel: string
   accessEmailLabel: string
   accessAddedLabel: string
   accessLoginLabel: string
+  accessLoginCodeSentLabel: string
   accessSubmitLabel: string
   accessSubmittingLabel: string
   accessRequestFailedLabel: string
@@ -67,11 +69,13 @@ const {
   projectsHeadingLabel,
   accessHeadingLabel,
   accessCardLabel,
+  accessCardDescription,
   accessFirstNameLabel,
   accessLastNameLabel,
   accessEmailLabel,
   accessAddedLabel,
   accessLoginLabel,
+  accessLoginCodeSentLabel,
   accessSubmitLabel,
   accessSubmittingLabel,
   accessRequestFailedLabel,
@@ -109,11 +113,13 @@ const {
   data-projects-heading-label={projectsHeadingLabel}
   data-access-heading-label={accessHeadingLabel}
   data-access-card-label={accessCardLabel}
+  data-access-card-description={accessCardDescription}
   data-access-first-name-label={accessFirstNameLabel}
   data-access-last-name-label={accessLastNameLabel}
   data-access-email-label={accessEmailLabel}
   data-access-added-label={accessAddedLabel}
   data-access-login-label={accessLoginLabel}
+  data-access-login-code-sent-label={accessLoginCodeSentLabel}
   data-access-submit-label={accessSubmitLabel}
   data-access-submitting-label={accessSubmittingLabel}
   data-access-request-failed-label={accessRequestFailedLabel}
@@ -358,6 +364,7 @@ const {
     template,
     {
       title,
+      description,
       emailValue,
       firstNameValue,
       lastNameValue,
@@ -368,9 +375,12 @@ const {
       submittingLabel,
       failedLabel,
       loginURL,
+      loginCodeSentLabel,
+      showLoginHint,
       showLoginAction,
       requestURL,
       checkoutId,
+      onRequestSuccess,
       onSuccess,
     },
   ) {
@@ -392,15 +402,34 @@ const {
     leadingIcon.className = "icon-[ph--lock-open] size-5 flex-shrink-0 text-ndex-green";
     rowsNode.className = "mt-3 grid gap-2";
 
+    if (description) {
+      const descriptionNode = document.createElement("p");
+      descriptionNode.className = "mb-2 pl-8 text-sm leading-6 text-foreground/75";
+      descriptionNode.textContent = description;
+      rowsNode.appendChild(descriptionNode);
+    }
+
     if (showLoginAction) {
+      const actionWrap = document.createElement("div");
+      actionWrap.className = "grid gap-3 pl-8 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center";
+
       const link = document.createElement("a");
       link.href = loginURL;
       link.className = "inline-flex h-11 w-fit self-start items-center justify-center gap-2 rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground transition-[background-image,opacity] hover:bg-[linear-gradient(90deg,#3eed69_0%,#09cd3a_100%)]";
       link.innerHTML = `<span>${buttonLabel}</span><span class="icon-[ph--arrow-right] size-4"></span>`;
-      rowsNode.appendChild(link);
+      actionWrap.appendChild(link);
+
+      if (showLoginHint && loginCodeSentLabel) {
+        const hint = document.createElement("p");
+        hint.className = "flex items-center gap-2 text-sm leading-6 text-foreground/75";
+        hint.innerHTML = `<span class="icon-[ph--envelope-simple-open] size-4 flex-shrink-0 text-ndex-green"></span><span>${loginCodeSentLabel}</span>`;
+        actionWrap.appendChild(hint);
+      }
+
+      rowsNode.appendChild(actionWrap);
     } else {
       const form = document.createElement("form");
-      form.className = "grid gap-3";
+      form.className = "grid gap-3 pl-8";
       form.noValidate = true;
 
       const firstNameField = createLabeledInput("givenName", firstNameLabel, "text", firstNameValue, "given-name");
@@ -435,12 +464,14 @@ const {
       form.addEventListener("submit", async (event) => {
         event.preventDefault();
         errorNode.hidden = true;
+        errorNode.classList.add("hidden");
         errorNode.textContent = "";
         if (!form.reportValidity()) {
           return;
         }
         if (!requestURL || !checkoutId) {
           errorNode.hidden = false;
+          errorNode.classList.remove("hidden");
           errorNode.textContent = failedLabel;
           return;
         }
@@ -467,11 +498,15 @@ const {
             const message = String(responsePayload?.error?.message || failedLabel).trim() || failedLabel;
             throw new Error(message);
           }
+          if (typeof onRequestSuccess === "function") {
+            onRequestSuccess();
+          }
           if (typeof onSuccess === "function") {
             await onSuccess();
           }
         } catch (error) {
           errorNode.hidden = false;
+          errorNode.classList.remove("hidden");
           errorNode.textContent = error instanceof Error && error.message ? error.message : failedLabel;
         } finally {
           submitButton.innerHTML = `<span>${buttonLabel}</span><span class="icon-[ph--arrow-right] size-4"></span>`;
@@ -533,12 +568,14 @@ const {
       checkout_completed: String(summary.getAttribute("data-status-checkout-completed-label") || "Checkout completed").trim(),
       paid: String(summary.getAttribute("data-status-paid-label") || "Paid").trim(),
       site_provisioning: String(summary.getAttribute("data-status-site-provisioning-label") || "Site provisioning").trim(),
+      provisioning: String(summary.getAttribute("data-status-site-provisioning-label") || "Site provisioning").trim(),
       site_ready: String(summary.getAttribute("data-status-site-ready-label") || "Site ready").trim(),
       published: String(summary.getAttribute("data-status-published-label") || "Published").trim(),
       queued: String(summary.getAttribute("data-status-queued-label") || "Queued").trim(),
       running: String(summary.getAttribute("data-status-running-label") || "Running").trim(),
       succeeded: String(summary.getAttribute("data-status-succeeded-label") || "Succeeded").trim(),
       failed: String(summary.getAttribute("data-status-failed-label") || "Failed").trim(),
+      provisioning_failed: String(summary.getAttribute("data-status-failed-label") || "Failed").trim(),
       cancelled: String(summary.getAttribute("data-status-cancelled-label") || "Cancelled").trim(),
     };
     const repositoryLabel = String(summary.getAttribute("data-repository-label") || "GitHub Repository").trim();
@@ -547,11 +584,13 @@ const {
     const projectsHeadingLabel = String(summary.getAttribute("data-projects-heading-label") || "Projects").trim();
     const accessHeadingLabel = String(summary.getAttribute("data-access-heading-label") || "Access").trim();
     const accessCardLabel = String(summary.getAttribute("data-access-card-label") || "Request access to projects").trim();
+    const accessCardDescription = String(summary.getAttribute("data-access-card-description") || "").trim();
     const accessFirstNameLabel = String(summary.getAttribute("data-access-first-name-label") || "First name").trim();
     const accessLastNameLabel = String(summary.getAttribute("data-access-last-name-label") || "Last name").trim();
     const accessEmailLabel = String(summary.getAttribute("data-access-email-label") || "Email").trim();
     const accessAddedLabel = String(summary.getAttribute("data-access-added-label") || "The projects were added to your Spotren account").trim();
     const accessLoginLabel = String(summary.getAttribute("data-access-login-label") || "Log in").trim();
+    const accessLoginCodeSentLabel = String(summary.getAttribute("data-access-login-code-sent-label") || "").trim();
     const accessSubmitLabel = String(summary.getAttribute("data-access-submit-label") || "Request access").trim();
     const accessSubmittingLabel = String(summary.getAttribute("data-access-submitting-label") || "Requesting...").trim();
     const accessRequestFailedLabel = String(summary.getAttribute("data-access-request-failed-label") || "Unable to request project access.").trim();
@@ -578,6 +617,7 @@ const {
     }
 
     let pollingTimer = 0;
+    let accessRequestJustCompleted = false;
 
     const stopPolling = () => {
       if (pollingTimer) {
@@ -772,6 +812,7 @@ const {
           resourceTemplate,
           {
             title: hasAssignedCustomerUser ? accessAddedLabel : accessCardLabel,
+            description: hasAssignedCustomerUser ? "" : accessCardDescription,
             emailValue: checkoutCustomerEmail,
             firstNameValue: checkoutFirstName || "",
             lastNameValue: checkoutLastName || "",
@@ -782,9 +823,14 @@ const {
             submittingLabel: accessSubmittingLabel,
             failedLabel: accessRequestFailedLabel,
             loginURL: resolveLoginURL(detailURL),
+            loginCodeSentLabel: accessLoginCodeSentLabel,
+            showLoginHint: hasAssignedCustomerUser && accessRequestJustCompleted,
             showLoginAction: hasAssignedCustomerUser,
             requestURL: resolveCustomerAccessURL(detailURL),
             checkoutId: typeof checkout?.id === "string" ? checkout.id.trim() : "",
+            onRequestSuccess: () => {
+              accessRequestJustCompleted = true;
+            },
             onSuccess: loadSiteDetail,
           },
         );

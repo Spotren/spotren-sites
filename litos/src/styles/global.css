@@ -30,6 +30,7 @@
   --color-tag-text: hsl(var(--tag-text));
   --color-scrollbar: hsl(var(--scrollbar));
   --color-scrollbar-bg: hsl(var(--scrollbar-bg));
+  --color-ndex-green: #09cd3a;
 }
 
 /* ===== 字体配置 ===== */
