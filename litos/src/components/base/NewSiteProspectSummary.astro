@@ -234,8 +234,13 @@ const {
         <p class="mb-3 text-sm text-muted-foreground hidden" data-checkout-state></p>
         {
           turnstileSiteKey ? (
-            <div class="mb-4 overflow-hidden rounded-2xl border border-border/60 bg-background/60 px-4 py-4">
-              <div class="cf-turnstile" data-sitekey={turnstileSiteKey}></div>
+            <div class="sr-only" aria-hidden="true">
+              <div
+                class="cf-turnstile"
+                data-sitekey={turnstileSiteKey}
+                data-size="invisible"
+                data-execution="execute"
+              ></div>
             </div>
           ) : null
         }
@@ -288,6 +293,26 @@ const {
 {turnstileSiteKey ? <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script> : null}
 
 <script is:inline>
+  function waitForTurnstileToken(scope, timeoutMs = 8000) {
+    return new Promise((resolve, reject) => {
+      const startedAt = Date.now();
+      const poll = () => {
+        const turnstileField = scope.querySelector('input[name="cf-turnstile-response"]');
+        const token = turnstileField instanceof HTMLInputElement ? turnstileField.value.trim() : "";
+        if (token) {
+          resolve(token);
+          return;
+        }
+        if (Date.now() - startedAt >= timeoutMs) {
+          reject(new Error("turnstile_timeout"));
+          return;
+        }
+        window.setTimeout(poll, 120);
+      };
+      poll();
+    });
+  }
+
   const templateSections = document.querySelectorAll("[data-site-templates]");
   for (const section of templateSections) {
     const templatesURL = String(section.getAttribute("data-templates-url") || "").trim();
@@ -785,11 +810,23 @@ const {
           currentURL.searchParams.set("gmn", placeId);
         }
         const cancelURL = checkoutCancelURL || new URL("/checkout/cancel", window.location.origin).toString();
+        let turnstileToken = "";
         const turnstileField = summary.querySelector('input[name="cf-turnstile-response"]');
-        const turnstileToken = turnstileField instanceof HTMLInputElement ? turnstileField.value.trim() : "";
-        if (turnstileSiteKey && !turnstileToken) {
-          setCheckoutError(verificationMessage);
-          return;
+        const turnstileWidget = summary.querySelector(".cf-turnstile");
+        turnstileToken = turnstileField instanceof HTMLInputElement ? turnstileField.value.trim() : "";
+        if (turnstileWidget) {
+          if (!turnstileToken) {
+            if (typeof window.turnstile?.execute !== "function") {
+              setCheckoutError(verificationMessage);
+              return;
+            }
+            window.turnstile.execute(turnstileWidget);
+            turnstileToken = await waitForTurnstileToken(summary).catch(() => "");
+          }
+          if (!turnstileToken) {
+            setCheckoutError(verificationMessage);
+            return;
+          }
         }
         const response = await fetch(checkoutURL, {
           method: "POST",
@@ -823,6 +860,12 @@ const {
       } catch {
         setCheckoutError(checkoutFailedLabel);
       } finally {
+        if (typeof window.turnstile?.reset === "function") {
+          const turnstileWidget = summary.querySelector(".cf-turnstile");
+          if (turnstileWidget) {
+            window.turnstile.reset(turnstileWidget);
+          }
+        }
         setCheckoutBusy(false);
       }
     });
