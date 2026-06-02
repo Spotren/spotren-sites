@@ -1,0 +1,31 @@
+---
+import Layout from '~/layouts/Layout.astro'
+import PageTitle from '~/components/base/PageTitle.astro'
+import PayOkSummary from '~/components/base/PayOkSummary.astro'
+
+const locale = 'en'
+const title = 'Payment Confirmed'
+const description = 'Your payment was completed successfully.'
+const payOkToken = Astro.url.searchParams.get('t')?.trim() ?? ''
+const payOkDetailURL = import.meta.env.PUBLIC_SPOTREN_PAY_OK_DETAIL_URL?.trim() ?? 'https://app.localhost:3443/api/public/spotren-sites/pay-ok/by-token'
+---
+
+<Layout {title} {description} {locale}>
+  <div class="relative z-[1] py-8 pb-10 px-6 sm:px-8">
+    <div class="mx-auto max-w-3xl text-center">
+      <PageTitle
+        title={title}
+        introduce="Your payment was completed successfully"
+      />
+      <PayOkSummary
+        detailURL={payOkDetailURL}
+        payOkToken={payOkToken}
+        loadingLabel="Loading payment details..."
+        unavailableLabel="Payment details are unavailable right now."
+        failedLabel="Unable to load payment details."
+        invoiceLinkLabel="Open receipt"
+        invoicePendingLabel="Your payment was confirmed. The receipt link will appear here when it becomes available."
+      />
+    </div>
+  </div>
+</Layout>

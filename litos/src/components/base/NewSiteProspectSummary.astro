@@ -14,7 +14,8 @@ interface Props {
   templatesEmptyLabel: string
   loadingLabel: string
   missingPlaceIdLabel: string
-  sessionInvalidLabel: string
+  sessionInvalidPrefixLabel: string
+  sessionInvalidLinkLabel: string
   unavailableLabel: string
   failedLabel: string
   companyNameLabel: string
@@ -35,8 +36,9 @@ interface Props {
   checkoutStateUnknownLabel: string
   checkoutSiteReadyLabel: string
   checkoutFallbackLinkLabel: string
-  mySiteURLBase: string
-  mySiteLinkLabel: string
+  appURL: string
+  existingSiteLabel: string
+  existingSiteLinkLabel: string
   verificationMessage: string
   priceCurrencyLabel: string
   priceWholeLabel: string
@@ -64,7 +66,8 @@ const {
   templatesEmptyLabel,
   loadingLabel,
   missingPlaceIdLabel,
-  sessionInvalidLabel,
+  sessionInvalidPrefixLabel,
+  sessionInvalidLinkLabel,
   unavailableLabel,
   failedLabel,
   companyNameLabel,
@@ -85,8 +88,9 @@ const {
   checkoutStateUnknownLabel,
   checkoutSiteReadyLabel,
   checkoutFallbackLinkLabel,
-  mySiteURLBase,
-  mySiteLinkLabel,
+  appURL,
+  existingSiteLabel,
+  existingSiteLinkLabel,
   verificationMessage,
   priceCurrencyLabel,
   priceWholeLabel,
@@ -109,7 +113,8 @@ const {
   data-home-url={homeURL}
   data-loading-label={loadingLabel}
   data-missing-place-id-label={missingPlaceIdLabel}
-  data-session-invalid-label={sessionInvalidLabel}
+  data-session-invalid-prefix-label={sessionInvalidPrefixLabel}
+  data-session-invalid-link-label={sessionInvalidLinkLabel}
   data-unavailable-label={unavailableLabel}
   data-failed-label={failedLabel}
   data-checkout-url={checkoutURL}
@@ -128,8 +133,9 @@ const {
   data-checkout-state-unknown-label={checkoutStateUnknownLabel}
   data-checkout-site-ready-label={checkoutSiteReadyLabel}
   data-checkout-fallback-link-label={checkoutFallbackLinkLabel}
-  data-my-site-url-base={mySiteURLBase}
-  data-my-site-link-label={mySiteLinkLabel}
+  data-app-url={appURL}
+  data-existing-site-label={existingSiteLabel}
+  data-existing-site-link-label={existingSiteLinkLabel}
   data-verification-message={verificationMessage}
   data-turnstile-site-key={turnstileSiteKey}
   data-static-map-url={staticMapURL}
@@ -140,12 +146,12 @@ const {
     {loadingLabel}
   </p>
   <div
-    class="mt-4 hidden rounded-3xl border border-border/60 bg-background/60 px-5 py-5 text-left shadow-sm"
+    class="mx-auto mt-4 hidden w-full max-w-3xl rounded-3xl border border-border/60 bg-background/60 px-5 py-5 text-left shadow-sm"
     data-prospect-error-card
     role="status"
     aria-live="polite"
   >
-    <div class="flex items-start gap-3">
+    <div class="flex items-start justify-center gap-3">
       <span class="icon-[ph--info] mt-0.5 size-5 flex-shrink-0 text-muted-foreground"></span>
       <p class="text-sm leading-6 text-foreground/80" data-prospect-error-card-message></p>
     </div>
@@ -252,7 +258,6 @@ const {
               <div
                 class="cf-turnstile"
                 data-sitekey={turnstileSiteKey}
-                data-size="invisible"
                 data-execution="execute"
               ></div>
             </div>
@@ -291,7 +296,7 @@ const {
             class="text-primary underline underline-offset-4"
             data-my-site-link
           >
-            {mySiteLinkLabel}
+            {existingSiteLinkLabel}
           </a>
         </p>
         <p
@@ -476,13 +481,15 @@ const {
   for (const summary of summaries) {
     const defaultSiteTemplateId = String(summary.getAttribute("data-default-site-template-id") || "").trim();
     const detailURL = String(summary.getAttribute("data-detail-url") || "").trim();
+    const homeURL = String(summary.getAttribute("data-home-url") || "/").trim();
     const initialSessionToken = String(summary.getAttribute("data-session-token") || "").trim();
     let sessionToken = initialSessionToken;
     let placeId = "";
     let selectedSiteTemplateId = String(summary.getAttribute("data-selected-site-template-id") || defaultSiteTemplateId).trim();
     const loadingLabel = String(summary.getAttribute("data-loading-label") || "Loading prospect...").trim();
     const missingPlaceIdLabel = String(summary.getAttribute("data-missing-place-id-label") || "Public session is missing.").trim();
-    const sessionInvalidLabel = String(summary.getAttribute("data-session-invalid-label") || "This public session is invalid or expired. Start again from the search page.").trim();
+    const sessionInvalidPrefixLabel = String(summary.getAttribute("data-session-invalid-prefix-label") || "This public session is invalid or expired. Start again from the").trim();
+    const sessionInvalidLinkLabel = String(summary.getAttribute("data-session-invalid-link-label") || "search page").trim();
     const unavailableLabel = String(summary.getAttribute("data-unavailable-label") || "Prospect detail is unavailable right now.").trim();
     const failedLabel = String(summary.getAttribute("data-failed-label") || "Unable to load prospect detail.").trim();
     const checkoutURL = String(summary.getAttribute("data-checkout-url") || "").trim();
@@ -499,8 +506,9 @@ const {
     const checkoutStateCancelledLabel = String(summary.getAttribute("data-checkout-state-cancelled-label") || "Checkout was cancelled.").trim();
     const checkoutStateUnknownLabel = String(summary.getAttribute("data-checkout-state-unknown-label") || "Checkout status updated.").trim();
     const checkoutFallbackLinkLabel = String(summary.getAttribute("data-checkout-fallback-link-label") || "Open checkout manually").trim();
-    const mySiteURLBase = String(summary.getAttribute("data-my-site-url-base") || "/my-site").trim();
-    const mySiteLinkLabel = String(summary.getAttribute("data-my-site-link-label") || "Go to my site").trim();
+    const appURL = String(summary.getAttribute("data-app-url") || "").trim();
+    const existingSiteLabel = String(summary.getAttribute("data-existing-site-label") || "This site already exists. Sign in to your Spotren account to follow it there.").trim();
+    const existingSiteLinkLabel = String(summary.getAttribute("data-existing-site-link-label") || "Open Spotren app").trim();
     const verificationMessage = String(summary.getAttribute("data-verification-message") || "Complete the verification challenge and try again.").trim();
     const turnstileSiteKey = String(summary.getAttribute("data-turnstile-site-key") || "").trim();
     const staticMapURL = String(summary.getAttribute("data-static-map-url") || "").trim();
@@ -571,7 +579,27 @@ const {
       checkoutState.classList.add("hidden");
       checkoutLinkRow.classList.add("hidden");
       mySiteRow.classList.add("hidden");
-      mapColumn.classList.add("hidden");
+      mapColumn.hidden = true;
+    };
+    const showSessionInvalidCard = () => {
+      stopPolling();
+      status.classList.add("hidden");
+      status.textContent = "";
+      errorCardMessage.textContent = "";
+      const prefix = document.createTextNode(`${sessionInvalidPrefixLabel} `);
+      const link = document.createElement("a");
+      link.href = homeURL;
+      link.className = "font-medium text-primary underline underline-offset-4";
+      link.textContent = sessionInvalidLinkLabel;
+      errorCardMessage.append(prefix, link, document.createTextNode("."));
+      errorCard.classList.remove("hidden");
+      grid.classList.add("hidden");
+      checkoutActions.classList.add("hidden");
+      checkoutError.classList.add("hidden");
+      checkoutState.classList.add("hidden");
+      checkoutLinkRow.classList.add("hidden");
+      mySiteRow.classList.add("hidden");
+      mapColumn.hidden = true;
     };
 
     const assignText = (selector, value) => {
@@ -604,21 +632,15 @@ const {
       checkoutLink.textContent = checkoutFallbackLinkLabel;
       checkoutLinkRow.classList.remove("hidden");
     };
-    const setMySiteLink = (visible) => {
-      if (!visible || (!sessionToken && !placeId)) {
+    const setExistingSiteLink = (visible) => {
+      if (!visible || !appURL) {
         mySiteLink.href = "#";
-        mySiteLink.textContent = mySiteLinkLabel;
+        mySiteLink.textContent = existingSiteLinkLabel;
         mySiteRow.classList.add("hidden");
         return;
       }
-      const nextURL = new URL(mySiteURLBase, window.location.origin);
-      if (sessionToken) {
-        nextURL.searchParams.set("ps", sessionToken);
-      } else {
-        nextURL.searchParams.set("gmn", placeId);
-      }
-      mySiteLink.href = nextURL.toString();
-      mySiteLink.textContent = mySiteLinkLabel;
+      mySiteLink.href = appURL;
+      mySiteLink.textContent = existingSiteLinkLabel;
       mySiteRow.classList.remove("hidden");
     };
     const setCheckoutState = (message) => {
@@ -714,7 +736,7 @@ const {
       checkoutButtonText.textContent = checkoutButtonLabel;
       setCheckoutState("");
       setCheckoutLink(activeCheckoutURL);
-      setMySiteLink(false);
+      setExistingSiteLink(false);
       stopPolling();
 
       if (latestStatus === "created" || latestStatus === "checkout_completed") {
@@ -729,9 +751,9 @@ const {
         checkoutPrimaryRow.classList.add("hidden");
         schedulePolling();
       } else if (effectivelyReady) {
-        setCheckoutState("");
+        setCheckoutState(existingSiteLabel);
         setCheckoutLink("");
-        setMySiteLink(true);
+        setExistingSiteLink(true);
         checkoutButton.classList.add("hidden");
         checkoutPrimaryRow.classList.add("hidden");
       } else if (latestStatus === "site_provisioning") {
@@ -799,7 +821,7 @@ const {
       status.classList.add("hidden");
       hideErrorCard();
       grid.classList.remove("hidden");
-      mapColumn.classList.remove("hidden");
+      mapColumn.hidden = false;
       checkoutActions.classList.remove("hidden");
       applyCheckoutState(payload);
     };
@@ -825,20 +847,20 @@ const {
     }
 
     hideErrorCard();
-    mapColumn.classList.add("hidden");
+    mapColumn.hidden = true;
     status.textContent = loadingLabel;
     status.classList.remove("hidden");
 
     void loadProspectDetail().catch((error) => {
       if (error && typeof error === "object" && error.code === "session_invalid") {
-        showErrorCard(sessionInvalidLabel);
+        showSessionInvalidCard();
         return;
       }
       status.textContent = error && typeof error === "object" && typeof error.message === "string"
         ? error.message
         : unavailableLabel;
       status.classList.remove("hidden");
-      mapColumn.classList.add("hidden");
+      mapColumn.hidden = true;
     });
 
     checkoutButton.addEventListener("click", async () => {
@@ -856,12 +878,8 @@ const {
           window.location.assign(activeCheckoutURL);
           return;
         }
-        const currentURL = new URL(mySiteURLBase, window.location.origin);
-        if (sessionToken) {
-          currentURL.searchParams.set("ps", sessionToken);
-        } else {
-          currentURL.searchParams.set("gmn", placeId);
-        }
+        const currentPath = window.location.pathname.startsWith("/pt/") ? "/pt/pay-ok" : "/pay-ok";
+        const currentURL = new URL(currentPath, window.location.origin);
         const cancelURL = checkoutCancelURL || new URL("/checkout/cancel", window.location.origin).toString();
         let turnstileToken = "";
         const turnstileField = summary.querySelector('input[name="cf-turnstile-response"]');

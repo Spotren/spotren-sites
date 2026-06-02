@@ -1,0 +1,128 @@
+---
+interface Props {
+  detailURL: string
+  payOkToken: string
+  loadingLabel: string
+  unavailableLabel: string
+  failedLabel: string
+  invoiceLinkLabel: string
+  invoicePendingLabel: string
+}
+
+const {
+  detailURL,
+  payOkToken,
+  loadingLabel,
+  unavailableLabel,
+  failedLabel,
+  invoiceLinkLabel,
+  invoicePendingLabel,
+} = Astro.props
+---
+
+<section
+  class="mt-6"
+  data-pay-ok-summary
+  data-detail-url={detailURL}
+  data-pay-ok-token={payOkToken}
+  data-loading-label={loadingLabel}
+  data-unavailable-label={unavailableLabel}
+  data-failed-label={failedLabel}
+  data-invoice-link-label={invoiceLinkLabel}
+  data-invoice-pending-label={invoicePendingLabel}
+>
+  <p class="text-sm text-muted-foreground" data-pay-ok-status>
+    {loadingLabel}
+  </p>
+  <p class="mt-4 hidden text-sm" data-pay-ok-invoice-row>
+    <a
+      href="#"
+      class="text-primary underline underline-offset-4"
+      target="_blank"
+      rel="noreferrer"
+      data-pay-ok-invoice-link
+    >
+      {invoiceLinkLabel}
+    </a>
+  </p>
+</section>
+
+<script is:inline>
+  const summaries = document.querySelectorAll("[data-pay-ok-summary]");
+
+  for (const summary of summaries) {
+    const detailURL = String(summary.getAttribute("data-detail-url") || "").trim();
+    let payOkToken = String(summary.getAttribute("data-pay-ok-token") || "").trim();
+    const loadingLabel = String(summary.getAttribute("data-loading-label") || "Loading payment details...").trim();
+    const unavailableLabel = String(summary.getAttribute("data-unavailable-label") || "Payment details are unavailable right now.").trim();
+    const failedLabel = String(summary.getAttribute("data-failed-label") || "Unable to load payment details.").trim();
+    const invoiceLinkLabel = String(summary.getAttribute("data-invoice-link-label") || "Open invoice").trim();
+    const invoicePendingLabel = String(summary.getAttribute("data-invoice-pending-label") || "Your payment was confirmed. The receipt link will appear here when it becomes available.").trim();
+
+    const status = summary.querySelector("[data-pay-ok-status]");
+    const invoiceRow = summary.querySelector("[data-pay-ok-invoice-row]");
+    const invoiceLink = summary.querySelector("[data-pay-ok-invoice-link]");
+
+    if (
+      !(status instanceof HTMLParagraphElement) ||
+      !(invoiceRow instanceof HTMLParagraphElement) ||
+      !(invoiceLink instanceof HTMLAnchorElement)
+    ) {
+      continue;
+    }
+
+    if (!payOkToken) {
+      try {
+        const currentURL = new URL(window.location.href);
+        payOkToken = currentURL.searchParams.get("t")?.trim() || "";
+      } catch {
+        payOkToken = "";
+      }
+    }
+
+    if (!payOkToken) {
+      status.textContent = failedLabel;
+      continue;
+    }
+    if (!detailURL) {
+      status.textContent = unavailableLabel;
+      continue;
+    }
+
+    const loadPaymentDetail = async () => {
+      const requestURL = new URL(detailURL, window.location.origin);
+      requestURL.searchParams.set("token", payOkToken);
+      const response = await fetch(requestURL.toString(), {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      });
+      const payload = await response.json().catch(() => null);
+      if (!response.ok) {
+        throw new Error(String(payload?.error?.message || failedLabel));
+      }
+
+      const checkout = payload?.checkout && typeof payload.checkout === "object" ? payload.checkout : null;
+      const hostedInvoiceURL = typeof checkout?.hostedInvoiceUrl === "string" ? checkout.hostedInvoiceUrl.trim() : "";
+      const invoicePdfURL = typeof checkout?.invoicePdfUrl === "string" ? checkout.invoicePdfUrl.trim() : "";
+      const receiptURL = hostedInvoiceURL || invoicePdfURL;
+
+      status.textContent = invoicePendingLabel;
+      if (!receiptURL) {
+        invoiceRow.classList.add("hidden");
+        return;
+      }
+
+      invoiceLink.href = receiptURL;
+      invoiceLink.textContent = invoiceLinkLabel;
+      invoiceRow.classList.remove("hidden");
+    };
+
+    status.textContent = loadingLabel;
+    void loadPaymentDetail().catch((error) => {
+      status.textContent = error instanceof Error && error.message ? error.message : failedLabel;
+      invoiceRow.classList.add("hidden");
+    });
+  }
+</script>
