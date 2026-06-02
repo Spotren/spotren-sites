@@ -35,7 +35,8 @@ interface Props {
   checkoutStateCancelledLabel: string
   checkoutStateUnknownLabel: string
   checkoutSiteReadyLabel: string
-  checkoutFallbackLinkLabel: string
+  checkoutSelfLinkLabel: string
+  checkoutCustomerLinkLabel: string
   appURL: string
   existingSiteLabel: string
   existingSiteLinkLabel: string
@@ -87,7 +88,8 @@ const {
   checkoutStateCancelledLabel,
   checkoutStateUnknownLabel,
   checkoutSiteReadyLabel,
-  checkoutFallbackLinkLabel,
+  checkoutSelfLinkLabel,
+  checkoutCustomerLinkLabel,
   appURL,
   existingSiteLabel,
   existingSiteLinkLabel,
@@ -132,7 +134,8 @@ const {
   data-checkout-state-cancelled-label={checkoutStateCancelledLabel}
   data-checkout-state-unknown-label={checkoutStateUnknownLabel}
   data-checkout-site-ready-label={checkoutSiteReadyLabel}
-  data-checkout-fallback-link-label={checkoutFallbackLinkLabel}
+  data-checkout-self-link-label={checkoutSelfLinkLabel}
+  data-checkout-customer-link-label={checkoutCustomerLinkLabel}
   data-app-url={appURL}
   data-existing-site-label={existingSiteLabel}
   data-existing-site-link-label={existingSiteLinkLabel}
@@ -287,7 +290,16 @@ const {
             class="text-primary underline underline-offset-4"
             data-checkout-link
           >
-            {checkoutFallbackLinkLabel}
+            {checkoutSelfLinkLabel}
+          </a>
+        </p>
+        <p class="mt-2 hidden text-sm" data-checkout-customer-link-row>
+          <a
+            href="#"
+            class="text-primary underline underline-offset-4"
+            data-checkout-customer-link
+          >
+            {checkoutCustomerLinkLabel}
           </a>
         </p>
         <p class="mt-3 hidden text-sm" data-my-site-row>
@@ -505,7 +517,8 @@ const {
     const checkoutStateFailedLabel = String(summary.getAttribute("data-checkout-state-failed-label") || "Checkout failed.").trim();
     const checkoutStateCancelledLabel = String(summary.getAttribute("data-checkout-state-cancelled-label") || "Checkout was cancelled.").trim();
     const checkoutStateUnknownLabel = String(summary.getAttribute("data-checkout-state-unknown-label") || "Checkout status updated.").trim();
-    const checkoutFallbackLinkLabel = String(summary.getAttribute("data-checkout-fallback-link-label") || "Open checkout manually").trim();
+    const checkoutSelfLinkLabel = String(summary.getAttribute("data-checkout-self-link-label") || "Open checkout for me").trim();
+    const checkoutCustomerLinkLabel = String(summary.getAttribute("data-checkout-customer-link-label") || "Send checkout to customer").trim();
     const appURL = String(summary.getAttribute("data-app-url") || "").trim();
     const existingSiteLabel = String(summary.getAttribute("data-existing-site-label") || "This site already exists. Sign in to your Spotren account to follow it there.").trim();
     const existingSiteLinkLabel = String(summary.getAttribute("data-existing-site-link-label") || "Open Spotren app").trim();
@@ -527,6 +540,8 @@ const {
     const checkoutState = summary.querySelector("[data-checkout-state]");
     const checkoutLinkRow = summary.querySelector("[data-checkout-link-row]");
     const checkoutLink = summary.querySelector("[data-checkout-link]");
+    const checkoutCustomerLinkRow = summary.querySelector("[data-checkout-customer-link-row]");
+    const checkoutCustomerLink = summary.querySelector("[data-checkout-customer-link]");
     const mySiteRow = summary.querySelector("[data-my-site-row]");
     const mySiteLink = summary.querySelector("[data-my-site-link]");
     const mapColumn = summary.querySelector("[data-map-column]");
@@ -547,6 +562,8 @@ const {
       !(checkoutState instanceof HTMLParagraphElement) ||
       !(checkoutLinkRow instanceof HTMLParagraphElement) ||
       !(checkoutLink instanceof HTMLAnchorElement) ||
+      !(checkoutCustomerLinkRow instanceof HTMLParagraphElement) ||
+      !(checkoutCustomerLink instanceof HTMLAnchorElement) ||
       !(mySiteRow instanceof HTMLParagraphElement) ||
       !(mySiteLink instanceof HTMLAnchorElement) ||
       !(mapColumn instanceof HTMLDivElement) ||
@@ -578,6 +595,7 @@ const {
       checkoutError.classList.add("hidden");
       checkoutState.classList.add("hidden");
       checkoutLinkRow.classList.add("hidden");
+      checkoutCustomerLinkRow.classList.add("hidden");
       mySiteRow.classList.add("hidden");
       mapColumn.hidden = true;
     };
@@ -598,6 +616,7 @@ const {
       checkoutError.classList.add("hidden");
       checkoutState.classList.add("hidden");
       checkoutLinkRow.classList.add("hidden");
+      checkoutCustomerLinkRow.classList.add("hidden");
       mySiteRow.classList.add("hidden");
       mapColumn.hidden = true;
     };
@@ -621,16 +640,22 @@ const {
       checkoutError.textContent = message;
       checkoutError.classList.remove("hidden");
     };
-    const setCheckoutLink = (url) => {
+    const setCheckoutLinks = (url) => {
       if (!url) {
         checkoutLink.href = "#";
-        checkoutLink.textContent = checkoutFallbackLinkLabel;
+        checkoutLink.textContent = checkoutSelfLinkLabel;
         checkoutLinkRow.classList.add("hidden");
+        checkoutCustomerLink.href = "#";
+        checkoutCustomerLink.textContent = checkoutCustomerLinkLabel;
+        checkoutCustomerLinkRow.classList.add("hidden");
         return;
       }
       checkoutLink.href = url;
-      checkoutLink.textContent = checkoutFallbackLinkLabel;
+      checkoutLink.textContent = checkoutSelfLinkLabel;
       checkoutLinkRow.classList.remove("hidden");
+      checkoutCustomerLink.href = url;
+      checkoutCustomerLink.textContent = checkoutCustomerLinkLabel;
+      checkoutCustomerLinkRow.classList.remove("hidden");
     };
     const setExistingSiteLink = (visible) => {
       if (!visible || !appURL) {
@@ -735,7 +760,7 @@ const {
       checkoutPrimaryRow.classList.remove("hidden");
       checkoutButtonText.textContent = checkoutButtonLabel;
       setCheckoutState("");
-      setCheckoutLink(activeCheckoutURL);
+      setCheckoutLinks(activeCheckoutURL);
       setExistingSiteLink(false);
       stopPolling();
 
@@ -752,7 +777,7 @@ const {
         schedulePolling();
       } else if (effectivelyReady) {
         setCheckoutState(existingSiteLabel);
-        setCheckoutLink("");
+        setCheckoutLinks("");
         setExistingSiteLink(true);
         checkoutButton.classList.add("hidden");
         checkoutPrimaryRow.classList.add("hidden");
@@ -874,8 +899,7 @@ const {
 
       try {
         if (activeCheckoutURL) {
-          setCheckoutLink(activeCheckoutURL);
-          window.location.assign(activeCheckoutURL);
+          setCheckoutLinks(activeCheckoutURL);
           return;
         }
         const currentPath = window.location.pathname.startsWith("/pt/") ? "/pt/pay-ok" : "/pay-ok";
@@ -926,8 +950,7 @@ const {
           return;
         }
         activeCheckoutURL = redirectURL;
-        setCheckoutLink(redirectURL);
-        window.location.assign(redirectURL);
+        setCheckoutLinks(redirectURL);
       } catch {
         setCheckoutError(checkoutFailedLabel);
       } finally {

@@ -39,13 +39,29 @@
   "newSite": {
     "title": "Almost there",
     "description": "A dedicated page for creating an ndEX website.",
-    "introduce": "This page gathers the business details, checkout flow, and next steps to create a site."
+    "introduce": "This page gathers the business details, checkout flow, and next steps to create a site.",
+    "sessionInvalidPrefixLabel": "This session is invalid or has expired. Start again from the",
+    "sessionInvalidLinkLabel": "search page",
+    "existingSiteLabel": "This site already exists. Sign in to your Spotren account to follow it there.",
+    "existingSiteLinkLabel": "Open Spotren app",
+    "checkoutSelfLinkLabel": "Open checkout for me",
+    "checkoutCustomerLinkLabel": "Send checkout to customer"
+  },
+  "mySite": {
+    "title": "My Site",
+    "description": "A dedicated page for your published ndEX site.",
+    "introduce": "Your time ran out :(",
+    "sessionInvalidPrefixLabel": "This session is invalid or has expired. Start again from the",
+    "sessionInvalidLinkLabel": "search page",
+    "appCardLabel": "Already created your Spotren account? Follow along in the app",
+    "appCardLinkLabel": "Open Spotren app"
   },
   "home": {
     "title": "ndEX",
     "subtitle": "Site for optimized indexing for SMBs",
     "intro": "An SEO method for local businesses that creates fast, intelligent websites with structured information that improves indexing and semantic understanding in LLMs.",
     "socialLabel": "followers",
+    "gmnReportLabel": "Free: GMN profile report",
     "sitesTitle": "Sites",
     "sitesDescription": "Sites created in the last year:",
     "skillsTitle": "Otimização",

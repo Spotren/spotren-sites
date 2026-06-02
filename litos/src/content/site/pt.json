@@ -39,13 +39,29 @@
   "newSite": {
     "title": "Seu site será único",
     "description": "Uma pagina dedicada para criar um site ndEX.",
-    "introduce": "Você está a um passo de publicar seu site"
+    "introduce": "Você está a um passo de publicar seu site",
+    "sessionInvalidPrefixLabel": "Esta sessão é inválida ou acabou expirando. Comece novamente pela",
+    "sessionInvalidLinkLabel": "página de busca",
+    "existingSiteLabel": "Este site já existe. Entre na sua conta Spotren para acompanhar por lá.",
+    "existingSiteLinkLabel": "Abrir app Spotren",
+    "checkoutSelfLinkLabel": "Abrir checkout para mim",
+    "checkoutCustomerLinkLabel": "Enviar checkout ao cliente"
+  },
+  "mySite": {
+    "title": "Meu site",
+    "description": "Uma pagina dedicada ao seu site ndEX publicado.",
+    "introduce": "Seu tempo acabou :(",
+    "sessionInvalidPrefixLabel": "Esta sessão é inválida ou acabou expirando. Comece novamente pela",
+    "sessionInvalidLinkLabel": "página de busca",
+    "appCardLabel": "Já criou sua conta Spotren? Acompanhe pelo app",
+    "appCardLinkLabel": "Abrir app Spotren"
   },
   "home": {
     "title": "ndEX",
-    "subtitle": "Indexação otimizada de Negócios Locais",
-    "intro": "O ndEX estrutura e esquematiza as informações do seu perfil comercial em um site simples e veloz, otimizando a indexação nos buscadores e o entendimento semântico em agentes de <abbr title=\"Inteligência Artificial\">IA</abbr>",
+    "subtitle": "Indexação otimizada para Negócios Locais",
+    "intro": "O ndEX transforma informação de perfis comerciais locais em sites velozes, estruturados e otimizados para indexação em buscadores inteligentes e <abbr title=\"Large Language Models\">LLMs</abbr>.",
     "socialLabel": "seguidores",
+    "gmnReportLabel": "Crie sites para revenda <br>com desconto de 47%",
     "sitesTitle": "Utilização",
     "sitesDescription": "Sites criados no último ano:",
     "skillsTitle": "Otimização",

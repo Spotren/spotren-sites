@@ -18,6 +18,22 @@ type NewSiteConfig = {
   title: string
   description: string
   introduce: string
+  sessionInvalidPrefixLabel: string
+  sessionInvalidLinkLabel: string
+  existingSiteLabel: string
+  existingSiteLinkLabel: string
+  checkoutSelfLinkLabel: string
+  checkoutCustomerLinkLabel: string
+}
+
+type MySiteConfig = {
+  title: string
+  description: string
+  introduce: string
+  sessionInvalidPrefixLabel: string
+  sessionInvalidLinkLabel: string
+  appCardLabel: string
+  appCardLinkLabel: string
 }
 
 type HomeConfig = {
@@ -25,6 +41,7 @@ type HomeConfig = {
   subtitle: string
   intro: string
   socialLabel: string
+  gmnReportLabel: string
   sitesTitle: string
   sitesDescription: string
   skillsTitle: string
@@ -90,6 +107,7 @@ type LocaleConfig = {
   PROJECTS_CONFIG: ProjectConfig
   CASES_CONFIG: CasesConfig
   NEW_SITE_CONFIG: NewSiteConfig
+  MY_SITE_CONFIG: MySiteConfig
   ANALYTICS_CONFIG: AnalyticsConfig
   HOME_CONFIG: HomeConfig
   UI: UiConfig
@@ -109,7 +127,7 @@ const SHARED_SOCIAL_LINKS: SocialLink[] = [
     name: 'github',
     url: 'https://github.com/Spotren',
     icon: 'icon-[ri--github-fill]',
-    count: 0,
+    count: 24,
   },
   {
     name: 'linkedin',
@@ -233,6 +251,12 @@ export function getLocaleConfig(locale: SiteLocale = defaultSiteLocale): LocaleC
     title: siteData.newSite.title,
     description: siteData.newSite.description,
     introduce: siteData.newSite.introduce,
+    sessionInvalidPrefixLabel: siteData.newSite.sessionInvalidPrefixLabel,
+    sessionInvalidLinkLabel: siteData.newSite.sessionInvalidLinkLabel,
+    existingSiteLabel: siteData.newSite.existingSiteLabel,
+    existingSiteLinkLabel: siteData.newSite.existingSiteLinkLabel,
+    checkoutSelfLinkLabel: siteData.newSite.checkoutSelfLinkLabel,
+    checkoutCustomerLinkLabel: siteData.newSite.checkoutCustomerLinkLabel,
   }
 
   const COMMENT_CONFIG: CommentConfig = {
@@ -258,6 +282,7 @@ export function getLocaleConfig(locale: SiteLocale = defaultSiteLocale): LocaleC
     subtitle: siteData.home.subtitle,
     intro: siteData.home.intro,
     socialLabel: siteData.home.socialLabel,
+    gmnReportLabel: siteData.home.gmnReportLabel,
     sitesTitle: siteData.home.sitesTitle,
     sitesDescription: siteData.home.sitesDescription,
     skillsTitle: siteData.home.skillsTitle,
@@ -311,17 +336,25 @@ export function getLocaleConfig(locale: SiteLocale = defaultSiteLocale): LocaleC
     heatmapSitePlural: siteData.ui.heatmapSitePlural,
   }
 
+  const MY_SITE_CONFIG: MySiteConfig = {
+    title: siteData.mySite.title,
+    description: siteData.mySite.description,
+    introduce: siteData.mySite.introduce,
+    sessionInvalidPrefixLabel: siteData.mySite.sessionInvalidPrefixLabel,
+    sessionInvalidLinkLabel: siteData.mySite.sessionInvalidLinkLabel,
+    appCardLabel: siteData.mySite.appCardLabel,
+    appCardLinkLabel: siteData.mySite.appCardLinkLabel,
+  }
+
   return {
     SITE,
     HEADER_LINKS: [
-      { name: siteData.header.casesLabel, url: withLocalePath(locale, '/cases') },
       { name: POSTS_CONFIG.title, url: withLocalePath(locale, '/posts') },
     ],
     FOOTER_LINKS: [
       { name: HOME_CONFIG.title, url: withLocalePath(locale, '/') },
       { name: POSTS_CONFIG.title, url: withLocalePath(locale, '/posts') },
       { name: TAGS_CONFIG.title, url: withLocalePath(locale, '/tags') },
-      { name: CASES_CONFIG.title, url: withLocalePath(locale, '/cases') },
     ],
     SOCIAL_LINKS: SHARED_SOCIAL_LINKS,
     SKILLSSHOWCASE_CONFIG,
@@ -332,6 +365,7 @@ export function getLocaleConfig(locale: SiteLocale = defaultSiteLocale): LocaleC
     PROJECTS_CONFIG,
     CASES_CONFIG,
     NEW_SITE_CONFIG,
+    MY_SITE_CONFIG,
     ANALYTICS_CONFIG,
     HOME_CONFIG,
     UI,
