@@ -6,8 +6,9 @@ import MySiteResourceSummary from '~/components/base/MySiteResourceSummary.astro
 const locale = 'en'
 const title = 'My Site'
 const description = 'A dedicated page for your published ndEX site.'
-const placeId = Astro.url.searchParams.get('gmn')?.trim() ?? ''
+const sessionToken = Astro.url.searchParams.get('ps')?.trim() ?? ''
 const prospectDetailURL = import.meta.env.PUBLIC_SPOTREN_PROSPECT_DETAIL_URL?.trim() ?? 'https://app.localhost:3443/api/public/spotren-sites/prospects/by-place-id'
+const turnstileSiteKey = import.meta.env.PUBLIC_SPOTREN_TURNSTILE_SITE_KEY?.trim() ?? ''
 ---
 
 <Layout {title} {description} {locale}>
@@ -18,7 +19,8 @@ const prospectDetailURL = import.meta.env.PUBLIC_SPOTREN_PROSPECT_DETAIL_URL?.tr
       </div>
       <MySiteResourceSummary
         detailURL={prospectDetailURL}
-        placeId={placeId}
+        sessionToken={sessionToken}
+        turnstileSiteKey={turnstileSiteKey}
         pageIntroCreatingLabel="Your site is being created"
         pageIntroReadyLabel="Your site is ready"
         copyLinkLabel="copy"
@@ -34,7 +36,7 @@ const prospectDetailURL = import.meta.env.PUBLIC_SPOTREN_PROSPECT_DETAIL_URL?.tr
         statusFailedLabel="Failed"
         statusCancelledLabel="Cancelled"
         loadingLabel="Loading site resources..."
-        missingPlaceIdLabel="Missing placeId in the URL."
+        missingPlaceIdLabel="Missing public session in the URL."
         unavailableLabel="Site details are unavailable right now."
         failedLabel="Unable to load site details."
         noSiteLabel="No site has been created for this business yet."
@@ -55,6 +57,7 @@ const prospectDetailURL = import.meta.env.PUBLIC_SPOTREN_PROSPECT_DETAIL_URL?.tr
         accessSubmitLabel="Request access"
         accessSubmittingLabel="Requesting..."
         accessRequestFailedLabel="Unable to request project access."
+        verificationMessage="Complete the verification challenge and try again."
       />
     </div>
   </div>

@@ -19,6 +19,7 @@ const { size, type } = POSTS_CONFIG.homePageConfig
 const { SKILLS_ENABLED, SKILLS_DATA } = SKILLSSHOWCASE_CONFIG
 const repoHeatmapData = normalizeRepoHeatmapSnapshot(rawGithubRepoHeatmap)
 const createProspectURL = import.meta.env.PUBLIC_SPOTREN_CREATE_PROSPECT_URL?.trim() ?? 'https://app.localhost:3443/api/public/spotren-sites/prospects/from-gmn'
+const turnstileSiteKey = import.meta.env.PUBLIC_SPOTREN_TURNSTILE_SITE_KEY?.trim() ?? ''
 const mapsHelpURL = import.meta.env.PUBLIC_SPOTREN_MAPS_HELP_URL?.trim() ?? '#'
 const googleMapsURL = import.meta.env.PUBLIC_SPOTREN_GOOGLE_MAPS_URL?.trim() ?? 'https://www.google.com/maps'
 const createBusinessURL = import.meta.env.PUBLIC_SPOTREN_CREATE_BUSINESS_URL?.trim() ?? 'https://business.google.com/create/new'
@@ -48,6 +49,7 @@ if (hasPinnedPosts) {
       <PlaceResolveLaunchForm
         action="/pt/new-site"
         createProspectURL={createProspectURL}
+        turnstileSiteKey={turnstileSiteKey}
         helpURL={mapsHelpURL}
         mapsURL={googleMapsURL}
         createBusinessURL={createBusinessURL}
@@ -56,6 +58,7 @@ if (hasPinnedPosts) {
         submitLabel="Criar site"
         creatingLabel="Preparando..."
         invalidURLMessage="Use uma URL valida do perfil da empresa no Google Maps."
+        verificationMessage="Conclua a verificacao e tente novamente."
         unavailableMessage="O resolvedor de locais esta indisponivel agora."
         createFailedMessage="Nao foi possivel resolver a URL do Google Maps."
         helpLabel="Veja como copiar o link"

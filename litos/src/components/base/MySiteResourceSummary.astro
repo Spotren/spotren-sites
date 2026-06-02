@@ -1,7 +1,8 @@
 ---
 interface Props {
   detailURL: string
-  placeId: string
+  sessionToken: string
+  turnstileSiteKey?: string
   pageIntroCreatingLabel: string
   pageIntroReadyLabel: string
   copyLinkLabel: string
@@ -38,11 +39,13 @@ interface Props {
   accessSubmitLabel: string
   accessSubmittingLabel: string
   accessRequestFailedLabel: string
+  verificationMessage: string
 }
 
 const {
   detailURL,
-  placeId,
+  sessionToken,
+  turnstileSiteKey = "",
   pageIntroCreatingLabel,
   pageIntroReadyLabel,
   copyLinkLabel,
@@ -79,6 +82,7 @@ const {
   accessSubmitLabel,
   accessSubmittingLabel,
   accessRequestFailedLabel,
+  verificationMessage,
 } = Astro.props
 ---
 
@@ -86,7 +90,7 @@ const {
   class="mt-8 text-left"
   data-my-site-summary
   data-detail-url={detailURL}
-  data-place-id={placeId}
+  data-session-token={sessionToken}
   data-page-intro-creating-label={pageIntroCreatingLabel}
   data-page-intro-ready-label={pageIntroReadyLabel}
   data-copy-link-label={copyLinkLabel}
@@ -123,6 +127,8 @@ const {
   data-access-submit-label={accessSubmitLabel}
   data-access-submitting-label={accessSubmittingLabel}
   data-access-request-failed-label={accessRequestFailedLabel}
+  data-verification-message={verificationMessage}
+  data-turnstile-site-key={turnstileSiteKey}
 >
   <div class="hidden grid gap-6" data-my-site-grid>
     <div class="grid gap-1">
@@ -138,6 +144,7 @@ const {
     <div class="grid gap-4" data-site-resource-list></div>
   </div>
 </section>
+{turnstileSiteKey ? <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script> : null}
 
 <template data-resource-card-template>
   <article class="rounded-3xl border border-border/60 bg-background/60 p-5">
@@ -380,6 +387,8 @@ const {
       showLoginAction,
       requestURL,
       checkoutId,
+      turnstileSiteKey,
+      verificationMessage,
       onRequestSuccess,
       onSuccess,
     },
@@ -454,7 +463,18 @@ const {
       submitButton.className = "inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-primary px-5 text-sm font-medium text-primary-foreground transition-[background-image,opacity] hover:bg-[linear-gradient(90deg,#3eed69_0%,#09cd3a_100%)] disabled:cursor-not-allowed disabled:opacity-70 sm:w-fit";
       actionRow.append(emailField.field, submitButton);
 
-      form.append(nameRow, actionRow, errorNode);
+      form.append(nameRow, actionRow);
+      if (turnstileSiteKey) {
+        const turnstileWrap = document.createElement("div");
+        turnstileWrap.className = "overflow-hidden rounded-2xl border border-border/60 bg-background/60 px-4 py-4";
+        turnstileWrap.innerHTML = `<div class="cf-turnstile" data-sitekey="${turnstileSiteKey}"></div>`;
+        form.append(turnstileWrap);
+        const turnstileContainer = turnstileWrap.firstElementChild;
+        if (turnstileContainer instanceof HTMLDivElement && typeof window.turnstile?.render === "function") {
+          window.turnstile.render(turnstileContainer);
+        }
+      }
+      form.append(errorNode);
       const syncSubmitState = () => updateButtonEnabledState(submitButton, form);
       for (const input of [firstNameField.input, lastNameField.input, emailField.input]) {
         input.addEventListener("input", syncSubmitState);
@@ -481,7 +501,15 @@ const {
           email: emailField.input.value.trim(),
           givenName: firstNameField.input.value.trim(),
           familyName: lastNameField.input.value.trim(),
+          turnstileToken: "",
         };
+        const turnstileField = form.querySelector('input[name="cf-turnstile-response"]');
+        if (turnstileSiteKey) {
+          payload.turnstileToken = turnstileField instanceof HTMLInputElement ? turnstileField.value.trim() : "";
+          if (!payload.turnstileToken) {
+            throw new Error(verificationMessage);
+          }
+        }
 
         submitButton.disabled = true;
         submitButton.innerHTML = `<span>${submittingLabel}</span><span class="icon-[ph--circle-notch] size-4 animate-spin"></span>`;
@@ -553,11 +581,12 @@ const {
 
   for (const summary of summaries) {
     const detailURL = String(summary.getAttribute("data-detail-url") || "").trim();
-    let placeId = String(summary.getAttribute("data-place-id") || "").trim();
+    let sessionToken = String(summary.getAttribute("data-session-token") || "").trim();
+    let placeId = "";
     const pageIntroCreatingLabel = String(summary.getAttribute("data-page-intro-creating-label") || "").trim();
     const pageIntroReadyLabel = String(summary.getAttribute("data-page-intro-ready-label") || "").trim();
     const loadingLabel = String(summary.getAttribute("data-loading-label") || "Loading site...").trim();
-    const missingPlaceIdLabel = String(summary.getAttribute("data-missing-place-id-label") || "Place ID is missing.").trim();
+    const missingPlaceIdLabel = String(summary.getAttribute("data-missing-place-id-label") || "Public session is missing.").trim();
     const unavailableLabel = String(summary.getAttribute("data-unavailable-label") || "Site detail is unavailable right now.").trim();
     const failedLabel = String(summary.getAttribute("data-failed-label") || "Unable to load site detail.").trim();
     const noSiteLabel = String(summary.getAttribute("data-no-site-label") || "No site has been created yet.").trim();
@@ -594,6 +623,8 @@ const {
     const accessSubmitLabel = String(summary.getAttribute("data-access-submit-label") || "Request access").trim();
     const accessSubmittingLabel = String(summary.getAttribute("data-access-submitting-label") || "Requesting...").trim();
     const accessRequestFailedLabel = String(summary.getAttribute("data-access-request-failed-label") || "Unable to request project access.").trim();
+    const verificationMessage = String(summary.getAttribute("data-verification-message") || "Complete the verification challenge and try again.").trim();
+    const turnstileSiteKey = String(summary.getAttribute("data-turnstile-site-key") || "").trim();
     const pageTitleIntro = document.querySelector("[data-my-site-page-title] .pro > p");
 
     const grid = summary.querySelector("[data-my-site-grid]");
@@ -828,6 +859,8 @@ const {
             showLoginAction: hasAssignedCustomerUser,
             requestURL: resolveCustomerAccessURL(detailURL),
             checkoutId: typeof checkout?.id === "string" ? checkout.id.trim() : "",
+            turnstileSiteKey,
+            verificationMessage,
             onRequestSuccess: () => {
               accessRequestJustCompleted = true;
             },
@@ -841,7 +874,13 @@ const {
     };
 
     const loadSiteDetail = async () => {
-      const response = await fetch(`${detailURL}?placeId=${encodeURIComponent(placeId)}`, {
+      const requestURL = new URL(detailURL, window.location.origin);
+      if (sessionToken) {
+        requestURL.searchParams.set("sessionToken", sessionToken);
+      } else {
+        requestURL.searchParams.set("placeId", placeId);
+      }
+      const response = await fetch(requestURL.toString(), {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -851,18 +890,23 @@ const {
       if (!response.ok) {
         throw new Error(String(payload?.error?.message || failedLabel));
       }
+      const prospect = payload?.prospect && typeof payload.prospect === "object" ? payload.prospect : null;
+      placeId = typeof prospect?.placeId === "string" ? prospect.placeId.trim() : placeId;
       renderResources(payload);
     };
 
-    if (!placeId) {
+    if (!sessionToken) {
       try {
-        placeId = new URL(window.location.href).searchParams.get("gmn")?.trim() || "";
+        const currentURL = new URL(window.location.href);
+        sessionToken = currentURL.searchParams.get("ps")?.trim() || "";
+        placeId = currentURL.searchParams.get("gmn")?.trim() || "";
       } catch {
+        sessionToken = "";
         placeId = "";
       }
     }
 
-    if (!placeId) {
+    if (!sessionToken && !placeId) {
       setStatus(missingPlaceIdLabel);
       continue;
     }

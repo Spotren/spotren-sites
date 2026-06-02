@@ -2,6 +2,7 @@
 interface Props {
   action: string
   createProspectURL: string
+  turnstileSiteKey?: string
   helpURL: string
   mapsURL: string
   createBusinessURL: string
@@ -10,6 +11,7 @@ interface Props {
   submitLabel: string
   creatingLabel: string
   invalidURLMessage: string
+  verificationMessage: string
   unavailableMessage: string
   createFailedMessage: string
   helpLabel: string
@@ -20,6 +22,7 @@ interface Props {
 const {
   action,
   createProspectURL,
+  turnstileSiteKey = "",
   helpURL,
   mapsURL,
   createBusinessURL,
@@ -28,6 +31,7 @@ const {
   submitLabel,
   creatingLabel,
   invalidURLMessage,
+  verificationMessage,
   unavailableMessage,
   createFailedMessage,
   helpLabel,
@@ -47,6 +51,7 @@ const {
   data-create-failed-message={createFailedMessage}
   data-creating-label={creatingLabel}
   data-submit-label={submitLabel}
+  data-verification-message={verificationMessage}
 >
   <div class="mb-2 flex items-center gap-3">
     <label for="gmn-place-input" class="block text-sm font-medium text-foreground">
@@ -143,7 +148,7 @@ const {
         <span class="icon-[ph--map-pin-plus] h-6 w-6 cursor-pointer"></span>
       </a>
     </div>
-    <input type="hidden" name="gmn" value="" data-place-id-field />
+    <input type="hidden" name="ps" value="" data-place-session-field />
     <button
       type="submit"
       class="inline-flex h-10 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-full bg-primary px-4 text-sm font-medium text-primary-foreground transition-[background-image,opacity] hover:bg-[linear-gradient(90deg,#3eed69_0%,#09cd3a_100%)] disabled:cursor-not-allowed disabled:opacity-60"
@@ -154,7 +159,15 @@ const {
     </button>
     </div>
   </div>
+  {
+    turnstileSiteKey ? (
+      <div class="mt-4 overflow-hidden rounded-2xl border border-border/60 bg-background/60 px-4 py-4">
+        <div class="cf-turnstile" data-sitekey={turnstileSiteKey}></div>
+      </div>
+    ) : null
+  }
 </form>
+{turnstileSiteKey ? <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script> : null}
 
 <script is:inline>
   const forms = document.querySelectorAll("[data-place-resolve-form]");
@@ -183,7 +196,7 @@ const {
 
   for (const form of forms) {
     const textarea = form.querySelector("[data-place-input]");
-    const hiddenPlaceIdField = form.querySelector("[data-place-id-field]");
+    const hiddenPlaceSessionField = form.querySelector("[data-place-session-field]");
     const submitButton = form.querySelector("[data-submit-button]");
     const submitButtonText = form.querySelector("[data-submit-button-text]");
     const errorElement = form.querySelector("[data-place-error]");
@@ -191,7 +204,7 @@ const {
 
     if (
       !(textarea instanceof HTMLInputElement) ||
-      !(hiddenPlaceIdField instanceof HTMLInputElement) ||
+      !(hiddenPlaceSessionField instanceof HTMLInputElement) ||
       !(submitButton instanceof HTMLButtonElement) ||
       !(submitButtonText instanceof HTMLSpanElement) ||
       !(errorElement instanceof HTMLDivElement) ||
@@ -202,6 +215,7 @@ const {
 
     const createProspectURL = String(form.getAttribute("data-create-prospect-url") || "").trim();
     const invalidURLMessage = String(form.getAttribute("data-invalid-url-message") || "Use a valid Google Maps URL.").trim();
+    const verificationMessage = String(form.getAttribute("data-verification-message") || "Complete the verification challenge and try again.").trim();
     const unavailableMessage = String(form.getAttribute("data-unavailable-message") || "Resolver is unavailable right now.").trim();
     const createFailedMessage = String(form.getAttribute("data-create-failed-message") || "Unable to create the prospect from Google Maps input.").trim();
     const creatingLabel = String(form.getAttribute("data-creating-label") || "Preparing...").trim();
@@ -251,6 +265,12 @@ const {
         setError(unavailableMessage);
         return;
       }
+      const turnstileField = form.querySelector('input[name="cf-turnstile-response"]');
+      const turnstileToken = turnstileField instanceof HTMLInputElement ? turnstileField.value.trim() : "";
+      if (form.querySelector(".cf-turnstile") && !turnstileToken) {
+        setError(verificationMessage);
+        return;
+      }
 
       setBusy(true);
       setError("");
@@ -264,6 +284,7 @@ const {
           },
           body: JSON.stringify({
             input: rawValue,
+            turnstileToken,
           }),
         });
         const payload = await response.json().catch(() => null);
@@ -272,13 +293,13 @@ const {
           setError(String(message));
           return;
         }
-        const placeId = typeof payload?.placeId === "string" ? payload.placeId.trim() : "";
-        if (!placeId) {
+        const sessionToken = typeof payload?.prospectSessionToken === "string" ? payload.prospectSessionToken.trim() : "";
+        if (!sessionToken) {
           setError(createFailedMessage);
           return;
         }
 
-        hiddenPlaceIdField.value = placeId;
+        hiddenPlaceSessionField.value = sessionToken;
         HTMLFormElement.prototype.submit.call(form);
       } catch {
         setError(unavailableMessage);

@@ -6,7 +6,8 @@ interface Props {
   checkoutURL: string
   checkoutCancelURL: string
   homeURL: string
-  placeId: string
+  sessionToken: string
+  turnstileSiteKey?: string
   templatesHeadingLabel: string
   templatesLoadingLabel: string
   templatesUnavailableLabel: string
@@ -35,6 +36,7 @@ interface Props {
   checkoutFallbackLinkLabel: string
   mySiteURLBase: string
   mySiteLinkLabel: string
+  verificationMessage: string
   priceCurrencyLabel: string
   priceWholeLabel: string
   priceFractionLabel: string
@@ -53,7 +55,8 @@ const {
   checkoutURL,
   checkoutCancelURL,
   homeURL,
-  placeId,
+  sessionToken,
+  turnstileSiteKey = "",
   templatesHeadingLabel,
   templatesLoadingLabel,
   templatesUnavailableLabel,
@@ -82,6 +85,7 @@ const {
   checkoutFallbackLinkLabel,
   mySiteURLBase,
   mySiteLinkLabel,
+  verificationMessage,
   priceCurrencyLabel,
   priceWholeLabel,
   priceFractionLabel,
@@ -99,7 +103,7 @@ const {
   data-prospect-summary
   data-default-site-template-id={defaultSiteTemplateId}
   data-detail-url={detailURL}
-  data-place-id={placeId}
+  data-session-token={sessionToken}
   data-home-url={homeURL}
   data-loading-label={loadingLabel}
   data-missing-place-id-label={missingPlaceIdLabel}
@@ -123,6 +127,8 @@ const {
   data-checkout-fallback-link-label={checkoutFallbackLinkLabel}
   data-my-site-url-base={mySiteURLBase}
   data-my-site-link-label={mySiteLinkLabel}
+  data-verification-message={verificationMessage}
+  data-turnstile-site-key={turnstileSiteKey}
   data-static-map-url={staticMapURL}
   data-map-alt-label={mapAltLabel}
   data-map-unavailable-label={mapUnavailableLabel}
@@ -226,6 +232,13 @@ const {
       <div class="h-px w-full bg-border/70"></div>
       <div class="hidden" data-checkout-actions>
         <p class="mb-3 text-sm text-muted-foreground hidden" data-checkout-state></p>
+        {
+          turnstileSiteKey ? (
+            <div class="mb-4 overflow-hidden rounded-2xl border border-border/60 bg-background/60 px-4 py-4">
+              <div class="cf-turnstile" data-sitekey={turnstileSiteKey}></div>
+            </div>
+          ) : null
+        }
         <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between" data-checkout-primary-row>
           <div class="flex items-start gap-2 text-foreground">
             <span class="pt-1 text-base font-medium text-foreground/70">{priceCurrencyLabel}</span>
@@ -272,6 +285,7 @@ const {
     </div>
   </div>
 </section>
+{turnstileSiteKey ? <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script> : null}
 
 <script is:inline>
   const templateSections = document.querySelectorAll("[data-site-templates]");
@@ -423,11 +437,12 @@ const {
   for (const summary of summaries) {
     const defaultSiteTemplateId = String(summary.getAttribute("data-default-site-template-id") || "").trim();
     const detailURL = String(summary.getAttribute("data-detail-url") || "").trim();
-    const initialPlaceId = String(summary.getAttribute("data-place-id") || "").trim();
-    let placeId = initialPlaceId;
+    const initialSessionToken = String(summary.getAttribute("data-session-token") || "").trim();
+    let sessionToken = initialSessionToken;
+    let placeId = "";
     let selectedSiteTemplateId = String(summary.getAttribute("data-selected-site-template-id") || defaultSiteTemplateId).trim();
     const loadingLabel = String(summary.getAttribute("data-loading-label") || "Loading prospect...").trim();
-    const missingPlaceIdLabel = String(summary.getAttribute("data-missing-place-id-label") || "Place ID is missing.").trim();
+    const missingPlaceIdLabel = String(summary.getAttribute("data-missing-place-id-label") || "Public session is missing.").trim();
     const unavailableLabel = String(summary.getAttribute("data-unavailable-label") || "Prospect detail is unavailable right now.").trim();
     const failedLabel = String(summary.getAttribute("data-failed-label") || "Unable to load prospect detail.").trim();
     const checkoutURL = String(summary.getAttribute("data-checkout-url") || "").trim();
@@ -446,6 +461,8 @@ const {
     const checkoutFallbackLinkLabel = String(summary.getAttribute("data-checkout-fallback-link-label") || "Open checkout manually").trim();
     const mySiteURLBase = String(summary.getAttribute("data-my-site-url-base") || "/my-site").trim();
     const mySiteLinkLabel = String(summary.getAttribute("data-my-site-link-label") || "Go to my site").trim();
+    const verificationMessage = String(summary.getAttribute("data-verification-message") || "Complete the verification challenge and try again.").trim();
+    const turnstileSiteKey = String(summary.getAttribute("data-turnstile-site-key") || "").trim();
     const staticMapURL = String(summary.getAttribute("data-static-map-url") || "").trim();
     const mapAltLabel = String(summary.getAttribute("data-map-alt-label") || "Business location map").trim();
     const mapUnavailableLabel = String(summary.getAttribute("data-map-unavailable-label") || "Map unavailable.").trim();
@@ -524,15 +541,19 @@ const {
       checkoutLink.textContent = checkoutFallbackLinkLabel;
       checkoutLinkRow.classList.remove("hidden");
     };
-    const setMySiteLink = (currentPlaceId, visible) => {
-      if (!visible || !currentPlaceId) {
+    const setMySiteLink = (visible) => {
+      if (!visible || (!sessionToken && !placeId)) {
         mySiteLink.href = "#";
         mySiteLink.textContent = mySiteLinkLabel;
         mySiteRow.classList.add("hidden");
         return;
       }
       const nextURL = new URL(mySiteURLBase, window.location.origin);
-      nextURL.searchParams.set("gmn", currentPlaceId);
+      if (sessionToken) {
+        nextURL.searchParams.set("ps", sessionToken);
+      } else {
+        nextURL.searchParams.set("gmn", placeId);
+      }
       mySiteLink.href = nextURL.toString();
       mySiteLink.textContent = mySiteLinkLabel;
       mySiteRow.classList.remove("hidden");
@@ -630,7 +651,7 @@ const {
       checkoutButtonText.textContent = checkoutButtonLabel;
       setCheckoutState("");
       setCheckoutLink(activeCheckoutURL);
-      setMySiteLink(placeId, false);
+      setMySiteLink(false);
       stopPolling();
 
       if (latestStatus === "created" || latestStatus === "checkout_completed") {
@@ -647,7 +668,7 @@ const {
       } else if (effectivelyReady) {
         setCheckoutState("");
         setCheckoutLink("");
-        setMySiteLink(placeId, true);
+        setMySiteLink(true);
         checkoutButton.classList.add("hidden");
         checkoutPrimaryRow.classList.add("hidden");
       } else if (latestStatus === "site_provisioning") {
@@ -664,7 +685,13 @@ const {
       }
     };
     const loadProspectDetail = async () => {
-      const response = await fetch(`${detailURL}?placeId=${encodeURIComponent(placeId)}`, {
+      const detailRequestURL = new URL(detailURL, window.location.origin);
+      if (sessionToken) {
+        detailRequestURL.searchParams.set("sessionToken", sessionToken);
+      } else {
+        detailRequestURL.searchParams.set("placeId", placeId);
+      }
+      const response = await fetch(detailRequestURL.toString(), {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -677,6 +704,7 @@ const {
 
       const prospect = payload?.prospect;
       const basicData = prospect?.basicData || {};
+      placeId = typeof prospect?.placeId === "string" ? prospect.placeId.trim() : placeId;
       assignText("[data-company-name]", String(basicData.companyName || "—"));
       assignText("[data-address-text]", String(basicData.addressText || "—"));
       const latitude = typeof basicData.latitude === "number" ? basicData.latitude : null;
@@ -709,15 +737,18 @@ const {
       applyCheckoutState(payload);
     };
 
-    if (!placeId) {
+    if (!sessionToken) {
       try {
-        placeId = new URL(window.location.href).searchParams.get("gmn")?.trim() || "";
+        const currentURL = new URL(window.location.href);
+        sessionToken = currentURL.searchParams.get("ps")?.trim() || "";
+        placeId = currentURL.searchParams.get("gmn")?.trim() || "";
       } catch {
+        sessionToken = "";
         placeId = "";
       }
     }
 
-    if (!placeId) {
+    if (!sessionToken && !placeId) {
       status.textContent = missingPlaceIdLabel;
       continue;
     }
@@ -733,7 +764,7 @@ const {
     });
 
     checkoutButton.addEventListener("click", async () => {
-      if (!placeId || !checkoutURL) {
+      if ((!sessionToken && !placeId) || !checkoutURL) {
         setCheckoutError(checkoutFailedLabel);
         return;
       }
@@ -748,8 +779,18 @@ const {
           return;
         }
         const currentURL = new URL(mySiteURLBase, window.location.origin);
-        currentURL.searchParams.set("gmn", placeId);
+        if (sessionToken) {
+          currentURL.searchParams.set("ps", sessionToken);
+        } else {
+          currentURL.searchParams.set("gmn", placeId);
+        }
         const cancelURL = checkoutCancelURL || new URL("/checkout/cancel", window.location.origin).toString();
+        const turnstileField = summary.querySelector('input[name="cf-turnstile-response"]');
+        const turnstileToken = turnstileField instanceof HTMLInputElement ? turnstileField.value.trim() : "";
+        if (turnstileSiteKey && !turnstileToken) {
+          setCheckoutError(verificationMessage);
+          return;
+        }
         const response = await fetch(checkoutURL, {
           method: "POST",
           headers: {
@@ -758,9 +799,11 @@ const {
           },
           body: JSON.stringify({
             placeId,
+            sessionToken,
             successURL: currentURL.toString(),
             cancelURL,
             siteTemplateId: selectedSiteTemplateId,
+            turnstileToken,
           }),
         });
         const payload = await response.json().catch(() => null);

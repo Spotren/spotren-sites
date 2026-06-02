@@ -6,8 +6,9 @@ import MySiteResourceSummary from '~/components/base/MySiteResourceSummary.astro
 const locale = 'pt'
 const title = 'Meu site'
 const description = 'Uma pagina dedicada ao seu site ndEX publicado.'
-const placeId = Astro.url.searchParams.get('gmn')?.trim() ?? ''
+const sessionToken = Astro.url.searchParams.get('ps')?.trim() ?? ''
 const prospectDetailURL = import.meta.env.PUBLIC_SPOTREN_PROSPECT_DETAIL_URL?.trim() ?? 'https://app.localhost:3443/api/public/spotren-sites/prospects/by-place-id'
+const turnstileSiteKey = import.meta.env.PUBLIC_SPOTREN_TURNSTILE_SITE_KEY?.trim() ?? ''
 ---
 
 <Layout {title} {description} {locale}>
@@ -18,7 +19,8 @@ const prospectDetailURL = import.meta.env.PUBLIC_SPOTREN_PROSPECT_DETAIL_URL?.tr
       </div>
       <MySiteResourceSummary
         detailURL={prospectDetailURL}
-        placeId={placeId}
+        sessionToken={sessionToken}
+        turnstileSiteKey={turnstileSiteKey}
         pageIntroCreatingLabel="Seu site está sendo criado"
         pageIntroReadyLabel="Seu site está pronto"
         copyLinkLabel="copiar"
@@ -34,7 +36,7 @@ const prospectDetailURL = import.meta.env.PUBLIC_SPOTREN_PROSPECT_DETAIL_URL?.tr
         statusFailedLabel="Falhou"
         statusCancelledLabel="Cancelado"
         loadingLabel="Carregando recursos do site..."
-        missingPlaceIdLabel="Falta o placeId na URL."
+        missingPlaceIdLabel="Falta a sessao publica na URL."
         unavailableLabel="Os dados do site estao indisponiveis agora."
         failedLabel="Nao foi possivel carregar os dados do site."
         noSiteLabel="Ainda nao existe um site criado para esta empresa."
@@ -55,6 +57,7 @@ const prospectDetailURL = import.meta.env.PUBLIC_SPOTREN_PROSPECT_DETAIL_URL?.tr
         accessSubmitLabel="Solicitar acesso"
         accessSubmittingLabel="Solicitando..."
         accessRequestFailedLabel="Nao foi possivel solicitar acesso aos projetos."
+        verificationMessage="Conclua a verificacao e tente novamente."
       />
     </div>
   </div>
