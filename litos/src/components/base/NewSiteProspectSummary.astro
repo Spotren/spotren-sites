@@ -14,6 +14,7 @@ interface Props {
   templatesEmptyLabel: string
   loadingLabel: string
   missingPlaceIdLabel: string
+  sessionInvalidLabel: string
   unavailableLabel: string
   failedLabel: string
   companyNameLabel: string
@@ -63,6 +64,7 @@ const {
   templatesEmptyLabel,
   loadingLabel,
   missingPlaceIdLabel,
+  sessionInvalidLabel,
   unavailableLabel,
   failedLabel,
   companyNameLabel,
@@ -107,6 +109,7 @@ const {
   data-home-url={homeURL}
   data-loading-label={loadingLabel}
   data-missing-place-id-label={missingPlaceIdLabel}
+  data-session-invalid-label={sessionInvalidLabel}
   data-unavailable-label={unavailableLabel}
   data-failed-label={failedLabel}
   data-checkout-url={checkoutURL}
@@ -136,6 +139,17 @@ const {
   <p class="text-sm text-muted-foreground" data-prospect-status>
     {loadingLabel}
   </p>
+  <div
+    class="mt-4 hidden rounded-3xl border border-border/60 bg-background/60 px-5 py-5 text-left shadow-sm"
+    data-prospect-error-card
+    role="status"
+    aria-live="polite"
+  >
+    <div class="flex items-start gap-3">
+      <span class="icon-[ph--info] mt-0.5 size-5 flex-shrink-0 text-muted-foreground"></span>
+      <p class="text-sm leading-6 text-foreground/80" data-prospect-error-card-message></p>
+    </div>
+  </div>
   <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-10">
     <div class="hidden min-w-[320px] flex-col gap-3 sm:flex" data-map-column>
       <div class="overflow-hidden rounded-t-3xl rounded-b-xl border border-border/60 bg-background/60" data-map-panel>
@@ -468,6 +482,7 @@ const {
     let selectedSiteTemplateId = String(summary.getAttribute("data-selected-site-template-id") || defaultSiteTemplateId).trim();
     const loadingLabel = String(summary.getAttribute("data-loading-label") || "Loading prospect...").trim();
     const missingPlaceIdLabel = String(summary.getAttribute("data-missing-place-id-label") || "Public session is missing.").trim();
+    const sessionInvalidLabel = String(summary.getAttribute("data-session-invalid-label") || "This public session is invalid or expired. Start again from the search page.").trim();
     const unavailableLabel = String(summary.getAttribute("data-unavailable-label") || "Prospect detail is unavailable right now.").trim();
     const failedLabel = String(summary.getAttribute("data-failed-label") || "Unable to load prospect detail.").trim();
     const checkoutURL = String(summary.getAttribute("data-checkout-url") || "").trim();
@@ -493,6 +508,8 @@ const {
     const mapUnavailableLabel = String(summary.getAttribute("data-map-unavailable-label") || "Map unavailable.").trim();
 
     const status = summary.querySelector("[data-prospect-status]");
+    const errorCard = summary.querySelector("[data-prospect-error-card]");
+    const errorCardMessage = summary.querySelector("[data-prospect-error-card-message]");
     const grid = summary.querySelector("[data-prospect-grid]");
     const checkoutActions = summary.querySelector("[data-checkout-actions]");
     const checkoutPrimaryRow = summary.querySelector("[data-checkout-primary-row]");
@@ -511,6 +528,8 @@ const {
     const mapFallback = summary.querySelector("[data-map-fallback]");
     if (
       !(status instanceof HTMLParagraphElement) ||
+      !(errorCard instanceof HTMLDivElement) ||
+      !(errorCardMessage instanceof HTMLParagraphElement) ||
       !(grid instanceof HTMLElement) ||
       !(checkoutActions instanceof HTMLElement) ||
       !(checkoutPrimaryRow instanceof HTMLDivElement) ||
@@ -535,6 +554,25 @@ const {
     let pollingTimer = 0;
     let latestLatitude = null;
     let latestLongitude = null;
+
+    const hideErrorCard = () => {
+      errorCard.classList.add("hidden");
+      errorCardMessage.textContent = "";
+    };
+    const showErrorCard = (message) => {
+      stopPolling();
+      status.classList.add("hidden");
+      status.textContent = "";
+      errorCardMessage.textContent = message;
+      errorCard.classList.remove("hidden");
+      grid.classList.add("hidden");
+      checkoutActions.classList.add("hidden");
+      checkoutError.classList.add("hidden");
+      checkoutState.classList.add("hidden");
+      checkoutLinkRow.classList.add("hidden");
+      mySiteRow.classList.add("hidden");
+      mapColumn.classList.add("hidden");
+    };
 
     const assignText = (selector, value) => {
       const node = summary.querySelector(selector);
@@ -724,7 +762,10 @@ const {
       });
       const payload = await response.json().catch(() => null);
       if (!response.ok) {
-        throw new Error(String(payload?.error?.message || failedLabel));
+        throw {
+          code: typeof payload?.error?.code === "string" ? payload.error.code.trim() : "",
+          message: typeof payload?.error?.message === "string" ? payload.error.message.trim() : failedLabel,
+        };
       }
 
       const prospect = payload?.prospect;
@@ -756,6 +797,7 @@ const {
       });
 
       status.classList.add("hidden");
+      hideErrorCard();
       grid.classList.remove("hidden");
       mapColumn.classList.remove("hidden");
       checkoutActions.classList.remove("hidden");
@@ -774,18 +816,29 @@ const {
     }
 
     if (!sessionToken && !placeId) {
-      status.textContent = missingPlaceIdLabel;
+      showErrorCard(missingPlaceIdLabel);
       continue;
     }
     if (!detailURL) {
-      status.textContent = unavailableLabel;
+      showErrorCard(unavailableLabel);
       continue;
     }
 
+    hideErrorCard();
+    mapColumn.classList.add("hidden");
     status.textContent = loadingLabel;
+    status.classList.remove("hidden");
 
     void loadProspectDetail().catch((error) => {
-      status.textContent = error instanceof Error && error.message ? error.message : unavailableLabel;
+      if (error && typeof error === "object" && error.code === "session_invalid") {
+        showErrorCard(sessionInvalidLabel);
+        return;
+      }
+      status.textContent = error && typeof error === "object" && typeof error.message === "string"
+        ? error.message
+        : unavailableLabel;
+      status.classList.remove("hidden");
+      mapColumn.classList.add("hidden");
     });
 
     checkoutButton.addEventListener("click", async () => {
