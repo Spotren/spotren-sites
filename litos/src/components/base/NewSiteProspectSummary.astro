@@ -575,7 +575,8 @@ const {
       continue;
     }
 
-    let activeCheckoutURL = "";
+    let activeSellerCheckoutURL = "";
+    let activeCustomerCheckoutURL = "";
     let pollingTimer = 0;
     let latestLatitude = null;
     let latestLongitude = null;
@@ -640,20 +641,23 @@ const {
       checkoutError.textContent = message;
       checkoutError.classList.remove("hidden");
     };
-    const setCheckoutLinks = (url) => {
-      if (!url) {
+    const setCheckoutLinks = (sellerURL, customerURL) => {
+      if (!sellerURL) {
         checkoutLink.href = "#";
         checkoutLink.textContent = checkoutSelfLinkLabel;
         checkoutLinkRow.classList.add("hidden");
+      } else {
+        checkoutLink.href = sellerURL;
+        checkoutLink.textContent = checkoutSelfLinkLabel;
+        checkoutLinkRow.classList.remove("hidden");
+      }
+      if (!customerURL) {
         checkoutCustomerLink.href = "#";
         checkoutCustomerLink.textContent = checkoutCustomerLinkLabel;
         checkoutCustomerLinkRow.classList.add("hidden");
         return;
       }
-      checkoutLink.href = url;
-      checkoutLink.textContent = checkoutSelfLinkLabel;
-      checkoutLinkRow.classList.remove("hidden");
-      checkoutCustomerLink.href = url;
+      checkoutCustomerLink.href = customerURL;
       checkoutCustomerLink.textContent = checkoutCustomerLinkLabel;
       checkoutCustomerLinkRow.classList.remove("hidden");
     };
@@ -753,20 +757,36 @@ const {
       const hasPublishedSite = latestSiteStatus === "published";
       const hasSucceededProvisioning = latestRunStatus === "succeeded";
       const effectivelyReady = latestStatus === "site_ready" || hasPublishedSite || hasSucceededProvisioning || hasReadyDeployment;
-      activeCheckoutURL = typeof latestCheckout?.checkoutUrl === "string" ? latestCheckout.checkoutUrl.trim() : "";
+      const findCheckoutByVariant = (variant) => {
+        for (const entry of checkouts) {
+          if (!entry || typeof entry !== "object") {
+            continue;
+          }
+          const checkout = entry.checkout && typeof entry.checkout === "object" ? entry.checkout : null;
+          const metadataSnapshot = checkout?.metadataSnapshot && typeof checkout.metadataSnapshot === "object" ? checkout.metadataSnapshot : null;
+          if (metadataSnapshot?.publicCheckoutVariant === variant) {
+            return checkout;
+          }
+        }
+        return null;
+      };
+      const sellerCheckout = findCheckoutByVariant("seller");
+      const customerCheckout = findCheckoutByVariant("customer");
+      activeSellerCheckoutURL = typeof sellerCheckout?.checkoutUrl === "string" ? sellerCheckout.checkoutUrl.trim() : "";
+      activeCustomerCheckoutURL = typeof customerCheckout?.checkoutUrl === "string" ? customerCheckout.checkoutUrl.trim() : "";
 
       checkoutButton.disabled = false;
       checkoutButton.classList.remove("hidden");
       checkoutPrimaryRow.classList.remove("hidden");
       checkoutButtonText.textContent = checkoutButtonLabel;
       setCheckoutState("");
-      setCheckoutLinks(activeCheckoutURL);
+      setCheckoutLinks(activeSellerCheckoutURL, activeCustomerCheckoutURL);
       setExistingSiteLink(false);
       stopPolling();
 
       if (latestStatus === "created" || latestStatus === "checkout_completed") {
         setCheckoutState(checkoutStateCreatedLabel);
-        if (activeCheckoutURL) {
+        if (activeSellerCheckoutURL || activeCustomerCheckoutURL) {
           checkoutButtonText.textContent = checkoutResumeButtonLabel;
         }
         schedulePolling();
@@ -777,7 +797,7 @@ const {
         schedulePolling();
       } else if (effectivelyReady) {
         setCheckoutState(existingSiteLabel);
-        setCheckoutLinks("");
+        setCheckoutLinks("", "");
         setExistingSiteLink(true);
         checkoutButton.classList.add("hidden");
         checkoutPrimaryRow.classList.add("hidden");
@@ -898,12 +918,19 @@ const {
       selectedSiteTemplateId = String(summary.getAttribute("data-selected-site-template-id") || defaultSiteTemplateId).trim();
 
       try {
-        if (activeCheckoutURL) {
-          setCheckoutLinks(activeCheckoutURL);
+        if (activeSellerCheckoutURL && activeCustomerCheckoutURL) {
+          setCheckoutLinks(activeSellerCheckoutURL, activeCustomerCheckoutURL);
           return;
         }
-        const currentPath = window.location.pathname.startsWith("/pt/") ? "/pt/pay-ok" : "/pay-ok";
-        const currentURL = new URL(currentPath, window.location.origin);
+        const sellerPath = window.location.pathname.startsWith("/pt/") ? "/pt/my-site" : "/my-site";
+        const customerPath = window.location.pathname.startsWith("/pt/") ? "/pt/pay-ok" : "/pay-ok";
+        const sellerURL = new URL(sellerPath, window.location.origin);
+        const customerURL = new URL(customerPath, window.location.origin);
+        if (sessionToken) {
+          sellerURL.searchParams.set("ps", sessionToken);
+        } else if (placeId) {
+          sellerURL.searchParams.set("gmn", placeId);
+        }
         const cancelURL = checkoutCancelURL || new URL("/checkout/cancel", window.location.origin).toString();
         let turnstileToken = "";
         const turnstileField = summary.querySelector('input[name="cf-turnstile-response"]');
@@ -932,7 +959,8 @@ const {
           body: JSON.stringify({
             placeId,
             sessionToken,
-            successURL: currentURL.toString(),
+            sellerSuccessURL: activeSellerCheckoutURL ? "" : sellerURL.toString(),
+            customerSuccessURL: activeCustomerCheckoutURL ? "" : customerURL.toString(),
             cancelURL,
             siteTemplateId: selectedSiteTemplateId,
             turnstileToken,
@@ -944,13 +972,15 @@ const {
           return;
         }
 
-        const redirectURL = typeof payload?.checkoutUrl === "string" ? payload.checkoutUrl.trim() : "";
-        if (!redirectURL) {
+        const nextSellerCheckoutURL = activeSellerCheckoutURL || (typeof payload?.sellerCheckoutUrl === "string" ? payload.sellerCheckoutUrl.trim() : "");
+        const nextCustomerCheckoutURL = activeCustomerCheckoutURL || (typeof payload?.customerCheckoutUrl === "string" ? payload.customerCheckoutUrl.trim() : typeof payload?.checkoutUrl === "string" ? payload.checkoutUrl.trim() : "");
+        if (!nextSellerCheckoutURL && !nextCustomerCheckoutURL) {
           setCheckoutError(checkoutFailedLabel);
           return;
         }
-        activeCheckoutURL = redirectURL;
-        setCheckoutLinks(redirectURL);
+        activeSellerCheckoutURL = nextSellerCheckoutURL;
+        activeCustomerCheckoutURL = nextCustomerCheckoutURL;
+        setCheckoutLinks(activeSellerCheckoutURL, activeCustomerCheckoutURL);
       } catch {
         setCheckoutError(checkoutFailedLabel);
       } finally {
