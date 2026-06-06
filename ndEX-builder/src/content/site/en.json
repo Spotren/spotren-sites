@@ -1,7 +1,7 @@
 {
   "site": {
     "title": "Spotren",
-    "description": "Litos is a modern blogging theme built on Astro.js, designed for developers. It supports multiple post layouts, case displays, project displays, and more, providing an elegant user experience and powerful customization capabilities.",
+    "description": "ndEX Builder is a modern Astro.js site builder focused on content, projects, and high-performance pages with a polished developer-oriented foundation.",
     "lang": "en"
   },
   "header": {

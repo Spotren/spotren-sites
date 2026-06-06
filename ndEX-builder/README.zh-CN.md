@@ -1,7 +1,7 @@
 <div align="center">
-<img src="./src/assets/readme/logo.png" width="400" alt="Litos Logo" />
+<img src="./src/assets/readme/logo.png" width="400" alt="ndEX Builder Logo" />
 
-![License](https://img.shields.io/github/license/Dnzzk2/Litos?color=blue&style=flat-square)
+![License](https://img.shields.io/github/license/Spotren/spotren-sites?color=blue&style=flat-square)
 ![Astro](https://img.shields.io/badge/Astro-v5.0-orange?style=flat-square&logo=astro)
 ![React](https://img.shields.io/badge/React-v19.0-blue?style=flat-square&logo=react)
 ![Tailwind](https://img.shields.io/badge/TailwindCSS-v4.0-38b2ac?style=flat-square&logo=tailwindcss)
@@ -11,15 +11,15 @@
 
 [English](./README.md) | **简体中文**
 
-[在线演示](https://litos.vercel.app/) · [反馈问题](https://github.com/Dnzzk2/Litos/issues) · [功能建议](https://github.com/Dnzzk2/Litos/issues)
+[在线演示](https://litos.vercel.app/) · [反馈问题](https://github.com/Spotren/spotren-sites/issues) · [功能建议](https://github.com/Spotren/spotren-sites/issues)
 
 </div>
 
 ## 简介
 
-Litos 是一个使用 **Astro**、**React** 和 **TailwindCSS** 精心打造的博客主题。它为开发者提供了一个简洁、专业且高度可定制的平台，用于展示作品、记录想法和分享摄影作品。
+ndEX Builder 是一个使用 **Astro**、**React** 和 **TailwindCSS** 精心打造的博客主题。它为开发者提供了一个简洁、专业且高度可定制的平台，用于展示作品、记录想法和分享摄影作品。
 
-不同于传统主题，Litos 在保持极致性能的同时，注重视觉美感。它拥有流畅的动画效果、精致的设计系统以及丰富的内置组件，帮助你高效地打造个人品牌。
+不同于传统主题，ndEX Builder 在保持极致性能的同时，注重视觉美感。它拥有流畅的动画效果、精致的设计系统以及丰富的内置组件，帮助你高效地打造个人品牌。
 
 ![封面图片](./src/assets/readme/readme.webp)
 
@@ -40,10 +40,10 @@ Litos 是一个使用 **Astro**、**React** 和 **TailwindCSS** 精心打造的�
 
 ## 部署
 
-一键部署你的 Litos 博客：
+一键部署你的 ndEX Builder 站点：
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Dnzzk2/Litos)
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/Dnzzk2/Litos)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Spotren/spotren-sites)
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/Spotren/spotren-sites)
 
 ## 快速开始
 
@@ -57,8 +57,8 @@ Litos 是一个使用 **Astro**、**React** 和 **TailwindCSS** 精心打造的�
 1.  **克隆仓库**
 
     ```bash
-    git clone https://github.com/Dnzzk2/Litos.git
-    cd Litos
+    git clone https://github.com/Spotren/spotren-sites.git
+    cd spotren-sites/ndEX-builder
     ```
 
 2.  **安装依赖**
@@ -82,7 +82,7 @@ Litos 是一个使用 **Astro**、**React** 和 **TailwindCSS** 精心打造的�
 ### 站点设置
 ```typescript
 export const SITE: Site = {
-  title: 'Litos',
+  title: 'ndEX Builder',
   description: '你的站点描述',
   website: 'https://your-domain.com',
   author: '你的名字',
@@ -122,11 +122,11 @@ export const GITHUB_CONFIG = {
 
 ## Star 趋势
 
-<a href="https://www.star-history.com/#Dnzzk2/Litos&type=date&legend=top-left">
+<a href="https://www.star-history.com/#Spotren/spotren-sites&type=date&legend=top-left">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=Dnzzk2/Litos&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=Dnzzk2/Litos&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=Dnzzk2/Litos&type=date&legend=top-left" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=Spotren/spotren-sites&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=Spotren/spotren-sites&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=Spotren/spotren-sites&type=date&legend=top-left" />
  </picture>
 </a>
 

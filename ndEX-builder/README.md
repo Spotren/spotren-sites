@@ -1,7 +1,7 @@
 <div align="center">
-<img src="./src/assets/readme/logo.png" width="400" alt="Litos Logo" />
+<img src="./src/assets/readme/logo.png" width="400" alt="ndEX Builder Logo" />
 
-![License](https://img.shields.io/github/license/Dnzzk2/Litos?color=blue&style=flat-square)
+![License](https://img.shields.io/github/license/Spotren/spotren-sites?color=blue&style=flat-square)
 ![Astro](https://img.shields.io/badge/Astro-v5.0-orange?style=flat-square&logo=astro)
 ![React](https://img.shields.io/badge/React-v19.0-blue?style=flat-square&logo=react)
 ![Tailwind](https://img.shields.io/badge/TailwindCSS-v4.0-38b2ac?style=flat-square&logo=tailwindcss)
@@ -11,15 +11,15 @@
 
 **English** | [简体中文](./README.zh-CN.md)
 
-[Demo](https://litos.vercel.app/) · [Report Bug](https://github.com/Dnzzk2/Litos/issues) · [Request Feature](https://github.com/Dnzzk2/Litos/issues)
+[Demo](https://litos.vercel.app/) · [Report Bug](https://github.com/Spotren/spotren-sites/issues) · [Request Feature](https://github.com/Spotren/spotren-sites/issues)
 
 </div>
 
 ## Introduction
 
-Litos is a comprehensive blogging theme crafted with **Astro**, **React**, and **TailwindCSS**. It is designed to provide developers with a clean, professional, and highly customizable platform to showcase their work, thoughts, and photography.
+ndEX Builder is a comprehensive blogging theme crafted with **Astro**, **React**, and **TailwindCSS**. It is designed to provide developers with a clean, professional, and highly customizable platform to showcase their work, thoughts, and photography.
 
-Unlike traditional themes, Litos emphasizes visual aesthetics without compromising on performance. It features fluid animations, a polished design system, and a robust set of built-in components to help you build your personal brand effectively.
+Unlike traditional themes, ndEX Builder emphasizes visual aesthetics without compromising on performance. It features fluid animations, a polished design system, and a robust set of built-in components to help you build your personal brand effectively.
 
 ![Cover image](./src/assets/readme/readme.webp)
 
@@ -40,10 +40,10 @@ Unlike traditional themes, Litos emphasizes visual aesthetics without compromisi
 
 ## Deploy
 
-Deploy your own Litos blog with one click:
+Deploy your own ndEX Builder site with one click:
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Dnzzk2/Litos)
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/Dnzzk2/Litos)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Spotren/spotren-sites)
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/Spotren/spotren-sites)
 
 ## Getting Started
 
@@ -57,8 +57,8 @@ Deploy your own Litos blog with one click:
 1.  **Clone the repository**
 
     ```bash
-    git clone https://github.com/Dnzzk2/Litos.git
-    cd Litos
+    git clone https://github.com/Spotren/spotren-sites.git
+    cd spotren-sites/ndEX-builder
     ```
 
 2.  **Install dependencies**
@@ -82,7 +82,7 @@ The primary configuration file is located at `src/config.ts`.
 ### Site Settings
 ```typescript
 export const SITE: Site = {
-  title: 'Litos',
+  title: 'ndEX Builder',
   description: 'Your site description here.',
   website: 'https://your-domain.com',
   author: 'Your Name',
@@ -122,11 +122,11 @@ Distributed under the MIT License. See [MIT LICENSE](LICENSE) for more informati
 
 ## Star History
 
-<a href="https://www.star-history.com/#Dnzzk2/Litos&type=date&legend=top-left">
+<a href="https://www.star-history.com/#Spotren/spotren-sites&type=date&legend=top-left">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=Dnzzk2/Litos&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=Dnzzk2/Litos&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=Dnzzk2/Litos&type=date&legend=top-left" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=Spotren/spotren-sites&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=Spotren/spotren-sites&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=Spotren/spotren-sites&type=date&legend=top-left" />
  </picture>
 </a>
 
