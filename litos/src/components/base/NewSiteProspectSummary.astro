@@ -37,6 +37,8 @@ interface Props {
   checkoutSiteReadyLabel: string
   checkoutSelfLinkLabel: string
   checkoutCustomerLinkLabel: string
+  checkoutCustomerCopyLabel: string
+  checkoutTrackPaymentLabel: string
   appURL: string
   existingSiteLabel: string
   existingSiteLinkLabel: string
@@ -90,6 +92,8 @@ const {
   checkoutSiteReadyLabel,
   checkoutSelfLinkLabel,
   checkoutCustomerLinkLabel,
+  checkoutCustomerCopyLabel,
+  checkoutTrackPaymentLabel,
   appURL,
   existingSiteLabel,
   existingSiteLinkLabel,
@@ -136,6 +140,8 @@ const {
   data-checkout-site-ready-label={checkoutSiteReadyLabel}
   data-checkout-self-link-label={checkoutSelfLinkLabel}
   data-checkout-customer-link-label={checkoutCustomerLinkLabel}
+  data-checkout-customer-copy-label={checkoutCustomerCopyLabel}
+  data-checkout-track-payment-label={checkoutTrackPaymentLabel}
   data-app-url={appURL}
   data-existing-site-label={existingSiteLabel}
   data-existing-site-link-label={existingSiteLinkLabel}
@@ -293,13 +299,30 @@ const {
             {checkoutSelfLinkLabel}
           </a>
         </p>
-        <p class="mt-2 hidden text-sm" data-checkout-customer-link-row>
+        <div class="mt-2 hidden items-center justify-between gap-3 text-sm" data-checkout-customer-link-row>
           <a
             href="#"
-            class="text-primary underline underline-offset-4"
+            class="min-w-0 truncate text-primary underline underline-offset-4"
             data-checkout-customer-link
           >
             {checkoutCustomerLinkLabel}
+          </a>
+          <button
+            type="button"
+            class="inline-flex flex-shrink-0 cursor-pointer items-center gap-1.5 text-sm font-medium text-muted-foreground transition hover:text-foreground"
+            data-checkout-customer-copy-button
+          >
+            <span class="icon-[ph--copy] size-3.5 flex-shrink-0" data-checkout-customer-copy-icon></span>
+            <span data-checkout-customer-copy-label>{checkoutCustomerCopyLabel}</span>
+          </button>
+        </div>
+        <p class="mt-2 hidden text-sm" data-track-payment-row>
+          <a
+            href="#"
+            class="text-primary underline underline-offset-4"
+            data-track-payment-link
+          >
+            {checkoutTrackPaymentLabel}
           </a>
         </p>
         <p class="mt-3 hidden text-sm" data-my-site-row>
@@ -518,7 +541,9 @@ const {
     const checkoutStateCancelledLabel = String(summary.getAttribute("data-checkout-state-cancelled-label") || "Checkout was cancelled.").trim();
     const checkoutStateUnknownLabel = String(summary.getAttribute("data-checkout-state-unknown-label") || "Checkout status updated.").trim();
     const checkoutSelfLinkLabel = String(summary.getAttribute("data-checkout-self-link-label") || "Open checkout for me").trim();
-    const checkoutCustomerLinkLabel = String(summary.getAttribute("data-checkout-customer-link-label") || "Send checkout to customer").trim();
+    const checkoutCustomerLinkLabel = String(summary.getAttribute("data-checkout-customer-link-label") || "Copy customer checkout link").trim();
+    const checkoutCustomerCopyLabel = String(summary.getAttribute("data-checkout-customer-copy-label") || "Copy").trim();
+    const checkoutTrackPaymentLabel = String(summary.getAttribute("data-checkout-track-payment-label") || "Track payment").trim();
     const appURL = String(summary.getAttribute("data-app-url") || "").trim();
     const existingSiteLabel = String(summary.getAttribute("data-existing-site-label") || "This site already exists. Sign in to your Spotren account to follow it there.").trim();
     const existingSiteLinkLabel = String(summary.getAttribute("data-existing-site-link-label") || "Open Spotren app").trim();
@@ -542,6 +567,11 @@ const {
     const checkoutLink = summary.querySelector("[data-checkout-link]");
     const checkoutCustomerLinkRow = summary.querySelector("[data-checkout-customer-link-row]");
     const checkoutCustomerLink = summary.querySelector("[data-checkout-customer-link]");
+    const checkoutCustomerCopyButton = summary.querySelector("[data-checkout-customer-copy-button]");
+    const checkoutCustomerCopyIcon = summary.querySelector("[data-checkout-customer-copy-icon]");
+    const checkoutCustomerCopyLabelNode = summary.querySelector("[data-checkout-customer-copy-label]");
+    const trackPaymentRow = summary.querySelector("[data-track-payment-row]");
+    const trackPaymentLink = summary.querySelector("[data-track-payment-link]");
     const mySiteRow = summary.querySelector("[data-my-site-row]");
     const mySiteLink = summary.querySelector("[data-my-site-link]");
     const mapColumn = summary.querySelector("[data-map-column]");
@@ -562,8 +592,13 @@ const {
       !(checkoutState instanceof HTMLParagraphElement) ||
       !(checkoutLinkRow instanceof HTMLParagraphElement) ||
       !(checkoutLink instanceof HTMLAnchorElement) ||
-      !(checkoutCustomerLinkRow instanceof HTMLParagraphElement) ||
+      !(checkoutCustomerLinkRow instanceof HTMLDivElement) ||
       !(checkoutCustomerLink instanceof HTMLAnchorElement) ||
+      !(checkoutCustomerCopyButton instanceof HTMLButtonElement) ||
+      !(checkoutCustomerCopyIcon instanceof HTMLSpanElement) ||
+      !(checkoutCustomerCopyLabelNode instanceof HTMLSpanElement) ||
+      !(trackPaymentRow instanceof HTMLParagraphElement) ||
+      !(trackPaymentLink instanceof HTMLAnchorElement) ||
       !(mySiteRow instanceof HTMLParagraphElement) ||
       !(mySiteLink instanceof HTMLAnchorElement) ||
       !(mapColumn instanceof HTMLDivElement) ||
@@ -597,6 +632,7 @@ const {
       checkoutState.classList.add("hidden");
       checkoutLinkRow.classList.add("hidden");
       checkoutCustomerLinkRow.classList.add("hidden");
+      trackPaymentRow.classList.add("hidden");
       mySiteRow.classList.add("hidden");
       mapColumn.hidden = true;
     };
@@ -618,6 +654,7 @@ const {
       checkoutState.classList.add("hidden");
       checkoutLinkRow.classList.add("hidden");
       checkoutCustomerLinkRow.classList.add("hidden");
+      trackPaymentRow.classList.add("hidden");
       mySiteRow.classList.add("hidden");
       mapColumn.hidden = true;
     };
@@ -646,11 +683,20 @@ const {
         checkoutLink.href = "#";
         checkoutLink.textContent = checkoutSelfLinkLabel;
         checkoutLinkRow.classList.add("hidden");
+        trackPaymentLink.href = "#";
+        trackPaymentLink.textContent = checkoutTrackPaymentLabel;
+        trackPaymentRow.classList.add("hidden");
       } else {
         checkoutLink.href = sellerURL;
         checkoutLink.textContent = checkoutSelfLinkLabel;
         checkoutLinkRow.classList.remove("hidden");
+        trackPaymentLink.href = sellerURL;
+        trackPaymentLink.textContent = checkoutTrackPaymentLabel;
+        trackPaymentRow.classList.remove("hidden");
       }
+      checkoutCustomerCopyIcon.className = "icon-[ph--copy] size-3.5 flex-shrink-0";
+      checkoutCustomerCopyLabelNode.textContent = checkoutCustomerCopyLabel;
+      checkoutCustomerCopyButton.classList.remove("text-ndex-green");
       if (!customerURL) {
         checkoutCustomerLink.href = "#";
         checkoutCustomerLink.textContent = checkoutCustomerLinkLabel;
@@ -681,6 +727,28 @@ const {
       checkoutState.textContent = `${checkoutStatusLabel}: ${message}`;
       checkoutState.classList.remove("hidden");
     };
+    let customerCopyResetTimer = 0;
+    checkoutCustomerCopyButton.addEventListener("click", async () => {
+      const urlToCopy = checkoutCustomerLink.href;
+      if (!urlToCopy || urlToCopy === "#") {
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(urlToCopy);
+        checkoutCustomerCopyIcon.className = "icon-[ph--check] size-4 flex-shrink-0 text-ndex-green";
+        checkoutCustomerCopyLabelNode.textContent = "copiado";
+        checkoutCustomerCopyButton.classList.add("text-ndex-green");
+        if (customerCopyResetTimer) {
+          window.clearTimeout(customerCopyResetTimer);
+        }
+        customerCopyResetTimer = window.setTimeout(() => {
+          checkoutCustomerCopyIcon.className = "icon-[ph--copy] size-3.5 flex-shrink-0";
+          checkoutCustomerCopyLabelNode.textContent = checkoutCustomerCopyLabel;
+          checkoutCustomerCopyButton.classList.remove("text-ndex-green");
+          customerCopyResetTimer = 0;
+        }, 3000);
+      } catch {}
+    });
     const getResolvedTheme = () => {
       if (typeof document !== "object") {
         return "light";

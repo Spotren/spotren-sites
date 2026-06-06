@@ -48,6 +48,8 @@ export const siteSchema = z.object({
     existingSiteLinkLabel: z.string().trim().min(1),
     checkoutSelfLinkLabel: z.string().trim().min(1),
     checkoutCustomerLinkLabel: z.string().trim().min(1),
+    checkoutCustomerCopyLabel: z.string().trim().min(1),
+    checkoutTrackPaymentLabel: z.string().trim().min(1),
   }),
   mySite: z.object({
     title: z.string().trim().min(1),

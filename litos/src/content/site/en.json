@@ -45,7 +45,9 @@
     "existingSiteLabel": "This site already exists. Sign in to your Spotren account to follow it there.",
     "existingSiteLinkLabel": "Open Spotren app",
     "checkoutSelfLinkLabel": "Open checkout for me",
-    "checkoutCustomerLinkLabel": "Send checkout to customer"
+    "checkoutCustomerLinkLabel": "Copy customer checkout link",
+    "checkoutCustomerCopyLabel": "Copy",
+    "checkoutTrackPaymentLabel": "Track payment"
   },
   "mySite": {
     "title": "My Site",

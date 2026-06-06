@@ -24,6 +24,8 @@ type NewSiteConfig = {
   existingSiteLinkLabel: string
   checkoutSelfLinkLabel: string
   checkoutCustomerLinkLabel: string
+  checkoutCustomerCopyLabel: string
+  checkoutTrackPaymentLabel: string
 }
 
 type MySiteConfig = {
@@ -257,6 +259,8 @@ export function getLocaleConfig(locale: SiteLocale = defaultSiteLocale): LocaleC
     existingSiteLinkLabel: siteData.newSite.existingSiteLinkLabel,
     checkoutSelfLinkLabel: siteData.newSite.checkoutSelfLinkLabel,
     checkoutCustomerLinkLabel: siteData.newSite.checkoutCustomerLinkLabel,
+    checkoutCustomerCopyLabel: siteData.newSite.checkoutCustomerCopyLabel,
+    checkoutTrackPaymentLabel: siteData.newSite.checkoutTrackPaymentLabel,
   }
 
   const COMMENT_CONFIG: CommentConfig = {
