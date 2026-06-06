@@ -42,13 +42,14 @@ export default function NumberTicker({
     const fetchData = async () => {
       if (githubUser) {
         const followers = await getGithubFollowers(githubUser)
-        if (isMounted && followers !== undefined) setValue(followers)
+        if (isMounted && followers !== undefined) setValue(Math.max(initialValue, followers))
       } else if (githubRepo && githubType) {
         const parts = githubRepo.split('/')
         if (parts.length === 2) {
           const stats = await getGithubRepoStats(parts[0], parts[1])
           if (isMounted && stats) {
-            setValue(githubType === 'stars' ? stats.stars : stats.forks)
+            const nextValue = githubType === 'stars' ? stats.stars : stats.forks
+            setValue(Math.max(initialValue, nextValue))
           }
         }
       }
@@ -59,7 +60,7 @@ export default function NumberTicker({
     return () => {
       isMounted = false
     }
-  }, [githubUser, githubRepo, githubType])
+  }, [githubUser, githubRepo, githubType, initialValue])
 
   useEffect(() => {
     if (!play) return

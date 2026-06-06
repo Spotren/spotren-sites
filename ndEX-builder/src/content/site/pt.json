@@ -45,8 +45,9 @@
     "existingSiteLabel": "Este site já existe. Entre na sua conta Spotren para acompanhar por lá.",
     "existingSiteLinkLabel": "Abrir app Spotren",
     "checkoutSelfLinkLabel": "Abrir checkout para mim",
-    "checkoutCustomerLinkLabel": "Copiar link de checkout do cliente",
+    "checkoutCustomerLinkLabel": "Link de checkout do cliente",
     "checkoutCustomerCopyLabel": "Copiar",
+    "checkoutCustomerCopiedLabel": "Copiado",
     "checkoutTrackPaymentLabel": "Acompanhar pagamento"
   },
   "mySite": {
@@ -63,7 +64,30 @@
     "subtitle": "Indexação otimizada para Negócios Locais",
     "intro": "O ndEX transforma informação de perfis comerciais locais em sites velozes, estruturados e otimizados para indexação em buscadores inteligentes e <abbr title=\"Large Language Models\">LLMs</abbr>.",
     "socialLabel": "seguidores",
-    "gmnReportLabel": "Crie sites para revenda <br>com desconto de 47%",
+    "gmnReportLabel": "Crie sites para revenda <br>com ganho de 50%",
+    "workTitle": "Como trabalhar com a ndEX",
+    "workDescription": "Ganhe dinheiro criando sites para Negócios Locais",
+    "workCardDiscountTitle": "Assinar com desconto",
+    "workCardPaymentLinkTitle": "Link de Pagamento",
+    "workCardDiscountItems": [
+      "Você mesmo assina com 50% de desconto",
+      "Cobra o cliente como quiser no seu sistema",
+      "Decide o quanto vai lucrar com isso"
+    ],
+    "workCardPaymentLinkItems": [
+      "Você cria um link de checkout no ndEX",
+      "Seu cliente faz a assinatura por esse link",
+      "Você recebe 50% do valor todos os meses"
+    ],
+    "workCardDiscountYouPayLabel": "Você paga",
+    "workCardDiscountYouPayValue": "~ R$ 35 /mês",
+    "workCardDiscountYouProfitLabel": "Você ganha",
+    "workCardDiscountYouProfitValue": "definido por você",
+    "workCardPaymentYouPayLabel": "Seu cliente paga",
+    "workCardPaymentYouPayValue": "~ R$ 70 /mês",
+    "workCardPaymentYouProfitLabel": "Você ganha",
+    "workCardPaymentYouProfitValue": "~ R$ 35 /mês",
+    "workInfoDeferredPayout": "a primeira assinatura é paga 7 dias após o vencimento da garantia de 14 dias e a forma de pagamento é escolhida por você via plataforma Spotren posteriormente",
     "sitesTitle": "Utilização",
     "sitesDescription": "Sites criados no último ano:",
     "skillsTitle": "Otimização",

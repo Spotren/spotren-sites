@@ -1,32 +1,38 @@
 ---
+import { getLocaleConfig } from '~/config'
+import { withLocalePath } from '~/lib/i18n'
 import Layout from '~/layouts/Layout.astro'
 import PageTitle from '~/components/base/PageTitle.astro'
 import MySiteResourceSummary from '~/components/base/MySiteResourceSummary.astro'
 
 const locale = 'pt'
-const title = 'Meu site'
-const description = 'Uma pagina dedicada ao seu site ndEX publicado.'
+const { MY_SITE_CONFIG } = getLocaleConfig(locale)
+const { title, description } = MY_SITE_CONFIG
 const sessionToken = Astro.url.searchParams.get('ps')?.trim() ?? ''
 const prospectDetailURL = import.meta.env.PUBLIC_SPOTREN_PROSPECT_DETAIL_URL?.trim() ?? 'https://app.localhost:3443/api/public/spotren-sites/prospects/by-place-id'
 const turnstileSiteKey = import.meta.env.PUBLIC_SPOTREN_TURNSTILE_SITE_KEY?.trim() ?? ''
+const spotrenAppURL = `${(import.meta.env.PUBLIC_SPOTREN_APP_URL?.trim() ?? 'https://app.localhost:3443').replace(/\/$/, '')}/sites`
+const homeURL = withLocalePath(locale, '/')
 ---
 
 <Layout {title} {description} {locale}>
   <div class="relative z-[1] py-8 pb-10 px-6 sm:px-8">
     <div class="mx-auto max-w-3xl text-center">
       <div data-my-site-page-title>
-        <PageTitle title={title} introduce="Seu site está sendo criado" />
+        <PageTitle title={title} introduce={MY_SITE_CONFIG.introduce} />
       </div>
       <MySiteResourceSummary
         detailURL={prospectDetailURL}
         sessionToken={sessionToken}
+        homeURL={homeURL}
+        appURL={spotrenAppURL}
         turnstileSiteKey={turnstileSiteKey}
         pageIntroCreatingLabel="Seu site está sendo criado"
         pageIntroReadyLabel="Seu site está pronto"
         copyLinkLabel="copiar"
-        statusCreatedLabel="Criado"
-        statusCheckoutCompletedLabel="Checkout concluído"
-        statusPaidLabel="Pago"
+        statusCreatedLabel="Aguardando pagamento"
+        statusCheckoutCompletedLabel="Pagamento em analise"
+        statusPaidLabel="Pagamento confirmado"
         statusSiteProvisioningLabel="Criando site"
         statusSiteReadyLabel="Site pronto"
         statusPublishedLabel="Publicado"
@@ -37,6 +43,10 @@ const turnstileSiteKey = import.meta.env.PUBLIC_SPOTREN_TURNSTILE_SITE_KEY?.trim
         statusCancelledLabel="Cancelado"
         loadingLabel="Carregando recursos do site..."
         missingPlaceIdLabel="Falta a sessao publica na URL."
+        sessionInvalidPrefixLabel={MY_SITE_CONFIG.sessionInvalidPrefixLabel}
+        sessionInvalidLinkLabel={MY_SITE_CONFIG.sessionInvalidLinkLabel}
+        appCardLabel={MY_SITE_CONFIG.appCardLabel}
+        appCardLinkLabel={MY_SITE_CONFIG.appCardLinkLabel}
         unavailableLabel="Os dados do site estao indisponiveis agora."
         failedLabel="Nao foi possivel carregar os dados do site."
         noSiteLabel="Ainda nao existe um site criado para esta empresa."

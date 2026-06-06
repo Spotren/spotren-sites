@@ -43,7 +43,7 @@ const {
 <form
   action={action}
   method="get"
-  class="mt-6 sm:max-w-2xl"
+  class="mt-6 w-full"
   data-place-resolve-form
   data-create-prospect-url={createProspectURL}
   data-invalid-url-message={invalidURLMessage}
@@ -165,7 +165,6 @@ const {
         <div
           class="cf-turnstile"
           data-sitekey={turnstileSiteKey}
-          data-size="invisible"
           data-execution="execute"
         ></div>
       </div>
@@ -174,7 +173,7 @@ const {
 </form>
 {turnstileSiteKey ? <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script> : null}
 
-<script is:inline>
+<script is:inline data-astro-rerun>
   const forms = document.querySelectorAll("[data-place-resolve-form]");
 
   function waitForTurnstileToken(form, timeoutMs = 8000) {
@@ -245,6 +244,7 @@ const {
     const createFailedMessage = String(form.getAttribute("data-create-failed-message") || "Unable to create the prospect from Google Maps input.").trim();
     const creatingLabel = String(form.getAttribute("data-creating-label") || "Preparing...").trim();
     const submitLabel = String(form.getAttribute("data-submit-label") || "Create site").trim();
+    const actionURL = String(form.getAttribute("action") || "").trim();
     const errorMessageElement = form.querySelector("[data-place-error-message]");
 
     const setBusy = (busy) => {
@@ -336,7 +336,11 @@ const {
         }
 
         hiddenPlaceSessionField.value = sessionToken;
-        HTMLFormElement.prototype.submit.call(form);
+        const nextURL = new URL(actionURL || form.action || window.location.href, window.location.origin);
+        nextURL.search = "";
+        nextURL.searchParams.set("ps", sessionToken);
+        window.location.assign(nextURL.toString());
+        return;
       } catch {
         setError(unavailableMessage);
       } finally {

@@ -25,6 +25,7 @@ type NewSiteConfig = {
   checkoutSelfLinkLabel: string
   checkoutCustomerLinkLabel: string
   checkoutCustomerCopyLabel: string
+  checkoutCustomerCopiedLabel: string
   checkoutTrackPaymentLabel: string
 }
 
@@ -44,6 +45,21 @@ type HomeConfig = {
   intro: string
   socialLabel: string
   gmnReportLabel: string
+  workTitle: string
+  workDescription: string
+  workCardDiscountTitle: string
+  workCardPaymentLinkTitle: string
+  workCardDiscountItems: string[]
+  workCardPaymentLinkItems: string[]
+  workCardDiscountYouPayLabel: string
+  workCardDiscountYouPayValue: string
+  workCardDiscountYouProfitLabel: string
+  workCardDiscountYouProfitValue: string
+  workCardPaymentYouPayLabel: string
+  workCardPaymentYouPayValue: string
+  workCardPaymentYouProfitLabel: string
+  workCardPaymentYouProfitValue: string
+  workInfoDeferredPayout: string
   sitesTitle: string
   sitesDescription: string
   skillsTitle: string
@@ -260,6 +276,7 @@ export function getLocaleConfig(locale: SiteLocale = defaultSiteLocale): LocaleC
     checkoutSelfLinkLabel: siteData.newSite.checkoutSelfLinkLabel,
     checkoutCustomerLinkLabel: siteData.newSite.checkoutCustomerLinkLabel,
     checkoutCustomerCopyLabel: siteData.newSite.checkoutCustomerCopyLabel,
+    checkoutCustomerCopiedLabel: siteData.newSite.checkoutCustomerCopiedLabel,
     checkoutTrackPaymentLabel: siteData.newSite.checkoutTrackPaymentLabel,
   }
 
@@ -287,6 +304,21 @@ export function getLocaleConfig(locale: SiteLocale = defaultSiteLocale): LocaleC
     intro: siteData.home.intro,
     socialLabel: siteData.home.socialLabel,
     gmnReportLabel: siteData.home.gmnReportLabel,
+    workTitle: siteData.home.workTitle,
+    workDescription: siteData.home.workDescription,
+    workCardDiscountTitle: siteData.home.workCardDiscountTitle,
+    workCardPaymentLinkTitle: siteData.home.workCardPaymentLinkTitle,
+    workCardDiscountItems: siteData.home.workCardDiscountItems,
+    workCardPaymentLinkItems: siteData.home.workCardPaymentLinkItems,
+    workCardDiscountYouPayLabel: siteData.home.workCardDiscountYouPayLabel,
+    workCardDiscountYouPayValue: siteData.home.workCardDiscountYouPayValue,
+    workCardDiscountYouProfitLabel: siteData.home.workCardDiscountYouProfitLabel,
+    workCardDiscountYouProfitValue: siteData.home.workCardDiscountYouProfitValue,
+    workCardPaymentYouPayLabel: siteData.home.workCardPaymentYouPayLabel,
+    workCardPaymentYouPayValue: siteData.home.workCardPaymentYouPayValue,
+    workCardPaymentYouProfitLabel: siteData.home.workCardPaymentYouProfitLabel,
+    workCardPaymentYouProfitValue: siteData.home.workCardPaymentYouProfitValue,
+    workInfoDeferredPayout: siteData.home.workInfoDeferredPayout,
     sitesTitle: siteData.home.sitesTitle,
     sitesDescription: siteData.home.sitesDescription,
     skillsTitle: siteData.home.skillsTitle,

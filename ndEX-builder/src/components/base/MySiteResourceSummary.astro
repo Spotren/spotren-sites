@@ -2,6 +2,8 @@
 interface Props {
   detailURL: string
   sessionToken: string
+  homeURL: string
+  appURL: string
   turnstileSiteKey?: string
   pageIntroCreatingLabel: string
   pageIntroReadyLabel: string
@@ -19,6 +21,10 @@ interface Props {
   statusCancelledLabel: string
   loadingLabel: string
   missingPlaceIdLabel: string
+  sessionInvalidPrefixLabel: string
+  sessionInvalidLinkLabel: string
+  appCardLabel: string
+  appCardLinkLabel: string
   unavailableLabel: string
   failedLabel: string
   noSiteLabel: string
@@ -45,6 +51,8 @@ interface Props {
 const {
   detailURL,
   sessionToken,
+  homeURL,
+  appURL,
   turnstileSiteKey = "",
   pageIntroCreatingLabel,
   pageIntroReadyLabel,
@@ -62,6 +70,10 @@ const {
   statusCancelledLabel,
   loadingLabel,
   missingPlaceIdLabel,
+  sessionInvalidPrefixLabel,
+  sessionInvalidLinkLabel,
+  appCardLabel,
+  appCardLinkLabel,
   unavailableLabel,
   failedLabel,
   noSiteLabel,
@@ -91,6 +103,8 @@ const {
   data-my-site-summary
   data-detail-url={detailURL}
   data-session-token={sessionToken}
+  data-home-url={homeURL}
+  data-app-url={appURL}
   data-page-intro-creating-label={pageIntroCreatingLabel}
   data-page-intro-ready-label={pageIntroReadyLabel}
   data-copy-link-label={copyLinkLabel}
@@ -107,6 +121,10 @@ const {
   data-status-cancelled-label={statusCancelledLabel}
   data-loading-label={loadingLabel}
   data-missing-place-id-label={missingPlaceIdLabel}
+  data-session-invalid-prefix-label={sessionInvalidPrefixLabel}
+  data-session-invalid-link-label={sessionInvalidLinkLabel}
+  data-app-card-label={appCardLabel}
+  data-app-card-link-label={appCardLinkLabel}
   data-unavailable-label={unavailableLabel}
   data-failed-label={failedLabel}
   data-no-site-label={noSiteLabel}
@@ -130,6 +148,33 @@ const {
   data-verification-message={verificationMessage}
   data-turnstile-site-key={turnstileSiteKey}
 >
+  <div
+    class="mx-auto mb-4 hidden w-full max-w-3xl rounded-3xl border border-border/60 bg-background/60 px-5 py-5 text-left shadow-sm"
+    data-my-site-error-card
+    role="status"
+    aria-live="polite"
+  >
+    <div class="flex items-start gap-3 text-left">
+      <span class="icon-[ph--info] mt-0.5 size-5 flex-shrink-0 text-muted-foreground"></span>
+      <p class="text-sm leading-6 text-foreground/80" data-my-site-error-card-message></p>
+    </div>
+  </div>
+  <div
+    class="mx-auto mb-4 hidden w-full max-w-3xl rounded-3xl border border-border/60 bg-background/60 px-5 py-5 text-left shadow-sm"
+    data-my-site-app-card
+  >
+    <div class="flex items-start gap-3">
+      <span class="icon-[ph--user] mt-0.5 size-5 flex-shrink-0 text-muted-foreground"></span>
+      <div class="min-w-0">
+        <p class="text-sm leading-6 text-foreground/80" data-my-site-app-card-label></p>
+        <a
+          href="#"
+          class="mt-2 inline-flex text-sm text-primary underline underline-offset-4"
+          data-my-site-app-card-link
+        ></a>
+      </div>
+    </div>
+  </div>
   <div class="hidden grid gap-6" data-my-site-grid>
     <div class="grid gap-1">
       <p class="text-sm text-muted-foreground" data-site-status></p>
@@ -159,7 +204,7 @@ const {
   </article>
 </template>
 
-<script is:inline>
+<script is:inline data-astro-rerun>
   const summaries = document.querySelectorAll("[data-my-site-summary]");
   const pollingIntervalMs = 4000;
 
@@ -189,6 +234,15 @@ const {
     }
     const value = record[key];
     return Array.isArray(value) ? value.filter((item) => typeof item === "string" && item.trim().length > 0).map((item) => item.trim()) : [];
+  }
+
+  function readCheckoutVariant(checkout) {
+    const metadataSnapshot = readMetadataRecord(checkout?.metadataSnapshot);
+    const siteMetadata = readMetadataRecord(checkout?.siteMetadata);
+    return (
+      readMetadataString(metadataSnapshot, "publicCheckoutVariant") ||
+      readMetadataString(siteMetadata, "publicCheckoutVariant")
+    ).trim();
   }
 
   function resolveDeploymentTimestamp(deployment) {
@@ -583,10 +637,16 @@ const {
     const detailURL = String(summary.getAttribute("data-detail-url") || "").trim();
     let sessionToken = String(summary.getAttribute("data-session-token") || "").trim();
     let placeId = "";
+    const homeURL = String(summary.getAttribute("data-home-url") || "/").trim();
+    const appURL = String(summary.getAttribute("data-app-url") || "").trim();
     const pageIntroCreatingLabel = String(summary.getAttribute("data-page-intro-creating-label") || "").trim();
     const pageIntroReadyLabel = String(summary.getAttribute("data-page-intro-ready-label") || "").trim();
     const loadingLabel = String(summary.getAttribute("data-loading-label") || "Loading site...").trim();
     const missingPlaceIdLabel = String(summary.getAttribute("data-missing-place-id-label") || "Public session is missing.").trim();
+    const sessionInvalidPrefixLabel = String(summary.getAttribute("data-session-invalid-prefix-label") || "This public session is invalid or expired. Start again from the").trim();
+    const sessionInvalidLinkLabel = String(summary.getAttribute("data-session-invalid-link-label") || "search page").trim();
+    const appCardLabel = String(summary.getAttribute("data-app-card-label") || "").trim();
+    const appCardLinkLabel = String(summary.getAttribute("data-app-card-link-label") || "").trim();
     const unavailableLabel = String(summary.getAttribute("data-unavailable-label") || "Site detail is unavailable right now.").trim();
     const failedLabel = String(summary.getAttribute("data-failed-label") || "Unable to load site detail.").trim();
     const noSiteLabel = String(summary.getAttribute("data-no-site-label") || "No site has been created yet.").trim();
@@ -628,6 +688,11 @@ const {
     const pageTitleIntro = document.querySelector("[data-my-site-page-title] .pro > p");
 
     const grid = summary.querySelector("[data-my-site-grid]");
+    const errorCard = summary.querySelector("[data-my-site-error-card]");
+    const errorCardMessage = summary.querySelector("[data-my-site-error-card-message]");
+    const appCard = summary.querySelector("[data-my-site-app-card]");
+    const appCardText = summary.querySelector("[data-my-site-app-card-label]");
+    const appCardLink = summary.querySelector("[data-my-site-app-card-link]");
     const siteStatus = summary.querySelector("[data-site-status]");
     const siteName = summary.querySelector("[data-site-name]");
     const siteSubtitle = summary.querySelector("[data-site-subtitle]");
@@ -637,6 +702,11 @@ const {
 
     if (
       !(grid instanceof HTMLDivElement) ||
+      !(errorCard instanceof HTMLDivElement) ||
+      !(errorCardMessage instanceof HTMLParagraphElement) ||
+      !(appCard instanceof HTMLDivElement) ||
+      !(appCardText instanceof HTMLParagraphElement) ||
+      !(appCardLink instanceof HTMLAnchorElement) ||
       !(siteStatus instanceof HTMLParagraphElement) ||
       !(siteName instanceof HTMLElement) ||
       !(siteSubtitle instanceof HTMLParagraphElement) ||
@@ -665,13 +735,45 @@ const {
     };
 
     const setStatus = (message) => {
+      errorCard.hidden = true;
+      errorCard.classList.add("hidden");
+      errorCardMessage.textContent = "";
+      appCard.hidden = true;
+      appCard.classList.add("hidden");
       grid.classList.remove("hidden");
+      siteStatusIcon.hidden = false;
       siteStatus.hidden = false;
       siteStatus.textContent = message;
       siteName.textContent = "";
       siteSubtitle.textContent = "";
       siteStatusIcon.className = "icon-[ph--circle-notch] size-14 animate-spin text-ndex-green";
       resourceList.innerHTML = "";
+    };
+
+    const setSessionInvalidState = () => {
+      stopPolling();
+      grid.classList.add("hidden");
+      resourceList.innerHTML = "";
+      siteStatus.textContent = "";
+      siteStatusIcon.hidden = true;
+      appCard.hidden = true;
+      appCard.classList.add("hidden");
+      errorCard.hidden = false;
+      errorCard.classList.remove("hidden");
+      errorCardMessage.innerHTML = "";
+      const prefix = document.createTextNode(`${sessionInvalidPrefixLabel} `);
+      const link = document.createElement("a");
+      link.href = homeURL;
+      link.className = "text-primary underline underline-offset-4";
+      link.textContent = sessionInvalidLinkLabel;
+      errorCardMessage.append(prefix, link, ".");
+      if (appURL && appCardLabel && appCardLinkLabel) {
+        appCardText.textContent = appCardLabel;
+        appCardLink.href = appURL;
+        appCardLink.textContent = appCardLinkLabel;
+        appCard.hidden = false;
+        appCard.classList.remove("hidden");
+      }
     };
 
     const resolveStatusLabel = (value) => {
@@ -685,8 +787,17 @@ const {
     const renderResources = (payload) => {
       const prospect = payload?.prospect && typeof payload.prospect === "object" ? payload.prospect : null;
       const checkouts = Array.isArray(payload?.checkouts) ? payload.checkouts : [];
+      const sellerEntry =
+        checkouts.find((item) => {
+          if (!item || typeof item !== "object") {
+            return false;
+          }
+          const checkout = item.checkout && typeof item.checkout === "object" ? item.checkout : null;
+          return readCheckoutVariant(checkout) === "seller";
+        }) || null;
       const latestEntryWithSite =
         checkouts.find((item) => item && typeof item === "object" && item.site && typeof item.site === "object" && String(item.site.id || "").trim()) ||
+        sellerEntry ||
         checkouts[0] ||
         null;
       const latestEntry = latestEntryWithSite && typeof latestEntryWithSite === "object" ? latestEntryWithSite : null;
@@ -733,6 +844,7 @@ const {
 
       if (effectivelyReady) {
         stopPolling();
+        siteStatusIcon.hidden = false;
         siteStatusIcon.className = "icon-[ph--check-circle] size-14 text-ndex-green";
         siteStatus.hidden = true;
         siteStatus.textContent = "";
@@ -741,6 +853,7 @@ const {
         }
       } else {
         schedulePolling();
+        siteStatusIcon.hidden = false;
         siteStatusIcon.className = "icon-[ph--circle-notch] size-14 animate-spin text-ndex-green";
         siteStatus.hidden = false;
         siteStatus.textContent = pendingSiteLabel;
@@ -888,7 +1001,15 @@ const {
       });
       const payload = await response.json().catch(() => null);
       if (!response.ok) {
-        throw new Error(String(payload?.error?.message || failedLabel));
+        const error = payload && typeof payload === "object" ? payload.error : null;
+        const code = error && typeof error === "object" ? String(error.code || "").trim() : "";
+        const message = error && typeof error === "object" ? String(error.message || "").trim() : "";
+        if (code === "session_invalid") {
+          const sessionInvalidError = new Error(message || failedLabel);
+          sessionInvalidError.name = "session_invalid";
+          throw sessionInvalidError;
+        }
+        throw new Error(message || failedLabel);
       }
       const prospect = payload?.prospect && typeof payload.prospect === "object" ? payload.prospect : null;
       placeId = typeof prospect?.placeId === "string" ? prospect.placeId.trim() : placeId;
@@ -917,6 +1038,10 @@ const {
 
     setStatus(loadingLabel);
     void loadSiteDetail().catch((error) => {
+      if (error instanceof Error && error.name === "session_invalid") {
+        setSessionInvalidState();
+        return;
+      }
       setStatus(error instanceof Error && error.message ? error.message : failedLabel);
     });
 

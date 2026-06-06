@@ -45,8 +45,9 @@
     "existingSiteLabel": "This site already exists. Sign in to your Spotren account to follow it there.",
     "existingSiteLinkLabel": "Open Spotren app",
     "checkoutSelfLinkLabel": "Open checkout for me",
-    "checkoutCustomerLinkLabel": "Copy customer checkout link",
+    "checkoutCustomerLinkLabel": "Customer checkout link",
     "checkoutCustomerCopyLabel": "Copy",
+    "checkoutCustomerCopiedLabel": "Copied",
     "checkoutTrackPaymentLabel": "Track payment"
   },
   "mySite": {
@@ -64,6 +65,29 @@
     "intro": "An SEO method for local businesses that creates fast, intelligent websites with structured information that improves indexing and semantic understanding in LLMs.",
     "socialLabel": "followers",
     "gmnReportLabel": "Free: GMN profile report",
+    "workTitle": "How to work with ndEX",
+    "workDescription": "Make money creating websites for Local Businesses",
+    "workCardDiscountTitle": "Subscribe with discount",
+    "workCardPaymentLinkTitle": "Payment Link",
+    "workCardDiscountItems": [
+      "You complete the checkout with 50% OFF",
+      "Charge your client directly",
+      "Decide how much profit you want to make"
+    ],
+    "workCardPaymentLinkItems": [
+      "You create a Checkout Link",
+      "Your client subscribes through it",
+      "Receive the 50% profit after 14 days"
+    ],
+    "workCardDiscountYouPayLabel": "You pay:",
+    "workCardDiscountYouPayValue": "$49/mo",
+    "workCardDiscountYouProfitLabel": "You profit:",
+    "workCardDiscountYouProfitValue": "$49/mo",
+    "workCardPaymentYouPayLabel": "Your client pays:",
+    "workCardPaymentYouPayValue": "$99/mo",
+    "workCardPaymentYouProfitLabel": "You profit:",
+    "workCardPaymentYouProfitValue": "$49/mo",
+    "workInfoDeferredPayout": "the first subscription is paid 7 days after the 14-day guarantee period ends, and the payment method is chosen by you later through the Spotren platform",
     "sitesTitle": "Sites",
     "sitesDescription": "Sites created in the last year:",
     "skillsTitle": "Otimização",

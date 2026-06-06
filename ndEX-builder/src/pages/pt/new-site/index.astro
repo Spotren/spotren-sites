@@ -5,7 +5,7 @@ import Layout from '~/layouts/Layout.astro'
 import PageTitle from '~/components/base/PageTitle.astro'
 import NewSiteProspectSummary from '~/components/base/NewSiteProspectSummary.astro'
 
-const locale = 'en'
+const locale = 'pt'
 const { NEW_SITE_CONFIG } = getLocaleConfig(locale)
 const { title, description } = NEW_SITE_CONFIG
 const sessionToken = Astro.url.searchParams.get('ps')?.trim() ?? ''
@@ -20,19 +20,19 @@ const checkoutCancelURL = new URL(withLocalePath(locale, '/checkout/cancel'), As
 const defaultSiteTemplateId = '86ef914e-fb4e-4228-b092-1170b2a86c74'
 const highlights = [
   {
-    icon: 'icon-[ph--rocket-launch]',
-    lead: 'Mobile-first',
-    text: 'A lightweight, fast site designed to load well on mobile devices.',
+    icon: 'icon-[ph--rocket]',
+    lead: 'Ultra-rápido',
+    text: 'Leve e veloz com Nota máxima 100/100 em performance',
   },
   {
-    icon: 'icon-[ph--globe-hemisphere-west]',
-    lead: 'Structured',
-    text: 'A clear structure that helps search engines and LLMs understand your business better.',
+    icon: 'icon-[ph--tree]',
+    lead: 'Estruturado',
+    text: 'Sua empresa melhor entendida por buscadores e LLMs',
   },
   {
     icon: 'icon-[ph--git-branch]',
-    lead: 'Versionable',
-    text: 'A guided publishing flow with less friction to get your presence online.',
+    lead: 'Versionável',
+    text: 'Repositório GitHub para você modificar quando quiser',
   },
 ]
 ---
@@ -63,56 +63,57 @@ const highlights = [
       homeURL={homeURL}
       sessionToken={sessionToken}
       turnstileSiteKey={turnstileSiteKey}
-      templatesHeadingLabel="Templates"
-      templatesLoadingLabel="Loading templates..."
-      templatesUnavailableLabel="Templates are unavailable right now."
-      templatesEmptyLabel="No templates are available right now."
-      loadingLabel="Loading business details..."
-      missingPlaceIdLabel="Missing public session in the URL."
+      templatesHeadingLabel="Modelos prontos"
+      templatesLoadingLabel="Carregando templates..."
+      templatesUnavailableLabel="Os templates estao indisponiveis agora."
+      templatesEmptyLabel="Nao ha templates disponiveis agora."
+      loadingLabel="Carregando dados da empresa..."
+      missingPlaceIdLabel="Falta a sessao publica na URL."
       sessionInvalidPrefixLabel={NEW_SITE_CONFIG.sessionInvalidPrefixLabel}
       sessionInvalidLinkLabel={NEW_SITE_CONFIG.sessionInvalidLinkLabel}
-      unavailableLabel="Business details are unavailable right now."
-      failedLabel="Unable to load business details."
-      companyNameLabel="Company"
-      addressLabel="Address"
-      advantagesHeadingLabel="Benefits"
+      unavailableLabel="Os dados da empresa estao indisponiveis agora."
+      failedLabel="Nao foi possivel carregar os dados da empresa."
+      companyNameLabel="Empresa"
+      addressLabel="Endereco"
+      advantagesHeadingLabel="Vantagens"
       advantagesItems={[
-        'Optimized indexing',
-        'Hosting included',
-        'Managed publishing',
-        'Versioned project',
-        'Custom domain',
+        'Indexação otimizada',
+        'Hospedagem inclusa',
+        'Publicações gerenciadas',
+        'Projeto versionado',
+        'Domínio próprio',
       ]}
       checkoutButtonLabel="Assinar"
       checkoutResumeButtonLabel="Assinar"
-      checkoutCreatingLabel="Preparing..."
-      checkoutFailedLabel="Unable to create checkout."
-      checkoutStatusLabel="Checkout status"
-      checkoutStateCreatedLabel="Awaiting payment confirmation."
-      checkoutStatePaidLabel="Payment confirmed. Continue in Spotren to enrich the prospect."
-      checkoutStateProvisioningLabel="Site provisioning is in progress."
-      checkoutStateReadyLabel="Site is ready."
-      checkoutStateFailedLabel="Checkout failed. You can try again."
-      checkoutStateCancelledLabel="Checkout was cancelled. You can start a new one."
-      checkoutStateUnknownLabel="Checkout status was updated."
-      checkoutSiteReadyLabel="The latest checkout already created the site."
+      checkoutCreatingLabel="Preparando..."
+      checkoutFailedLabel="Nao foi possivel criar o checkout."
+      checkoutStatusLabel="Status do checkout"
+      checkoutStateCreatedLabel="Aguardando confirmacao do pagamento."
+      checkoutStatePaidLabel="Pagamento confirmado. Continue na Spotren para enriquecer o prospect."
+      checkoutStateProvisioningLabel="A criacao do site esta em andamento."
+      checkoutStateReadyLabel="O site esta pronto."
+      checkoutStateFailedLabel="O checkout falhou. Voce pode tentar de novo."
+      checkoutStateCancelledLabel="O checkout foi cancelado. Voce pode iniciar outro."
+      checkoutStateUnknownLabel="O status do checkout foi atualizado."
+      checkoutSiteReadyLabel="O checkout mais recente ja criou o site."
       checkoutSelfLinkLabel={NEW_SITE_CONFIG.checkoutSelfLinkLabel}
       checkoutCustomerLinkLabel={NEW_SITE_CONFIG.checkoutCustomerLinkLabel}
       checkoutCustomerCopyLabel={NEW_SITE_CONFIG.checkoutCustomerCopyLabel}
+      checkoutCustomerCopiedLabel={NEW_SITE_CONFIG.checkoutCustomerCopiedLabel}
       checkoutTrackPaymentLabel={NEW_SITE_CONFIG.checkoutTrackPaymentLabel}
       appURL={spotrenAppURL}
       existingSiteLabel={NEW_SITE_CONFIG.existingSiteLabel}
       existingSiteLinkLabel={NEW_SITE_CONFIG.existingSiteLinkLabel}
-      verificationMessage="Complete the verification challenge and try again."
+      verificationMessage="Conclua a verificacao e tente novamente."
       priceCurrencyLabel="R$"
       priceWholeLabel="35"
       priceFractionLabel="80"
-      pricePeriodLabel="/ month"
+      pricePeriodLabel="/ mes"
       staticMapURL={staticMapURL}
-      mapAltLabel="Business location map"
-      mapUnavailableLabel="Map unavailable."
-      searchAgainLabel="Not your business? Search again"
-      mapHeadlineLabel="Maximum performance on mobile devices"
+      mapAltLabel="Mapa da localizacao da empresa"
+      mapUnavailableLabel="Mapa indisponivel."
+      searchAgainLabel="Não é sua empresa? Busque novamente"
+      mapHeadlineLabel="Performance máxima nos dispositivos móveis"
     />
   </div>
 </Layout>

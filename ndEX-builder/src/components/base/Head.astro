@@ -1,5 +1,4 @@
 ---
-import { ClientRouter } from 'astro:transitions'
 import { ANALYTICS_CONFIG, getLocaleConfig } from '~/config'
 import { defaultSiteLocale, getLocaleFromPathname, siteLocales, stripLocalePrefix, type SiteLocale, withLocalePath } from '~/lib/i18n'
 
@@ -114,5 +113,3 @@ const rssHref = new URL(withLocalePath(locale, '/rss.xml'), Astro.site).href
     </>
   )
 }
-
-<ClientRouter fallback="swap" />

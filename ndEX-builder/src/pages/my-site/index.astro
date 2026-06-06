@@ -1,32 +1,38 @@
 ---
+import { getLocaleConfig } from '~/config'
+import { withLocalePath } from '~/lib/i18n'
 import Layout from '~/layouts/Layout.astro'
 import PageTitle from '~/components/base/PageTitle.astro'
 import MySiteResourceSummary from '~/components/base/MySiteResourceSummary.astro'
 
 const locale = 'en'
-const title = 'My Site'
-const description = 'A dedicated page for your published ndEX site.'
+const { MY_SITE_CONFIG } = getLocaleConfig(locale)
+const { title, description } = MY_SITE_CONFIG
 const sessionToken = Astro.url.searchParams.get('ps')?.trim() ?? ''
 const prospectDetailURL = import.meta.env.PUBLIC_SPOTREN_PROSPECT_DETAIL_URL?.trim() ?? 'https://app.localhost:3443/api/public/spotren-sites/prospects/by-place-id'
 const turnstileSiteKey = import.meta.env.PUBLIC_SPOTREN_TURNSTILE_SITE_KEY?.trim() ?? ''
+const spotrenAppURL = `${(import.meta.env.PUBLIC_SPOTREN_APP_URL?.trim() ?? 'https://app.localhost:3443').replace(/\/$/, '')}/sites`
+const homeURL = withLocalePath(locale, '/')
 ---
 
 <Layout {title} {description} {locale}>
   <div class="relative z-[1] py-8 pb-10 px-6 sm:px-8">
     <div class="mx-auto max-w-3xl text-center">
       <div data-my-site-page-title>
-        <PageTitle title={title} introduce="Your site is being created" />
+        <PageTitle title={title} introduce={MY_SITE_CONFIG.introduce} />
       </div>
       <MySiteResourceSummary
         detailURL={prospectDetailURL}
         sessionToken={sessionToken}
+        homeURL={homeURL}
+        appURL={spotrenAppURL}
         turnstileSiteKey={turnstileSiteKey}
         pageIntroCreatingLabel="Your site is being created"
         pageIntroReadyLabel="Your site is ready"
         copyLinkLabel="copy"
-        statusCreatedLabel="Created"
-        statusCheckoutCompletedLabel="Checkout completed"
-        statusPaidLabel="Paid"
+        statusCreatedLabel="Awaiting payment"
+        statusCheckoutCompletedLabel="Payment in review"
+        statusPaidLabel="Payment confirmed"
         statusSiteProvisioningLabel="Site provisioning"
         statusSiteReadyLabel="Site ready"
         statusPublishedLabel="Published"
@@ -37,6 +43,10 @@ const turnstileSiteKey = import.meta.env.PUBLIC_SPOTREN_TURNSTILE_SITE_KEY?.trim
         statusCancelledLabel="Cancelled"
         loadingLabel="Loading site resources..."
         missingPlaceIdLabel="Missing public session in the URL."
+        sessionInvalidPrefixLabel={MY_SITE_CONFIG.sessionInvalidPrefixLabel}
+        sessionInvalidLinkLabel={MY_SITE_CONFIG.sessionInvalidLinkLabel}
+        appCardLabel={MY_SITE_CONFIG.appCardLabel}
+        appCardLinkLabel={MY_SITE_CONFIG.appCardLinkLabel}
         unavailableLabel="Site details are unavailable right now."
         failedLabel="Unable to load site details."
         noSiteLabel="No site has been created for this business yet."

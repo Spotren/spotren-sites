@@ -34,6 +34,9 @@ const {
   <p class="text-sm text-muted-foreground" data-pay-ok-status>
     {loadingLabel}
   </p>
+  <div class="mt-4 hidden" data-pay-ok-pending-icon aria-hidden="true">
+    <span class="icon-[ph--circle-notch] size-14 animate-spin text-ndex-green"></span>
+  </div>
   <p class="mt-4 hidden text-sm" data-pay-ok-invoice-row>
     <a
       href="#"
@@ -47,7 +50,7 @@ const {
   </p>
 </section>
 
-<script is:inline>
+<script is:inline data-astro-rerun>
   const summaries = document.querySelectorAll("[data-pay-ok-summary]");
 
   for (const summary of summaries) {
@@ -60,11 +63,13 @@ const {
     const invoicePendingLabel = String(summary.getAttribute("data-invoice-pending-label") || "Your payment was confirmed. The receipt link will appear here when it becomes available.").trim();
 
     const status = summary.querySelector("[data-pay-ok-status]");
+    const pendingIcon = summary.querySelector("[data-pay-ok-pending-icon]");
     const invoiceRow = summary.querySelector("[data-pay-ok-invoice-row]");
     const invoiceLink = summary.querySelector("[data-pay-ok-invoice-link]");
 
     if (
       !(status instanceof HTMLParagraphElement) ||
+      !(pendingIcon instanceof HTMLDivElement) ||
       !(invoiceRow instanceof HTMLParagraphElement) ||
       !(invoiceLink instanceof HTMLAnchorElement)
     ) {
@@ -82,10 +87,12 @@ const {
 
     if (!payOkToken) {
       status.textContent = failedLabel;
+      pendingIcon.classList.add("hidden");
       continue;
     }
     if (!detailURL) {
       status.textContent = unavailableLabel;
+      pendingIcon.classList.add("hidden");
       continue;
     }
 
@@ -108,20 +115,24 @@ const {
       const invoicePdfURL = typeof checkout?.invoicePdfUrl === "string" ? checkout.invoicePdfUrl.trim() : "";
       const receiptURL = hostedInvoiceURL || invoicePdfURL;
 
-      status.textContent = invoicePendingLabel;
+      status.textContent = "";
       if (!receiptURL) {
         invoiceRow.classList.add("hidden");
+        pendingIcon.classList.remove("hidden");
         return;
       }
 
+      pendingIcon.classList.add("hidden");
       invoiceLink.href = receiptURL;
       invoiceLink.textContent = invoiceLinkLabel;
       invoiceRow.classList.remove("hidden");
     };
 
     status.textContent = loadingLabel;
+    pendingIcon.classList.add("hidden");
     void loadPaymentDetail().catch((error) => {
       status.textContent = error instanceof Error && error.message ? error.message : failedLabel;
+      pendingIcon.classList.add("hidden");
       invoiceRow.classList.add("hidden");
     });
   }
