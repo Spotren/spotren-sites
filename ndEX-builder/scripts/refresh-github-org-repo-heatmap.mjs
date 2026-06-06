@@ -133,7 +133,7 @@ async function githubGraphql(token, variables) {
     headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
-      'User-Agent': 'litos-org-repositories-created-per-day',
+      'User-Agent': 'ndex-builder-org-repositories-created-per-day',
     },
     body: JSON.stringify({
       query: ORGANIZATION_QUERY,

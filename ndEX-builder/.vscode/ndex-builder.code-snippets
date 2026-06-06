@@ -1,7 +1,7 @@
 {
-  "Litos Post Frontmatter": {
+  "ndEX Builder Post Frontmatter": {
     "scope": "markdown,mdx,astro",
-    "prefix": ["litos-post", "postfm"],
+    "prefix": ["ndex-builder-post", "postfm"],
     "body": [
       "---",
       "title: '${1:Your Post Title}'",
@@ -21,11 +21,11 @@
       "",
       "$0",
     ],
-    "description": "Litos post frontmatter matching src/content.config.ts (cover/ogImage/postType/coverLayout optional).",
+    "description": "ndEX Builder post frontmatter matching src/content.config.ts (cover/ogImage/postType/coverLayout optional).",
   },
-  "Litos Project Frontmatter": {
+  "ndEX Builder Project Frontmatter": {
     "scope": "markdown,mdx,astro",
-    "prefix": ["litos-project", "projfm"],
+    "prefix": ["ndex-builder-project", "projfm"],
     "body": [
       "---",
       "name: '${1:Project Name}'",
@@ -43,6 +43,6 @@
       "",
       "$0",
     ],
-    "description": "Litos project frontmatter matching src/content.config.ts (icon/imageClass optional).",
+    "description": "ndEX Builder project frontmatter matching src/content.config.ts (icon/imageClass optional).",
   },
 }

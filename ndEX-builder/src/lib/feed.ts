@@ -231,7 +231,7 @@ export async function generateRSS20(locale: SiteLocale = 'en'): Promise<string> 
     <author>${escapeXml(author)}</author>
     <pubDate>${lastBuildDate}</pubDate>
     <lastBuildDate>${lastBuildDate}</lastBuildDate>
-    <generator>Astro Litos Theme</generator>
+    <generator>Astro ndEX Builder</generator>
     <atom:link href="${siteUrl}${feedPath}" rel="self" type="application/rss+xml" />
     ${processedPosts
       .map(
@@ -276,7 +276,7 @@ export async function generateAtom10(locale: SiteLocale = 'en'): Promise<string>
     <name>${escapeXml(author)}</name>
     <uri>${siteUrl}${homePath === '/' ? '' : homePath}</uri>
   </author>
-  <generator uri="https://github.com/Dnzzk2/Litos" version="5.0">Astro Litos Theme</generator>
+  <generator uri="https://github.com/Spotren/spotren-sites/tree/main/ndEX-builder" version="5.0">Astro ndEX Builder</generator>
   <rights>Copyright © ${new Date().getFullYear()} ${escapeXml(author)}</rights>
   ${processedPosts
     .map(
