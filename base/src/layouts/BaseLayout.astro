@@ -28,6 +28,34 @@ const { description, faviconContentType, faviconHref, locale, seoTitle, site } =
       title={seoTitle}
     />
     <style is:global>
+      @font-face {
+        font-family: "Geist";
+        src: url("/fonts/geist-v5-latin-regular.woff2") format("woff2");
+        font-weight: 400;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "Geist";
+        src: url("/fonts/geist-v5-latin-500.woff2") format("woff2");
+        font-weight: 500;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "Lexend";
+        src: url("/fonts/lexend-v26-latin-500.woff2") format("woff2");
+        font-weight: 500;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "GeistMono";
+        src: url("/fonts/geist-mono-v5-latin-regular.woff2") format("woff2");
+        font-weight: 400;
+        font-display: swap;
+      }
+
       :root {
         color-scheme: light;
         --color-bg: #f7f3eb;
@@ -51,8 +79,9 @@ const { description, faviconContentType, faviconHref, locale, seoTitle, site } =
         --space-2xl: 4.5rem;
         --content-width: 64rem;
         --reading-width: 46rem;
-        --font-body: "IBM Plex Sans", "Segoe UI", sans-serif;
-        --font-heading: "IBM Plex Serif", Georgia, serif;
+        --font-body: "Geist", ui-sans-serif, system-ui, sans-serif;
+        --font-heading: "Lexend", "Geist", ui-sans-serif, system-ui, sans-serif;
+        --font-mono: "GeistMono", "Input Mono", "Fira Code", monospace;
       }
 
       *,
