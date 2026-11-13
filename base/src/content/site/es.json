@@ -1,6 +1,6 @@
 {
   "title": "Cómo aparecer en Google con un Sitio Simple y Bien Estructurado",
-  "seoTitle": "Cómo aparecer en Google con un Sitio Simple de R$27 ∙ Spotren™",
+  "seoTitle": "Cómo aparecer en Google con un Sitio Simple de R$70 ∙ Spotren™",
   "description": "Cómo aparecer en Google con un Sitio Simple. Descubre ahora la Inteligencia de Demanda de Spotren™.",
   "faviconHref": "/favicon.ico",
   "faviconContentType": "image/x-icon",
@@ -38,7 +38,7 @@
       "body": "+ hospedaje incluido",
       "price": {
         "currency": "R$",
-        "amount": "27",
+        "amount": "70",
         "period": "mes"
       }
     }
@@ -270,7 +270,7 @@
           "cardClass": "is-monthly",
           "label": "Mensual",
           "currency": "R$",
-          "amount": "27",
+          "amount": "70",
           "period": "mes",
           "items": [
             "Ideal para empezar",
@@ -381,7 +381,7 @@
         },
         {
           "question": "¿Cuánto cuesta mantenerlo?",
-          "answer": "R$ 27 por mes."
+          "answer": "R$ 70 por mes."
         }
       ]
     }

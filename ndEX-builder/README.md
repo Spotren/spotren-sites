@@ -7,43 +7,48 @@
 ![Tailwind](https://img.shields.io/badge/TailwindCSS-v4.0-38b2ac?style=flat-square&logo=tailwindcss)
 ![TypeScript](https://img.shields.io/badge/TypeScript-v5.0-blue?style=flat-square&logo=typescript)
 
-**A modern, elegant, and performance-focused blogging theme built for developers.**
+**Public ndEX funnel and customer-facing builder surface for Spotren.**
 
-**English** | [简体中文](./README.zh-CN.md)
+**English**
 
-[Demo](https://litos.vercel.app/) · [Report Bug](https://github.com/Spotren/spotren-sites/issues) · [Request Feature](https://github.com/Spotren/spotren-sites/issues)
+[Report Bug](https://github.com/Spotren/spotren-sites/issues) · [Request Feature](https://github.com/Spotren/spotren-sites/issues)
 
 </div>
 
 ## Introduction
 
-ndEX Builder is a comprehensive blogging theme crafted with **Astro**, **React**, and **TailwindCSS**. It is designed to provide developers with a clean, professional, and highly customizable platform to showcase their work, thoughts, and photography.
+`ndEX-builder` is the public Spotren surface that helps turn a Google Maps business profile into a guided site-building and checkout journey.
 
-Unlike traditional themes, ndEX Builder emphasizes visual aesthetics without compromising on performance. It features fluid animations, a polished design system, and a robust set of built-in components to help you build your personal brand effectively.
+It is built with **Astro**, **React**, and **TailwindCSS**, but its role is operational, not just visual:
+
+- resolve a public Google Maps business profile URL
+- create or reuse a Spotren prospect
+- issue a signed public session token
+- list active Spotren site templates
+- create seller and customer checkouts
+- expose post-checkout status surfaces such as `my-site` and `pay-ok`
 
 ![Cover image](./src/assets/readme/readme.webp)
 
 ## Key Features
 
-- **Modern Architecture** — Astro 5 + React 19 for blazing fast performance and dynamic interactivity.
-- **Elegant Design** — Fully responsive, meticulously crafted UI with TailwindCSS 4.
-- **Posts** — Multiple layout options (compact, cover image) with rich Markdown support.
-- **Projects** — Dedicated portfolio section with filterable tags.
-- **Photos** — Beautiful masonry layout for photography collections.
-- **Skills Showcase** — Visually represented technical stack configuration.
-- **Code Highlighting** — Integrated Expressive Code for beautiful syntax highlighting.
-- **Math Support** — KaTeX for rendering mathematical equations.
-- **Comments** — Gitalk integration for GitHub-based discussions.
-- **SEO** — Built-in sitemaps, robots.txt, and meta tags.
-- **Analytics** — Configurable Vercount and Umami analytics.
-- **Dark Mode** — Native light and dark theme support.
+- **Public Prospect Flow** — turns a Google Maps business profile URL into a Spotren prospect and signed public session.
+- **Template Selection** — loads active Spotren site templates from the product backend.
+- **Checkout Handoff** — creates seller and customer checkout flows tied to the selected template and prospect.
+- **Post-Checkout Surfaces** — provides `my-site` and `pay-ok` views backed by public Spotren API routes.
+- **Localized Astro UI** — localized content-driven pages under `src/content/site/*`.
+- **Content + Editorial Pages** — still supports posts, projects, cases, and supporting editorial content.
+- **Performance-Oriented Frontend** — Astro 5 + React 19 + TailwindCSS 4.
 
-## Deploy
+## What This Project Is Not
 
-Deploy your own ndEX Builder site with one click:
+This project is not:
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Spotren/spotren-sites)
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/Spotren/spotren-sites)
+- the authenticated Spotren workspace app
+- the managed site provisioning worker
+- the provisionable customer site template itself
+
+Those responsibilities live in `spotren-app/` and `spotren-templates/`.
 
 ## Getting Started
 
@@ -77,34 +82,60 @@ Deploy your own ndEX Builder site with one click:
 
 ## Configuration
 
-The primary configuration file is located at `src/config.ts`.
+The public UI configuration lives mainly in:
 
-### Site Settings
-```typescript
-export const SITE: Site = {
-  title: 'ndEX Builder',
-  description: 'Your site description here.',
-  website: 'https://your-domain.com',
-  author: 'Your Name',
-  // ...other settings
-}
-```
+- `src/config.ts`
+- `src/content/site/en.json`
+- `src/content/site/pt.json`
 
-### Feature Toggles
-```typescript
-export const SKILLSSHOWCASE_CONFIG = {
-  SKILLS_ENABLED: true,
-  // ...
-}
+The operational integration points come from public environment variables.
 
-export const GITHUB_CONFIG = {
-  ENABLED: true,
-  // ...
-}
-```
+### Public API Environment Variables
 
-### Navigation
-Links for the Header and Footer can be managed via `HEADER_LINKS` and `FOOTER_LINKS`.
+The main public routes used by this project are configured through `.env` values such as:
+
+- `PUBLIC_SPOTREN_CREATE_PROSPECT_URL`
+- `PUBLIC_SPOTREN_PROSPECT_DETAIL_URL`
+- `PUBLIC_SPOTREN_PAY_OK_DETAIL_URL`
+- `PUBLIC_SPOTREN_SITE_TEMPLATES_URL`
+- `PUBLIC_SPOTREN_CREATE_CHECKOUT_URL`
+- `PUBLIC_SPOTREN_STATIC_MAP_URL`
+- `PUBLIC_SPOTREN_TURNSTILE_SITE_KEY`
+
+These routes are currently served by:
+
+- `spotren-app/apps/web/app/api/public/spotren-sites/*`
+
+### Public Flow Pages
+
+- `/`
+  - Google Maps entry point and public ndEX overview
+- `/new-site`
+  - public session-based site creation and checkout selection
+- `/my-site`
+  - public follow-up surface for the seller journey
+- `/pay-ok`
+  - public follow-up surface for the customer payment journey
+
+### Content Model
+
+Unlike `spotren-templates/ndEX`, this project uses localized content files under:
+
+- `src/content/site/en.json`
+- `src/content/site/pt.json`
+
+The content schema is validated in:
+
+- `src/lib/site-schema.ts`
+
+### Relation To Other Repositories
+
+- `spotren-sites/ndEX-builder`
+  - public funnel UI
+- `spotren-app`
+  - public route behavior and integrations backend
+- `spotren-templates/ndEX`
+  - provisionable customer site template contract
 
 ## Scripts
 
@@ -115,6 +146,13 @@ Links for the Header and Footer can be managed via `HEADER_LINKS` and `FOOTER_LI
 | `pnpm preview` | Previews the built production site locally. |
 | `pnpm format` | Formats code using Prettier. |
 | `pnpm check` | Runs Astro check for diagnostics. |
+
+## Architecture Notes
+
+- Public sessions are signed and are required to bridge anonymous users into prospect-specific actions.
+- Template selection in this UI is advisory until the backend accepts the chosen `siteTemplateId`.
+- Checkout creation does not provision the managed site directly from this repository.
+- Managed provisioning and deploy are documented in `spotren-app/docs/architecture/`.
 
 ## License
 
